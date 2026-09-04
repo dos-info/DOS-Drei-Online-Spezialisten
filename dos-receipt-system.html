@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إيصال استلام نقدية</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/emailjs-com/3.2.0/email.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js';"></script>
+  <style>
+    :root {
+      --navy:#0B1F3A;
+      --navy-deep:#081527;
+      --gold:#E3A825;
+      --gold-strong:#D19F0F;
+      --gold-soft:#F7E5B3;
+      --red:#D92A30;
+      --paper:#ffffff;
+      --ink:#1b2430;
+      --muted:#66727d;
+      --line:#e7ebf0;
+      --soft:#f6f8fb;
+      --green:#1b7a45;
+      --shadow: rgba(11,31,58,0.10);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin:0;
+      padding:0;
+      background:#f3f4f6;
+      color:var(--ink);
+      font-family: Tahoma, Arial, sans-serif;
+    }
+
+    body {
+      padding: 22px;
+      direction: rtl;
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      background: #f9fafb;
+      border-radius: 20px;
+      box-shadow: 0 18px 40px var(--shadow);
+      border: 1px solid rgba(11,31,58,0.06);
+      overflow: hidden;
+    }
+
+    .toolbar {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:18px;
+      padding: 16px 20px 18px;
+      background: linear-gradient(180deg, #ffffff 0%, #f6f7fa 100%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:20px;
+      min-width:0;
+    }
+
+    .brand-logo {
+      display:flex;
+      align-items:flex-end;
+      gap: 0;
+      line-height: 0.7;
+      transform: translateY(2px);
+    }
+
+    .dos-char {
+      display:inline-block;
+      font-weight: 900;
+      font-size: 170px;
+      letter-spacing: -0.02em;
+      font-family: "Arial Black", Impact, sans-serif;
+      transform: scaleY(1.05);
+      position: relative;
+    }
+
+    .dos-black { color: #1a1e24; }
+    .dos-red { color: var(--red); margin-inline: -14px 0; }
+    .dos-gold { color: var(--gold); }
+
+    .brand-copy {
+      min-width:0;
+      display:flex;
+      align-items:center;
+      gap: 16px;
+      padding-inline-start: 18px;
+      border-inline-start: 3px solid rgba(11,31,58,0.15);
+    }
+
+    .brand-copy h2 {
+      margin:0;
+      font-size: clamp(22px, 2.5vw, 46px);
+      line-height: 0.92;
+      font-weight: 700;
+      font-family: Georgia, serif;
+      letter-spacing: -0.04em;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+
+    .brand-copy h2 .red {
+      color: var(--navy);
+      font-style: italic;
+    }
+    .brand-copy h2 .gold {
+      color: var(--red);
+      font-style: italic;
+    }
+    .brand-copy h2 .dos-word {
+      color: var(--navy);
+      font-style: normal;
+    }
+
+    .brand-copy .sub{
+      font-size: 18px;
+      color: var(--navy);
+      opacity: 0.85;
+      font-weight: 600;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .btns {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      cursor:pointer;
+      border:none;
+      border-radius: 12px;
+      padding: 11px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: translateY(0); }
+
+    .btn-primary {
+      background: linear-gradient(180deg, var(--gold) 0%, var(--gold-strong) 100%);
+      color: var(--navy-deep);
+      box-shadow: 0 8px 18px rgba(227,168,37,.25);
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--navy);
+      border: 1px solid var(--line);
+    }
+
+    .content {
+      padding: 26px 30px 32px;
+      background: linear-gradient(180deg, #fff 0%, #fffdf9 100%);
+    }
+
+    .receipt {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 28px 20px;
+      background: linear-gradient(180deg, #fff 0%, #fffdf9 100%);
+      box-shadow: 0 12px 28px rgba(11,31,58,.05);
+    }
+
+    .receipt-logo {
+      width: 110px;
+      height: auto;
+      border-radius: 14px;
+      object-fit: contain;
+      background: #fff;
+      box-shadow: 0 6px 14px rgba(11,31,58,.08);
+      border: 1px solid rgba(11,31,58,.06);
+    }
+
+    .header-row {
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:20px;
+      padding-bottom: 18px;
+      border-bottom: 2px solid var(--navy);
+    }
+
+    .header-left {
+      display:flex;
+      align-items:center;
+      gap:16px;
+      min-width:0;
+    }
+
+    .mini-mark {
+      width: 72px;
+      height:72px;
+      border-radius: 18px;
+      display:grid;
+      place-items:center;
+      background: linear-gradient(135deg, var(--navy) 0%, #0f2f54 100%);
+      color: var(--gold);
+      font-weight:900;
+      font-size: 26px;
+      font-family: "Arial Black", Impact, sans-serif;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.06);
+    }
+
+    .academy-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .academy-sub {
+      margin-top:4px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .04em;
+    }
+
+    .receipt-meta {
+      text-align: left;
+      min-width: 250px;
+    }
+
+    .receipt-meta .small {
+      color: var(--muted);
+      font-size:12px;
+      margin-bottom: 4px;
+    }
+
+    .receipt-meta .big {
+      font-size: 22px;
+      font-weight:800;
+      color: var(--navy);
+      letter-spacing: .04em;
+      font-family: "Consolas", "Courier New", monospace;
+    }
+
+    .receipt-meta .date {
+      margin-top:4px;
+      font-size: 13px;
+      color: var(--muted);
+      font-family: "Consolas", "Courier New", monospace;
+    }
+
+    .title-bar {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin: 18px 0 20px;
+    }
+
+    .title-bar h1 {
+      margin:0;
+      font-size: clamp(26px, 3vw, 38px);
+      color: var(--navy);
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      font-weight: 800;
+    }
+
+    .title-bar .badge {
+      background: linear-gradient(180deg, #fff5d7 0%, var(--gold-soft) 100%);
+      border: 1px solid rgba(227,168,37,0.35);
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-size:12px;
+      font-weight:800;
+      color: var(--navy);
+    }
+
+    .grid {
+      display:grid;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: 15px 18px;
+    }
+
+    .field {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+
+    .field .label {
+      display:block;
+      color: var(--muted);
+      font-size:11px;
+      margin-bottom:6px;
+    }
+
+    .field .value {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+      word-break: break-word;
+      line-height:1.5;
+    }
+
+    .field .mono {
+      font-family: "Consolas", "Courier New", monospace;
+      letter-spacing: .05em;
+    }
+
+    .amount-box {
+      margin-top: 18px;
+      background: linear-gradient(135deg, rgba(227,168,37,.12), rgba(11,31,58,.03));
+      border: 1px solid rgba(227,168,37,.30);
+      border-radius: 16px;
+      padding: 16px 18px;
+    }
+
+    .amount-box .row {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding: 7px 0;
+      border-bottom: 1px dashed rgba(11,31,58,.12);
+      font-size: 15px;
+    }
+
+    .amount-box .row:last-child { border-bottom:none; }
+
+    .amount-box .row strong {
+      color: var(--navy);
+      font-size: 21px;
+      font-weight: 800;
+      font-family: "Consolas", "Courier New", monospace;
+    }
+
+    .foot {
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .notes,
+    .account-box {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+
+    .notes h3,
+    .account-box h3 {
+      margin:0 0 10px;
+      font-size: 13px;
+      color: var(--navy);
+      font-weight:800;
+    }
+
+    .notes p {
+      margin:0;
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .account-row {
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding: 7px 0;
+      border-bottom:1px solid rgba(11,31,58,.08);
+      font-size: 12px;
+    }
+
+    .account-row:last-child { border-bottom:none; }
+    .account-row span {
+      color: var(--muted);
+    }
+
+    .account-row strong {
+      color: var(--ink);
+      font-weight:700;
+      white-space: nowrap;
+      text-align:left;
+    }
+
+    .signature {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap: 12px;
+      color: var(--muted);
+      font-size:12px;
+    }
+
+    .stamp {
+      min-width: 102px;
+      border: 2px dashed var(--gold);
+      border-radius: 12px;
+      padding: 10px 12px;
+      text-align:center;
+      color: var(--gold-strong);
+      font-size: 14px;
+      font-weight:800;
+      line-height: 1.4;
+      background: rgba(227,168,37,.055);
+    }
+
+    .prepared-by {
+      text-align:left;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .prepared-by strong {
+      display:block;
+      margin-top:4px;
+      font-size: 14px;
+      color: var(--navy);
+    }
+
+    .receipt-form {
+      display: none;
+      margin-top: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 8px 20px rgba(11,31,58,0.04);
+    }
+
+    .receipt-form h3 {
+      margin:0 0 14px;
+      color: var(--navy);
+      font-size: 18px;
+    }
+
+    .receipt-form .grid {
+      gap: 12px 14px;
+    }
+
+    .receipt-form .field {
+      background:#fff;
+    }
+
+    .receipt-form input {
+      display:block;
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding: 9px 11px;
+      font-size:14px;
+      color: var(--ink);
+      font-family: Tahoma, Arial, sans-serif;
+      background:#fff;
+    }
+
+    .receipt-form .actions {
+      margin-top:16px;
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 860px) {
+      body { padding: 14px; }
+      .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .brand {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .brand-copy {
+        padding-inline-start: 0;
+        border-inline-start: none;
+      }
+      .brand-copy h2 { white-space: normal; }
+      .brand-copy .sub { white-space: normal; }
+      .header-row {
+        flex-direction: column;
+      }
+      .receipt-meta {
+        min-width: 0;
+        width:100%;
+      }
+      .title-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .grid,
+      .foot {
+        grid-template-columns: 1fr;
+      }
+      .btns {
+        width:100%;
+      }
+      .btns button {
+        flex:1 1 0;
+      }
+    }
+
+    @media print {
+      body {
+        background:#fff;
+        padding:0;
+      }
+      .toolbar,
+      .receipt-form {
+        display:none !important;
+      }
+      .page {
+        max-width:none;
+        margin:0;
+        border:none;
+        box-shadow:none;
+        border-radius:0;
+      }
+      .content {
+        padding:0;
+      }
+      .receipt {
+        box-shadow:none;
+        border:none;
+        border-radius:0;
+      }
+      .page, .receipt {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="toolbar">
+      <div class="brand">
+        <div class="brand-logo" aria-label="DOS logo">
+          <span class="dos-char dos-gold">S</span>
+          <span class="dos-char dos-red">O</span>
+          <span class="dos-char dos-black">D</span>
+        </div>
+        <div class="brand-copy">
+          <h2><span class="dos-word">DOS</span> <span class="red">Drei</span> <span class="gold">Online</span><br /><span class="dos-word">Spezialisten</span></h2>
+          <div class="sub"></div>
+        </div>
+      </div>
+
+      <div class="btns">
+        <button type="button" class="btn-secondary" onclick="toggleForm()">تعديل البيانات</button>
+        <button type="button" class="btn-secondary" onclick="sendReceiptByEmail()">إرسال بالإيميل</button>
+        <button type="button" class="btn-primary" onclick="window.print()">طباعة الإيصال</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="receipt" id="receiptSheet">
+        <div class="header-row">
+          <div class="header-left">
+            <img id="receiptLogo" class="receipt-logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 100'%3E%3Crect width='260' height='100' rx='18' fill='%230B1F3A'/%3E%3Ctext x='130' y='60' text-anchor='middle' font-family='Arial, sans-serif' font-size='52' font-weight='900' fill='%23E3A825'%3EDOS%3C/text%3E%3C/svg%3E" alt="DOS logo" />
+            <div>
+              <div class="academy-name">DOS — Drei Online Spezialisten</div>
+              <div class="academy-sub">أكاديمية تعليم اللغة الألمانية</div>
+            </div>
+          </div>
+
+          <div class="receipt-meta">
+            <div class="small">رقم الإيصال / Receipt No.</div>
+            <div class="big" id="receiptNumber">DOS-REC-2026-001</div>
+            <div class="date" id="receiptDate">2026-08-29</div>
+          </div>
+        </div>
+
+        <div class="title-bar">
+          <h1>إيصال إستلام نقدية</h1>
+          <span class="badge">Cash Receipt</span>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <span class="label">اسم الطالب / Student Name</span>
+            <div class="value" id="studentName">—</div>
+          </div>
+          <div class="field">
+            <span class="label">الاسم بالعربية / Arabic Name</span>
+            <div class="value" id="studentNameAr">—</div>
+          </div>
+          <div class="field">
+            <span class="label">كود الطالب / Student Code</span>
+            <div class="value mono" id="studentCode">—</div>
+          </div>
+          <div class="field">
+            <span class="label">الهاتف / Phone</span>
+            <div class="value mono" id="studentPhone">—</div>
+          </div>
+          <div class="field">
+            <span class="label">الجروب / Group</span>
+            <div class="value" id="studentGroup">—</div>
+          </div>
+          <div class="field">
+            <span class="label">الكورسات السابقة / Previous Courses</span>
+            <div class="value" id="studentPreviousCourses">—</div>
+          </div>
+          <div class="field">
+            <span class="label">المستوى / Course Level</span>
+            <div class="value" id="courseLevel">—</div>
+          </div>
+          <div class="field">
+            <span class="label">طريقة الدفع / Payment Method</span>
+            <div class="value" id="paymentType">نقدي — Cash</div>
+          </div>
+        </div>
+
+        <div class="amount-box">
+          <div class="row">
+            <span>المبلغ المستلم / Amount Received</span>
+            <strong id="paymentAmount">0 EGP</strong>
+          </div>
+          <div class="row">
+            <span>العملة / Currency</span>
+            <strong id="currencyValue">EGP</strong>
+          </div>
+        </div>
+
+        <div class="foot">
+          <div class="notes">
+            <h3>ملاحظات / Notes</h3>
+            <p id="notes">الاسترداد: يحق استرداد المصروفات خلال 3 أيام من التسجيل وقبل بدء أول حصة، بخصم رسوم إدارية 10%. لا يُسترد الرسم بعد بدء الكورس.
+الحضور: الحد الأدنى للحضور 80% لاستلام شهادة إتمام المستوى. التأخر عن الحصة أكثر من 15 دقيقة يُحتسب غياباً.
+الالتزام: يلتزم الطالب بمواعيد السداد المتبقية حسب الاتفاق، ويحتفظ بحق الأكاديمية بإيقاف الخدمة عند التأخر دون تنسيق مسبق.</p>
+          </div>
+
+          <div class="account-box">
+            <h3>بيانات الحساب / Account Details</h3>
+            <div class="account-row"><span>اسم الحساب</span><strong id="accountName">Buchhalter DOS</strong></div>
+            <div class="account-row"><span>اسم البنك</span><strong id="bankName">DOS Cash / Bank</strong></div>
+            <div class="account-row"><span>البريد</span><strong id="accountEmail">buchhalter@dos-eg.com</strong></div>
+            <div class="account-row"><span>الهاتف</span><strong id="accountPhone">+201553002897</strong></div>
+          </div>
+        </div>
+
+        <div class="signature">
+          <div class="stamp">ختم<br>DOS</div>
+          <div class="prepared-by"><br><strong id="preparedBy"></strong></div>
+        </div>
+      </div>
+
+      <div class="receipt-form" id="receiptForm">
+        <h3>تعديل البيانات قبل الطباعة</h3>
+        <div class="grid">
+          <div class="field"><span class="label">اسم الطالب</span><input id="f_studentName" type="text" /></div>
+          <div class="field"><span class="label">الاسم بالعربية</span><input id="f_studentNameAr" type="text" /></div>
+          <div class="field"><span class="label">كود الطالب</span><input id="f_studentCode" type="text" /></div>
+          <div class="field"><span class="label">الهاتف</span><input id="f_studentPhone" type="text" /></div>
+          <div class="field"><span class="label">البريد الإلكتروني</span><input id="f_studentEmail" type="email" /></div>
+          <div class="field"><span class="label">الجروب</span><input id="f_studentGroup" type="text" /></div>
+          <div class="field"><span class="label">الكورسات السابقة</span><input id="f_studentPreviousCourses" type="text" /></div>
+          <div class="field"><span class="label">المستوى</span><input id="f_courseLevel" type="text" /></div>
+          <div class="field"><span class="label">طريقة الدفع</span><input id="f_paymentType" type="text" /></div>
+          <div class="field"><span class="label">المبلغ</span><input id="f_paymentAmount" type="number" /></div>
+          <div class="field"><span class="label">العملة</span><input id="f_currency" type="text" /></div>
+          <div class="field"><span class="label">رقم الإيصال</span><input id="f_receiptNumber" type="text" /></div>
+          <div class="field"><span class="label">تاريخ الإيصال</span><input id="f_receiptDate" type="date" /></div>
+          <div class="field" style="grid-column:1 / -1;"><span class="label">ملاحظات</span><input id="f_notes" type="text" /></div>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn-secondary" onclick="applyFormToReceipt()">تحديث الإيصال</button>
+          <button type="button" class="btn-primary" onclick="window.print()">طباعة الإيصال</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DRAFT_KEY = 'dos-receipt-current-draft';
+    const DEFAULT_RECEIPT_LOGO = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 100'%3E%3Crect width='260' height='100' rx='18' fill='%230B1F3A'/%3E%3Ctext x='130' y='60' text-anchor='middle' font-family='Arial, sans-serif' font-size='52' font-weight='900' fill='%23E3A825'%3EDOS%3C/text%3E%3C/svg%3E";
+
+    function todayISO() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function readValue(id) {
+      return (document.getElementById(id)?.value ?? '').trim();
+    }
+
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value || '—';
+    }
+
+    function setInput(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.value = value ?? '';
+    }
+
+    function setReceiptLogo(src) {
+      const img = document.getElementById('receiptLogo');
+      if (img) img.src = src || DEFAULT_RECEIPT_LOGO;
+    }
+
+    function receiptNotesDefault() {
+      return "الشروط والأحكام\nالاسترداد: يحق استرداد المصروفات خلال 3 أيام من التسجيل وقبل بدء أول حصة، بخصم رسوم إدارية 10%. لا يُسترد الرسم بعد بدء الكورس.\nالحضور: الحد الأدنى للحضور 80% لاستلام شهادة إتمام المستوى. التأخر عن الحصة أكثر من 15 دقيقة يُحتسب غياباً.\nالالتزام: يلتزم الطالب بمواعيد السداد المتبقية حسب الاتفاق، ويحتفظ بحق الأكاديمية بإيقاف الخدمة عند التأخر دون تنسيق مسبق.";
+    }
+
+    function receiptSubjectText() {
+      const value = readValue('f_receiptNumber') || document.getElementById('receiptNumber')?.textContent || 'DOS-REC';
+      return `إيصال استلام نقدية ${value}`;
+    }
+
+    function receiptMailBody() {
+      const studentName = readValue('f_studentName') || document.getElementById('studentName')?.textContent || 'الطالب';
+      const receiptNo = readValue('f_receiptNumber') || document.getElementById('receiptNumber')?.textContent || '—';
+      const amount = readValue('f_paymentAmount') || document.getElementById('paymentAmount')?.textContent || '0';
+      const currency = readValue('f_currency') || document.getElementById('currencyValue')?.textContent || 'EGP';
+      const date = readValue('f_receiptDate') || document.getElementById('receiptDate')?.textContent || todayISO();
+      return `مرحباً ${studentName}،\n\nيرجى الاطلاع على إيصال استلام نقدية أكاديمية DOS - Drei Online Spezialisten.\n\nرقم الإيصال: ${receiptNo}\nالتاريخ: ${date}\nالمبلغ: ${amount} ${currency}\n\nمع خالص التحية،\nDOS - Drei Online Spezialisten`;
+    }
+
+    function openReceiptMailClient(email) {
+      if (!email) {
+        alert('يرجى إدخال بريد الطالب أولاً قبل الإرسال.');
+        return;
+      }
+      const subject = encodeURIComponent(receiptSubjectText());
+      const body = encodeURIComponent(receiptMailBody());
+      const mailto = `mailto:${email}?subject=${subject}&body=${body}`;
+      window.location.href = mailto;
+    }
+
+    async function sendReceiptByEmail() {
+      const recipientEmail = readValue('f_studentEmail') || prompt('أدخل بريد الطالب الذي سيتم إرسال الإيصال إليه:', 'student@example.com');
+      if (!recipientEmail) return;
+
+      const service = 'service_sbo95al';
+      const template = 'template_3jsa0qf';
+      const key = 'AxhMNs8NcGVqZJSiA';
+
+      const payload = {
+        to_email: recipientEmail,
+        student_name: readValue('f_studentName') || document.getElementById('studentName')?.textContent || 'الطالب',
+        student_email: recipientEmail,
+        receipt_number: readValue('f_receiptNumber') || document.getElementById('receiptNumber')?.textContent || '—',
+        receipt_date: readValue('f_receiptDate') || document.getElementById('receiptDate')?.textContent || todayISO(),
+        receipt_amount: readValue('f_paymentAmount') || document.getElementById('paymentAmount')?.textContent || '0',
+        receipt_currency: readValue('f_currency') || document.getElementById('currencyValue')?.textContent || 'EGP',
+        academy_name: 'DOS - Drei Online Spezialisten',
+        contact_email: 'buchhalter@dos-eg.com',
+        contact_phone: '+201553002897'
+      };
+
+      try {
+        if (window.emailjs && typeof window.emailjs.init === 'function') {
+          window.emailjs.init({ publicKey: key });
+          await window.emailjs.send(service, template, payload);
+          alert('تم إرسال إيصال الاستلام النقدي بنجاح عبر البريد الإلكتروني.');
+          return;
+        }
+      } catch (error) {
+        console.warn('EmailJS failed, falling back to mail client.', error);
+      }
+
+      openReceiptMailClient(recipientEmail);
+    }
+
+    function gatherDraft() {
+      return {
+        receiptNumber: readValue('f_receiptNumber') || document.getElementById('receiptNumber')?.textContent || `DOS-REC-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`,
+        receiptDate: readValue('f_receiptDate') || document.getElementById('receiptDate')?.textContent || todayISO(),
+        studentCode: readValue('f_studentCode') || '',
+        studentName: readValue('f_studentName') || '',
+        studentNameAr: readValue('f_studentNameAr') || '',
+        studentPhone: readValue('f_studentPhone') || '',
+        studentEmail: readValue('f_studentEmail') || '',
+        studentGroup: readValue('f_studentGroup') || '',
+        studentPreviousCourses: readValue('f_studentPreviousCourses') || '',
+        courseLevel: readValue('f_courseLevel') || '',
+        paymentType: readValue('f_paymentType') || 'نقدي — Cash',
+        paymentAmount: Number(readValue('f_paymentAmount') || 0),
+        currency: readValue('f_currency') || 'EGP',
+        notes: readValue('f_notes') || receiptNotesDefault(),
+        preparedBy: document.getElementById('preparedBy')?.textContent || 'Administration',
+        accountName: document.getElementById('accountName')?.textContent || 'Buchhalter DOS',
+        bankName: document.getElementById('bankName')?.textContent || 'DOS Cash / Bank',
+        accountEmail: document.getElementById('accountEmail')?.textContent || 'buchhalter@dos-eg.com',
+        accountPhone: document.getElementById('accountPhone')?.textContent || '+201553002897',
+        logo: document.getElementById('receiptLogo')?.src || DEFAULT_RECEIPT_LOGO
+      };
+    }
+
+    function applyDraft(draft) {
+      const values = draft || {};
+      const amount = Number(values.paymentAmount || 0);
+      const currency = values.currency || 'EGP';
+      setReceiptLogo(values.logo || DEFAULT_RECEIPT_LOGO);
+      setText('receiptNumber', values.receiptNumber || 'DOS-REC-000001');
+      setText('receiptDate', values.receiptDate || todayISO());
+      setText('studentName', values.studentName || '—');
+      setText('studentNameAr', values.studentNameAr || '—');
+      setText('studentCode', values.studentCode || '—');
+      setText('studentPhone', values.studentPhone || '—');
+      setText('studentGroup', values.studentGroup || '—');
+      setText('studentPreviousCourses', values.studentPreviousCourses || '—');
+      setText('courseLevel', values.courseLevel || '—');
+      setText('paymentType', values.paymentType || 'نقدي — Cash');
+      setText('paymentAmount', `${amount.toLocaleString('ar-EG', { maximumFractionDigits: 2 })} ${currency}`);
+      setText('currencyValue', currency);
+      setText('notes', values.notes || receiptNotesDefault());
+      setText('preparedBy', values.preparedBy || 'Administration');
+      setText('accountName', values.accountName || 'Buchhalter DOS');
+      setText('bankName', values.bankName || 'DOS Cash / Bank');
+      setText('accountEmail', values.accountEmail || 'buchhalter@dos-eg.com');
+      setText('accountPhone', values.accountPhone || '+201553002897');
+
+      setInput('f_studentName', values.studentName || '');
+      setInput('f_studentNameAr', values.studentNameAr || '');
+      setInput('f_studentCode', values.studentCode || '');
+      setInput('f_studentPhone', values.studentPhone || '');
+      setInput('f_studentEmail', values.studentEmail || '');
+      setInput('f_studentGroup', values.studentGroup || '');
+      setInput('f_studentPreviousCourses', values.studentPreviousCourses || '');
+      setInput('f_courseLevel', values.courseLevel || '');
+      setInput('f_paymentType', values.paymentType || 'نقدي — Cash');
+      setInput('f_paymentAmount', values.paymentAmount || 0);
+      setInput('f_currency', currency);
+      setInput('f_receiptNumber', values.receiptNumber || '');
+      setInput('f_receiptDate', values.receiptDate || todayISO());
+      setInput('f_notes', values.notes || receiptNotesDefault());
+    }
+
+    function saveDraft() {
+      try {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(gatherDraft()));
+      } catch (e) {
+        console.warn('Receipt draft could not be saved.', e);
+      }
+    }
+
+    function loadDraft() {
+      try {
+        const raw = localStorage.getItem(DRAFT_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function applyFormToReceipt() {
+      const values = {
+        receiptNumber: readValue('f_receiptNumber') || document.getElementById('receiptNumber')?.textContent || `DOS-REC-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`,
+        receiptDate: readValue('f_receiptDate') || todayISO(),
+        studentCode: readValue('f_studentCode') || '',
+        studentName: readValue('f_studentName') || '',
+        studentNameAr: readValue('f_studentNameAr') || '',
+        studentPhone: readValue('f_studentPhone') || '',
+        studentEmail: readValue('f_studentEmail') || '',
+        studentGroup: readValue('f_studentGroup') || '',
+        studentPreviousCourses: readValue('f_studentPreviousCourses') || '',
+        courseLevel: readValue('f_courseLevel') || '',
+        paymentType: readValue('f_paymentType') || 'نقدي — Cash',
+        paymentAmount: Number(readValue('f_paymentAmount') || 0),
+        currency: readValue('f_currency') || 'EGP',
+        notes: readValue('f_notes') || receiptNotesDefault(),
+        preparedBy: document.getElementById('preparedBy')?.textContent || 'Administration',
+        accountName: document.getElementById('accountName')?.textContent || 'Buchhalter DOS',
+        bankName: document.getElementById('bankName')?.textContent || 'DOS Cash / Bank',
+        accountEmail: document.getElementById('accountEmail')?.textContent || 'buchhalter@dos-eg.com',
+        accountPhone: document.getElementById('accountPhone')?.textContent || '+201553002897',
+        logo: document.getElementById('receiptLogo')?.src || DEFAULT_RECEIPT_LOGO
+      };
+
+      applyDraft(values);
+      saveDraft();
+    }
+
+    function toggleForm() {
+      const form = document.getElementById('receiptForm');
+      const isVisible = form.style.display === 'block';
+      form.style.display = isVisible ? 'none' : 'block';
+
+      if (!isVisible) {
+        const draft = loadDraft() || {};
+        setInput('f_studentName', draft.studentName || '');
+        setInput('f_studentNameAr', draft.studentNameAr || '');
+        setInput('f_studentCode', draft.studentCode || '');
+        setInput('f_studentPhone', draft.studentPhone || '');
+        setInput('f_studentEmail', draft.studentEmail || '');
+        setInput('f_studentGroup', draft.studentGroup || '');
+        setInput('f_studentPreviousCourses', draft.studentPreviousCourses || '');
+        setInput('f_courseLevel', draft.courseLevel || '');
+        setInput('f_paymentType', draft.paymentType || 'نقدي — Cash');
+        setInput('f_paymentAmount', draft.paymentAmount || 0);
+        setInput('f_currency', draft.currency || 'EGP');
+        setInput('f_receiptNumber', draft.receiptNumber || '');
+        setInput('f_receiptDate', draft.receiptDate || todayISO());
+        setInput('f_notes', draft.notes || receiptNotesDefault());
+      }
+    }
+
+    window.addEventListener('message', function (event) {
+      if (!event.data || event.data.type !== 'dos-receipt-draft' || !event.data.draft) return;
+      applyDraft(event.data.draft);
+      saveDraft();
+    });
+
+    window.addEventListener('load', function () {
+      const draft = loadDraft();
+      if (draft) {
+        applyDraft(draft);
+      } else {
+        applyDraft({
+          accountName: 'Buchhalter DOS',
+          bankName: 'DOS Cash / Bank',
+          accountEmail: 'buchhalter@dos-eg.com',
+          accountPhone: '+201553002897',
+          receiptNumber: `DOS-REC-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`,
+          receiptDate: todayISO(),
+          studentCode: '',
+          studentName: '',
+          studentNameAr: '',
+          studentPhone: '',
+          studentEmail: '',
+          studentGroup: '',
+          studentPreviousCourses: '',
+          courseLevel: '',
+          paymentType: 'نقدي — Cash',
+          paymentAmount: 0,
+          currency: 'EGP',
+          notes: receiptNotesDefault(),
+          preparedBy: '',
+          logo: DEFAULT_RECEIPT_LOGO
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شريك المحادثة الألمانية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#12181A;
+    --night-2:#1A2426;
+    --teal:#1F3D3C;
+    --teal-light:#2E5654;
+    --amber:#E8A659;
+    --amber-dim:#C98A44;
+    --copper:#C97A5C;
+    --cream:#F3EEE4;
+    --cream-dim:#D8D1C2;
+    --ink:#0F1414;
+    --line:rgba(243,238,228,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--night);
+    color:var(--cream);
+    font-family:'IBM Plex Sans Arabic','IBM Plex Sans',sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  .app{
+    display:grid;
+    grid-template-columns:1.05fr 1fr;
+    min-height:100vh;
+  }
+  @media (max-width:900px){
+    .app{grid-template-columns:1fr;}
+  }
+
+  /* ---------- STAGE (left) ---------- */
+  .stage{
+    position:relative;
+    background:
+      radial-gradient(ellipse at 20% 15%, rgba(232,166,89,0.10), transparent 45%),
+      radial-gradient(ellipse at 80% 75%, rgba(46,86,84,0.35), transparent 55%),
+      linear-gradient(180deg, var(--night) 0%, var(--night-2) 100%);
+    padding:44px 40px 32px;
+    display:flex;
+    flex-direction:column;
+    min-height:520px;
+  }
+  .bokeh{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+  .bokeh span{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(1px);
+    opacity:0.55;
+    animation:drift 9s ease-in-out infinite;
+  }
+  @keyframes drift{
+    0%,100%{transform:translateY(0) scale(1);opacity:.35;}
+    50%{transform:translateY(-10px) scale(1.08);opacity:.7;}
+  }
+
+  .brand{
+    position:relative;
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(26px,3vw,34px);
+    letter-spacing:0.2px;
+    color:var(--cream);
+  }
+  .brand em{
+    font-style:italic;
+    color:var(--amber);
+    font-weight:500;
+  }
+  .brand-sub{
+    position:relative;
+    color:var(--cream-dim);
+    font-size:14px;
+    margin-top:6px;
+    max-width:38ch;
+  }
+
+  .header-row{
+    position:relative;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .session-clock{
+    flex-shrink:0;
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-variant-numeric:tabular-nums;
+    font-size:19px;
+    color:var(--cream);
+    background:rgba(243,238,228,0.08);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:8px 18px;
+    letter-spacing:.3px;
+  }
+  .session-clock.ending{
+    color:var(--ink);
+    background:var(--amber);
+    border-color:var(--amber);
+  }
+  .session-clock.done{
+    color:var(--cream);
+    background:var(--copper);
+    border-color:var(--copper);
+  }
+
+  .avatar-wrap{
+    position:relative;
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:18px 0 6px;
+  }
+  svg#avatar{ width:min(280px,72%); height:auto; }
+  #avatar .hairFemale{ display:none; }
+  #avatar .jawFemale{ display:none; }
+  #avatar.is-female .hairMale{ display:none; }
+  #avatar.is-female .beardMale{ display:none; }
+  #avatar.is-female .hairFemale{ display:block; }
+  #avatar.is-female .jawFemale{ display:block; }
+
+  .speech-bubble{
+    position:relative;
+    background:var(--cream);
+    color:var(--ink);
+    border-radius:18px;
+    padding:20px 22px;
+    min-height:64px;
+    box-shadow:0 18px 34px rgba(0,0,0,0.35);
+    font-family:'IBM Plex Sans',sans-serif;
+    direction:ltr;
+    text-align:left;
+  }
+  .speech-bubble::before{
+    content:"";
+    position:absolute;
+    top:-11px; left:50%; transform:translateX(-50%);
+    border-width:0 11px 12px 11px;
+    border-style:solid;
+    border-color:transparent transparent var(--cream) transparent;
+  }
+  .speaker-tag{
+    display:inline-block;
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    color:var(--teal);
+    font-size:13px;
+    letter-spacing:.3px;
+    margin-bottom:6px;
+  }
+  .de-line{ font-size:20px; line-height:1.55; }
+  .de-line .word{ padding:0 1px; border-radius:4px; transition:background .12s ease, color .12s ease; }
+  .de-line .word.active{ background:var(--amber); color:var(--ink); }
+
+  .your-turn{
+    margin-top:14px;
+    background:rgba(232,166,89,0.14);
+    border:1px solid rgba(232,166,89,0.4);
+    border-radius:14px;
+    padding:14px 16px;
+    display:none;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .your-turn.show{ display:flex; }
+  .your-turn .msg{ font-size:14px; color:var(--amber); flex:1; min-width:180px; }
+  .rec-countdown{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-variant-numeric:tabular-nums;
+    font-size:15px;
+    color:var(--amber);
+    min-width:34px;
+    text-align:center;
+  }
+  .rec-countdown.urgent{ color:var(--copper); }
+  .your-turn .msg b{ color:var(--cream); }
+
+  .transport{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:16px;
+    flex-wrap:wrap;
+  }
+  button.ctl{
+    border:1px solid var(--line);
+    background:rgba(243,238,228,0.06);
+    color:var(--cream);
+    padding:10px 16px;
+    border-radius:999px;
+    font-size:14px;
+    font-family:inherit;
+    cursor:pointer;
+    transition:background .15s ease, transform .1s ease;
+  }
+  button.ctl:hover{ background:rgba(243,238,228,0.14); }
+  button.ctl:active{ transform:scale(0.97); }
+  button.ctl.primary{
+    background:var(--amber);
+    color:var(--ink);
+    border-color:var(--amber);
+    font-weight:600;
+  }
+  button.ctl.primary:hover{ background:#f0b673; }
+  button.ctl.rec{
+    background:var(--copper);
+    border-color:var(--copper);
+    color:var(--ink);
+    font-weight:600;
+  }
+  button.ctl:disabled{ opacity:.4; cursor:not-allowed; }
+
+  .progress-line{
+    position:relative;
+    height:3px;
+    background:var(--line);
+    border-radius:3px;
+    margin-top:16px;
+    overflow:hidden;
+  }
+  .progress-line i{
+    display:block; height:100%; width:0%;
+    background:var(--amber);
+    transition:width .2s linear;
+  }
+  .counter{ font-size:12px; color:var(--cream-dim); margin-top:6px; }
+
+  /* ---------- PANEL (right) ---------- */
+  .panel{
+    background:var(--cream);
+    color:var(--ink);
+    padding:36px 38px 40px;
+    overflow-y:auto;
+  }
+  .panel h2{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:22px;
+    margin:0 0 4px;
+  }
+  .panel .lede{ color:#5b5b52; font-size:13.5px; margin:0 0 26px; }
+
+  .field{ margin-bottom:20px; }
+  .field label{
+    display:block;
+    font-size:12.5px;
+    font-weight:600;
+    color:#5b5b52;
+    margin-bottom:7px;
+    letter-spacing:.2px;
+  }
+  .field input[type=text], .field select, .field textarea{
+    width:100%;
+    border:1.5px solid #DCD5C4;
+    background:#fff;
+    border-radius:10px;
+    padding:10px 12px;
+    font-family:inherit;
+    font-size:14.5px;
+    color:var(--ink);
+  }
+  .field input[type=text]:focus, .field select:focus, .field textarea:focus{
+    outline:none; border-color:var(--teal-light);
+  }
+  .field textarea{ min-height:120px; resize:vertical; direction:ltr; text-align:left; font-family:'IBM Plex Sans',sans-serif;}
+
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+
+  .speed-row{ display:flex; align-items:center; gap:12px; }
+  .speed-row input[type=range]{ flex:1; accent-color:var(--teal); }
+  .speed-val{ font-family:'Fraunces',serif; font-weight:600; min-width:42px; text-align:center; }
+
+  .hint{ font-size:12px; color:#8a8578; margin-top:6px; }
+
+  .divider{ height:1px; background:#E4DECF; margin:26px 0; }
+
+  .convo-log{
+    max-height:190px;
+    overflow-y:auto;
+    background:#fff;
+    border:1px solid #E4DECF;
+    border-radius:10px;
+    padding:10px 12px;
+    font-size:13px;
+    line-height:1.65;
+    direction:ltr;
+    text-align:left;
+  }
+  .convo-log .entry{ margin-bottom:6px; }
+  .convo-log .entry b{ font-family:'Fraunces',serif; color:var(--teal); }
+  .convo-log .entry.user b{ color:var(--copper); }
+  .convo-log .entry.pending{ opacity:.55; font-style:italic; }
+
+  .pron-panel{
+    background:#FBF9F3;
+    border:1px solid #E4DECF;
+    border-radius:12px;
+    padding:14px 16px;
+    margin-top:4px;
+  }
+  .pron-panel h3{
+    font-family:'Fraunces',serif;
+    font-size:14.5px;
+    margin:0 0 8px;
+    color:var(--teal);
+  }
+  .pron-item{ font-size:13px; margin-bottom:7px; line-height:1.5; }
+  .pron-item b{ font-family:'IBM Plex Sans',sans-serif; direction:ltr; display:inline-block; background:#EFE9DB; padding:1px 6px; border-radius:5px; }
+  .pron-empty{ font-size:12.5px; color:#9a9585; }
+
+  .recordings{ margin-top:10px; display:flex; flex-direction:column; gap:8px; max-height:150px; overflow-y:auto; }
+  .rec-item{ display:flex; align-items:center; gap:8px; font-size:12.5px; background:#fff; border:1px solid #E4DECF; border-radius:8px; padding:6px 8px; }
+  .rec-item audio{ height:30px; flex:1; }
+
+  .btn-secondary{
+    display:inline-block;
+    background:var(--teal);
+    color:#fff;
+    border:none;
+    padding:9px 16px;
+    border-radius:9px;
+    font-size:13.5px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .btn-secondary:hover{ background:var(--teal-light); }
+
+  .badge-saved{
+    font-size:11.5px;
+    color:#7a9a8f;
+    opacity:0;
+    transition:opacity .3s ease;
+  }
+  .badge-saved.show{ opacity:1; }
+
+  @media (prefers-reduced-motion: reduce){
+    .bokeh span{ animation:none; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- LEFT: STAGE -->
+  <div class="stage">
+    <div class="bokeh" id="bokeh"></div>
+
+    <div class="header-row">
+      <div>
+        <div class="brand">شريك <em>المحادثة</em> الألماني</div>
+        <div class="brand-sub">تدرّب على النطق الألماني الصحيح مع شخصية تتحدث معك بصوت حقيقي، بسرعة تتحكم فيها بنفسك.</div>
+      </div>
+      <div class="session-clock" id="sessionClock">⏱ 50:00</div>
+    </div>
+
+    <div class="avatar-wrap">
+      <svg id="avatar" viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+        <!-- background glow -->
+        <ellipse cx="120" cy="260" rx="95" ry="14" fill="#000" opacity="0.25"/>
+        <!-- suit body -->
+        <path d="M55 300 C55 230 70 205 95 195 L145 195 C170 205 185 230 185 300 Z" fill="#1F3D3C"/>
+        <path d="M95 195 L120 300 L98 300 C90 260 88 220 95 195Z" fill="#193230"/>
+        <path d="M145 195 L120 300 L142 300 C150 260 152 220 145 195Z" fill="#193230"/>
+        <!-- waistcoat -->
+        <path d="M104 200 L120 300 L136 200 L128 196 L120 210 L112 196 Z" fill="#284A48"/>
+        <circle cx="120" cy="230" r="2.4" fill="#C9A24A"/>
+        <circle cx="120" cy="250" r="2.4" fill="#C9A24A"/>
+        <circle cx="120" cy="270" r="2.4" fill="#C9A24A"/>
+        <!-- shirt collar -->
+        <path d="M108 196 L120 214 L132 196 L124 190 L116 190 Z" fill="#F3EEE4"/>
+        <!-- tie -->
+        <path d="M116 196 L124 196 L128 214 L120 224 L112 214 Z" fill="#C97A5C"/>
+        <path d="M112 214 L128 214 L124 240 L120 246 L116 240 Z" fill="#C97A5C"/>
+        <path d="M114 200 L126 200" stroke="#F3EEE4" stroke-width="2" opacity="0.6"/>
+        <path d="M113.5 208 L126.5 208" stroke="#F3EEE4" stroke-width="2" opacity="0.6"/>
+        <!-- lapel pin chain -->
+        <path d="M148 205 q22 40 4 92" stroke="#D9CFA8" stroke-width="1.4" fill="none" opacity="0.85"/>
+        <circle cx="148" cy="205" r="4" fill="#D9CFA8"/>
+        <!-- neck -->
+        <rect x="108" y="168" width="24" height="26" rx="8" fill="#C98B6E"/>
+        <!-- head -->
+        <ellipse cx="120" cy="130" rx="42" ry="46" fill="#D69A78"/>
+        <!-- ears -->
+        <ellipse cx="79" cy="132" rx="7" ry="10" fill="#D69A78"/>
+        <ellipse cx="161" cy="132" rx="7" ry="10" fill="#D69A78"/>
+        <!-- hair (male) -->
+        <g class="hairMale">
+          <path d="M78 118 C74 78 100 58 120 58 C140 58 166 78 162 118 C158 100 148 92 140 96 C132 84 108 84 100 96 C92 92 82 100 78 118Z" fill="#26201C"/>
+        </g>
+        <!-- hair (female) -->
+        <g class="hairFemale">
+          <path d="M76 118 C72 76 98 56 120 56 C142 56 168 76 164 118 C163 145 160 178 152 208 L143 208 C147 172 149 140 146 116 C142 96 132 88 120 88 C108 88 98 96 94 116 C91 140 93 172 97 208 L88 208 C80 178 77 145 76 118Z" fill="#3B2A22"/>
+          <path d="M120 58 C130 58 140 64 144 76" stroke="#4A3529" stroke-width="2" fill="none" opacity="0.5"/>
+        </g>
+        <!-- beard (male only) -->
+        <g class="beardMale">
+          <path d="M82 128 C80 158 96 182 120 184 C144 182 160 158 158 128 C154 150 142 168 120 170 C98 168 86 150 82 128Z" fill="#2E2620" opacity="0.92"/>
+        </g>
+        <!-- face highlight (skin above beard) -->
+        <path d="M92 122 C92 108 104 100 120 100 C136 100 148 108 148 122 C148 132 140 140 120 140 C100 140 92 132 92 122Z" fill="#E3AC8B"/>
+        <!-- soft jawline shading for female mode (no beard) -->
+        <g class="jawFemale">
+          <path d="M86 130 C88 155 100 175 120 177 C140 175 152 155 154 130 C152 150 140 164 120 166 C100 164 88 150 86 130Z" fill="#D69A78"/>
+        </g>
+        <!-- eyebrows -->
+        <path d="M96 116 q10 -6 20 -1" stroke="#26201C" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+        <path d="M124 115 q10 -5 20 1" stroke="#26201C" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+        <!-- eyes -->
+        <ellipse cx="105" cy="124" rx="4.2" ry="5" fill="#1A1512"/>
+        <ellipse cx="135" cy="124" rx="4.2" ry="5" fill="#1A1512"/>
+        <ellipse cx="106.4" cy="122" rx="1.2" ry="1.4" fill="#fff"/>
+        <ellipse cx="136.4" cy="122" rx="1.2" ry="1.4" fill="#fff"/>
+        <!-- eyelids for blink -->
+        <rect id="lidL" x="99" y="119" width="12" height="0" fill="#D69A78"/>
+        <rect id="lidR" x="129" y="119" width="12" height="0" fill="#D69A78"/>
+        <!-- nose -->
+        <path d="M120 122 L116 138 q4 4 8 0Z" fill="#C98B6E" opacity="0.7"/>
+        <!-- mouth group (animated) -->
+        <g id="mouthGroup" transform="translate(120,150)">
+          <path id="mouth" d="M-13 0 Q0 6 13 0 Q0 3 -13 0 Z" fill="#7A3B33"/>
+        </g>
+        <!-- pocket square + pin -->
+        <rect x="140" y="220" width="14" height="10" fill="#F3EEE4" opacity="0.85"/>
+        <circle cx="148" cy="206" r="4.5" fill="#2E5654" stroke="#D9CFA8" stroke-width="1.2"/>
+      </svg>
+    </div>
+
+    <div class="speech-bubble">
+      <span class="speaker-tag" id="speakerTag">Mark</span>
+      <div class="de-line" id="deLine">Guten Tag! Ich heiße Mark.</div>
+    </div>
+
+    <div class="your-turn" id="yourTurn">
+      <div class="msg">دورك يا <b id="turnName">صديقي</b>! اضغط وتكلم بالألماني، وهننتقل تلقائياً للجملة اللي بعدها.</div>
+      <button class="ctl rec" id="recBtn" type="button">🎙️ ابدأ الرد بصوتك</button>
+      <span class="rec-countdown" id="recCountdown"></span>
+    </div>
+
+    <div class="progress-line"><i id="progressBar"></i></div>
+    <div class="counter" id="counter">السطر 1 من 1</div>
+
+    <div class="transport">
+      <button class="ctl" id="prevBtn" type="button">◀ السابق</button>
+      <button class="ctl primary" id="playBtn" type="button">▶ تشغيل</button>
+      <button class="ctl" id="nextBtn" type="button">التالي ▶</button>
+      <button class="ctl" id="restartBtn" type="button">↺ من البداية</button>
+      <button class="ctl" id="repeatSlowBtn" type="button">🐢 كرّر ببطء</button>
+    </div>
+  </div>
+
+  <!-- RIGHT: PANEL -->
+  <div class="panel">
+    <h2>إعدادات المحادثة</h2>
+    <p class="lede">خصّص الشخصية وطريقة تحدثها، وارفع أي محادثة ألمانية جديدة للتدرب عليها.</p>
+
+    <div class="row2">
+      <div class="field">
+        <label for="avatarName">اسم الشخصية</label>
+        <input type="text" id="avatarName" value="Max" placeholder="مثال: Max">
+      </div>
+      <div class="field">
+        <label for="userName">الاسم اللي هينادي بيه عليك</label>
+        <input type="text" id="userName" placeholder="مثال: يوسف">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>سجل المحادثة (الشخصية بتتذكره أول بأول)</label>
+      <div class="convo-log" id="convoLog"><p class="pron-empty">لسه المحادثة ما بدأتش.</p></div>
+    </div>
+
+    <div class="field">
+      <label for="roleSelect">أنا أمثّل دور:</label>
+      <select id="roleSelect"></select>
+      <p class="hint">الشخصية الكرتونية هتتكلم بكل الأدوار التانية، وهتوقف عند دورك عشان تتكلم وتسجّل صوتك.</p>
+    </div>
+
+    <div class="field">
+      <label for="voiceSelect">صوت الشخصية (ألماني)</label>
+      <select id="voiceSelect"></select>
+      <p class="hint" id="voiceHint">جاري تحميل الأصوات المتاحة في المتصفح...</p>
+    </div>
+
+    <div class="field">
+      <label for="speedRange">سرعة الكلام</label>
+      <div class="speed-row">
+        <input type="range" id="speedRange" min="0.5" max="1.3" step="0.05" value="0.85">
+        <span class="speed-val" id="speedVal">0.85×</span>
+      </div>
+      <p class="hint">ابدأ ببطء لحد ما تضبط مخارج الحروف صح، بعدين زوّد السرعة تدريجياً.</p>
+    </div>
+
+    <div class="pron-panel">
+      <h3>ملاحظات النطق لهذا السطر</h3>
+      <div id="pronList"><p class="pron-empty">شغّل السطر عشان تظهر ملاحظات مخارج الحروف الخاصة بيه.</p></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field">
+      <label for="dialogInput">الصق محادثة ألمانية جديدة (بصيغة: الاسم: الجملة)</label>
+      <textarea id="dialogInput" placeholder="Mark: Guten Tag! Ich heiße Mark.&#10;Anna: Guten Tag! Ich bin Anna."></textarea>
+      <div style="display:flex; align-items:center; gap:12px; margin-top:10px;">
+        <button class="btn-secondary" id="loadDialogBtn" type="button">تحميل هذه المحادثة</button>
+        <span class="badge-saved" id="savedBadge">✓ تم الحفظ</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field">
+      <label>تسجيلاتك في هذه الجلسة</label>
+      <div class="recordings" id="recordingsList">
+        <p class="pron-empty">لسه معملتش تسجيلات. سجّل ردودك وهتظهر هنا للاستماع.</p>
+      </div>
+      <p class="hint">التسجيلات مؤقتة لهذه الجلسة فقط ومش بتتخزن على السيرفر. والانتقال التلقائي للجملة اللي بعدها بيشتغل بشكل أفضل على متصفح Chrome على الكمبيوتر.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const DEFAULT_DIALOG = `Mark: Guten Tag! Ich heiße Mark. Und wie heißen Sie?
+Anna: Guten Tag! Ich bin Anna. Freut mich!
+Mark: Freut mich auch, Anna. Woher kommen Sie?
+Anna: Ich komme aus Deutschland, aus Berlin. Und woher kommst du, Mark?
+Mark: Ich komme aus Ägypten und wohne in Kairo. Sprichst du Deutsch?
+Anna: Ja, ich spreche Deutsch und ein bisschen Englisch. Und was sprichst du?
+Mark: Ich spreche Arabisch und gut Deutsch. Sag mal, wie ist deine Telefonnummer?
+Anna: Meine Nummer ist 0176 45 32 89 10. Und wie ist deine Nummer?
+Mark: Meine Telefonnummer ist 0122 98 76 54 32. Wie buchstabiert man deinen Nachnamen?
+Anna: Mein Nachname ist Weber. Man buchstabiert ihn: W-E-B-E-R.
+Mark: Danke. Und wie ist deine E-Mail-Adresse, Anna?
+Anna: Meine E-Mail-Adresse ist anna.weber@web.de. Hast du auch eine E-Mail-Adresse?
+Mark: Ja, meine E-Mail-Adresse ist mark.hassan@outlook.de.
+Anna: Sehr schön. Wie geht es dir heute, Mark?
+Mark: Danke, es geht mir sehr gut. Und wie geht es Ihnen?
+Anna: Mir geht es auch gut, danke der Nachfrage! Wer ist das da drüben?
+Mark: Das ist Paul. Er kommt aus der Schweiz und spricht Französisch und Deutsch.
+Anna: Hallo Paul! Ich heiße Anna.
+Paul: Hallo Anna! Willkommen in der WG. Wie alt bist du, Anna?
+Anna: Ich bin zwanzig Jahre alt. Und du, Paul?
+Paul: Ich bin neunzehn Jahre alt. Wohnst du schon lange hier in Berlin?
+Anna: Nein, erst seit einer Woche. Und ich wohne mit Mark zusammen.
+Mark: Ja, genau. Wir sind jetzt eine kleine Wohngemeinschaft.
+Paul: Das ist toll! Woher kommen eigentlich Ihre Eltern, Anna?
+Anna: Meine Mutter kommt aus Österreich und mein Vater kommt aus Deutschland.
+Mark: Interessant! Sprechen deine Eltern auch Deutsch?
+Anna: Natürlich, Deutsch ist unsere Muttersprache. Und was machen Sie beruflich, Mark?
+Mark: Ich bin Student und lerne hier in Berlin.
+Anna: Ach so, verstehe. Auf Wiedersehen, Mark und Paul! Bis bald!
+Mark: Auf Wiedersehen, Anna! Tschüss!`;
+
+  // ---------- state ----------
+  let lines = [];         // [{speaker, text}]
+  let currentIndex = 0;
+  let voices = [];
+  let isSpeaking = false;
+  let mediaRecorder = null;
+  let recordedChunks = [];
+  let recordingsByLine = {};
+  let conversationLog = [];   // parallel to lines: {speaker, text, isUser, pending}
+  let recognition = null;
+  let isListening = false;
+  let micStream = null;
+  const SpeechRecognitionImpl = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  // ---------- elements ----------
+  const el = {
+    speakerTag: document.getElementById('speakerTag'),
+    deLine: document.getElementById('deLine'),
+    yourTurn: document.getElementById('yourTurn'),
+    turnName: document.getElementById('turnName'),
+    recBtn: document.getElementById('recBtn'),
+    progressBar: document.getElementById('progressBar'),
+    counter: document.getElementById('counter'),
+    prevBtn: document.getElementById('prevBtn'),
+    playBtn: document.getElementById('playBtn'),
+    nextBtn: document.getElementById('nextBtn'),
+    restartBtn: document.getElementById('restartBtn'),
+    repeatSlowBtn: document.getElementById('repeatSlowBtn'),
+    avatarName: document.getElementById('avatarName'),
+    userName: document.getElementById('userName'),
+    roleSelect: document.getElementById('roleSelect'),
+    voiceSelect: document.getElementById('voiceSelect'),
+    voiceHint: document.getElementById('voiceHint'),
+    speedRange: document.getElementById('speedRange'),
+    speedVal: document.getElementById('speedVal'),
+    pronList: document.getElementById('pronList'),
+    dialogInput: document.getElementById('dialogInput'),
+    loadDialogBtn: document.getElementById('loadDialogBtn'),
+    savedBadge: document.getElementById('savedBadge'),
+    recordingsList: document.getElementById('recordingsList'),
+    mouth: document.getElementById('mouth'),
+    lidL: document.getElementById('lidL'),
+    lidR: document.getElementById('lidR'),
+    bokeh: document.getElementById('bokeh')
+  };
+
+  // ---------- bokeh background ----------
+  (function initBokeh(){
+    const colors = ['#E8A659','#C97A5C','#F3EEE4','#8FBFB8'];
+    for(let i=0;i<14;i++){
+      const s = document.createElement('span');
+      const size = 6 + Math.random()*26;
+      s.style.width = size+'px';
+      s.style.height = size+'px';
+      s.style.left = Math.random()*100+'%';
+      s.style.top = Math.random()*100+'%';
+      s.style.background = colors[i % colors.length];
+      s.style.animationDuration = (6+Math.random()*6)+'s';
+      s.style.animationDelay = (Math.random()*4)+'s';
+      el.bokeh.appendChild(s);
+    }
+  })();
+
+  // ---------- idle blink ----------
+  function blinkLoop(){
+    const blink = ()=>{
+      el.lidL.setAttribute('height', 10);
+      el.lidR.setAttribute('height', 10);
+      setTimeout(()=>{ el.lidL.setAttribute('height',0); el.lidR.setAttribute('height',0); }, 140);
+    };
+    setInterval(blink, 3200 + Math.random()*2000);
+  }
+  blinkLoop();
+
+  // ---------- mouth talk animation ----------
+  let mouthInterval = null;
+  function startMouthAnim(){
+    let open = false;
+    mouthInterval = setInterval(()=>{
+      open = !open;
+      el.mouth.setAttribute('d', open
+        ? 'M-13 0 Q0 14 13 0 Q0 8 -13 0 Z'
+        : 'M-13 0 Q0 6 13 0 Q0 3 -13 0 Z');
+    }, 130);
+  }
+  function stopMouthAnim(){
+    clearInterval(mouthInterval);
+    el.mouth.setAttribute('d','M-13 0 Q0 6 13 0 Q0 3 -13 0 Z');
+  }
+
+  // ---------- parse dialogue ----------
+  function parseDialog(text){
+    const out = [];
+    text.split('\n').forEach(raw=>{
+      const t = raw.trim();
+      if(!t) return;
+      const idx = t.indexOf(':');
+      if(idx === -1) return;
+      const speaker = t.slice(0, idx).trim();
+      const content = t.slice(idx+1).trim();
+      if(speaker && content) out.push({speaker, text: content});
+    });
+    return out;
+  }
+
+  function uniqueSpeakers(arr){
+    const seen = [];
+    arr.forEach(l=>{ if(!seen.includes(l.speaker)) seen.push(l.speaker); });
+    return seen;
+  }
+
+  function loadDialog(text){
+    const parsed = parseDialog(text);
+    if(parsed.length === 0){
+      alert('لم يتم التعرف على أي سطر. تأكد من الصيغة: الاسم: الجملة');
+      return;
+    }
+    lines = parsed;
+    currentIndex = 0;
+    conversationLog = new Array(lines.length).fill(undefined);
+    recordingsByLine = {};
+    refreshRecordingsList();
+    renderConvoLog();
+    const speakers = uniqueSpeakers(lines);
+    el.roleSelect.innerHTML = '';
+    speakers.forEach(s=>{
+      const opt = document.createElement('option');
+      opt.value = s; opt.textContent = s;
+      el.roleSelect.appendChild(opt);
+    });
+    renderLine();
+    persistSettings();
+  }
+
+  // ---------- conversation memory ----------
+  function logLine(idx, text, isUser, pending){
+    conversationLog[idx] = { speaker: lines[idx].speaker, text, isUser: !!isUser, pending: !!pending };
+    renderConvoLog();
+  }
+
+  function renderConvoLog(){
+    const box = document.getElementById('convoLog');
+    const items = [];
+    conversationLog.forEach(e=>{
+      if(!e) return;
+      items.push(`<div class="entry ${e.isUser?'user':''} ${e.pending?'pending':''}"><b>${e.speaker}:</b> ${e.text}</div>`);
+    });
+    box.innerHTML = items.length ? items.join('') : '<p class="pron-empty">لسه المحادثة ما بدأتش.</p>';
+    box.scrollTop = box.scrollHeight;
+  }
+
+  // ---------- pronunciation tips ----------
+  const PRON_RULES = [
+    { re:/sch/i, label:'sch', tip:'تُنطق مثل "ش" الإنجليزية/العربية في كلمة واحدة، وليست س+ك+ه منفصلة.' },
+    { re:/[aou]ch/i, label:'ach / och / uch', tip:'صوت "ch" هنا خلفي وقوي، أقرب لصوت الخاء العربية (خ).' },
+    { re:/[eiäöü]ch/i, label:'ich / ech', tip:'صوت "ch" هنا أمامي ورقيق، يشبه هسة خفيفة بين الشين والهاء.' },
+    { re:/\bsp/i, label:'sp-', tip:'في أول الكلمة تُنطق "شپ" وليس "سپ".' },
+    { re:/\bst/i, label:'st-', tip:'في أول الكلمة تُنطق "شت" وليس "ست".' },
+    { re:/ü/i, label:'ü', tip:'ضم شفتيك كأنك تقول "و" وحاول تنطق "ي" في نفس الوقت.' },
+    { re:/ö/i, label:'ö', tip:'دوّر شفتيك كأنك تقول "و" وحاول تنطق "ي" مفتوحة أكتر من الـü.' },
+    { re:/ä/i, label:'ä', tip:'تُنطق قريبة من الـ"إ" المفتوحة، بين الألف والياء.' },
+    { re:/z/i, label:'z', tip:'تُنطق دائماً "تس" وليس "ز".' },
+    { re:/\bw/i, label:'w-', tip:'تُنطق "ف" (v إنجليزية) وليس "و".' },
+    { re:/\bv/i, label:'v-', tip:'غالباً تُنطق "ف"، إلا في كلمات أجنبية الأصل.' },
+    { re:/ie/i, label:'ie', tip:'تُنطق "ي" ممدودة طويلة.' },
+    { re:/ei/i, label:'ei', tip:'تُنطق "آي" وليس "إي".' },
+    { re:/ig\b/i, label:'-ig', tip:'في نهاية الكلمة تُنطق مثل "ich" (إش خفيفة) وليس "إيج".' },
+    { re:/pf/i, label:'pf', tip:'صوتان مدموجان معاً: پ ثم ف بسرعة بدون فاصل.' },
+    { re:/r(?![aeiouäöü])/i, label:'r', tip:'راء حلقية خفيفة من الحلق، تكاد تختفي في آخر الكلمة.' }
+  ];
+
+  function renderPronTips(text){
+    const matched = [];
+    PRON_RULES.forEach(rule=>{
+      if(rule.re.test(text) && !matched.find(m=>m.label===rule.label)){
+        matched.push(rule);
+      }
+    });
+    if(matched.length === 0){
+      el.pronList.innerHTML = '<p class="pron-empty">مافيش مخارج حروف صعبة مميزة في هذا السطر — انطقه بثقة!</p>';
+      return;
+    }
+    el.pronList.innerHTML = matched.slice(0,4).map(m=>
+      `<div class="pron-item"><b>${m.label}</b> — ${m.tip}</div>`
+    ).join('');
+  }
+
+  // ---------- rendering ----------
+  function isUserLine(line){
+    const role = el.roleSelect.value;
+    return role && line.speaker === role;
+  }
+
+  const FEMALE_NAMES = ['anna','lisa','lena','laura','julia','sophie','sophia','sarah','nina',
+    'maria','eva','emma','marie','lea','leah','mia','sabine','petra','katrin','nadine','vanessa',
+    'hanna','hannah','clara','klara','lara','melanie','stefanie','stephanie','jana','christina',
+    'christine','martina','andrea','monika','ines','tanja','birgit','claudia','susanne',
+    'katharina','johanna','greta','frieda','charlotte','luisa','louisa'];
+  function guessGender(name){
+    const n = (name||'').trim().toLowerCase();
+    return FEMALE_NAMES.includes(n) ? 'f' : 'm';
+  }
+  function updateAvatarAppearance(speakerName){
+    const avatarEl = document.getElementById('avatar');
+    avatarEl.classList.toggle('is-female', guessGender(speakerName) === 'f');
+  }
+
+  function renderLine(){
+    if(lines.length === 0) return;
+    const line = lines[currentIndex];
+    updateAvatarAppearance(line.speaker);
+    el.speakerTag.textContent = isUserLine(line) ? line.speaker + ' (أنت)' : line.speaker;
+    // wrap words for highlight
+    const words = line.text.split(/(\s+)/);
+    el.deLine.innerHTML = words.map(w=>{
+      if(w.trim()==='') return w;
+      return `<span class="word">${w}</span>`;
+    }).join('');
+    el.counter.textContent = `السطر ${currentIndex+1} من ${lines.length}`;
+    el.progressBar.style.width = (((currentIndex+1)/lines.length)*100) + '%';
+    renderPronTips(line.text);
+
+    const userTurn = isUserLine(line);
+    el.yourTurn.classList.toggle('show', userTurn);
+    if(userTurn){
+      el.turnName.textContent = el.userName.value.trim() || line.speaker;
+    }
+    if(!conversationLog[currentIndex]){
+      if(userTurn) logLine(currentIndex, 'في انتظار ردك... 🎙️', true, true);
+      else logLine(currentIndex, line.text, false, false);
+    }
+    renderRecordingForLine(currentIndex);
+  }
+
+  // ---------- session clock: visual 50-minute countdown, no spoken nudges ----------
+  const SESSION_SECONDS = 50 * 60;
+  let remainingSeconds = SESSION_SECONDS;
+  let sessionClockInterval = null;
+  function formatClock(totalSeconds){
+    const m = Math.floor(totalSeconds / 60).toString().padStart(2,'0');
+    const s = Math.floor(totalSeconds % 60).toString().padStart(2,'0');
+    return `${m}:${s}`;
+  }
+  function updateClockDisplay(){
+    const clockEl = document.getElementById('sessionClock');
+    if(!clockEl) return;
+    clockEl.textContent = '⏱ ' + formatClock(remainingSeconds);
+    clockEl.classList.toggle('ending', remainingSeconds <= 300 && remainingSeconds > 0);
+    clockEl.classList.toggle('done', remainingSeconds <= 0);
+  }
+  function startSessionClock(){
+    updateClockDisplay();
+    sessionClockInterval = setInterval(()=>{
+      if(remainingSeconds <= 0){
+        clearInterval(sessionClockInterval);
+        updateClockDisplay();
+        return;
+      }
+      remainingSeconds--;
+      updateClockDisplay();
+    }, 1000);
+  }
+
+  function highlightWord(charIndex){
+    const spans = el.deLine.querySelectorAll('.word');
+    let count = 0;
+    spans.forEach(s=>s.classList.remove('active'));
+    const line = lines[currentIndex];
+    if(!line) return;
+    // find which word contains charIndex
+    let acc = 0;
+    const words = line.text.split(/(\s+)/);
+    let wordSpanIdx = -1;
+    let runningSpanIdx = 0;
+    for(let i=0;i<words.length;i++){
+      const w = words[i];
+      if(w.trim() !== ''){
+        if(charIndex >= acc && charIndex < acc + w.length){
+          wordSpanIdx = runningSpanIdx;
+        }
+        runningSpanIdx++;
+      }
+      acc += w.length;
+    }
+    if(wordSpanIdx >= 0 && spans[wordSpanIdx]) spans[wordSpanIdx].classList.add('active');
+  }
+
+  // ---------- speech synthesis ----------
+  function populateVoices(){
+    voices = speechSynthesis.getVoices().filter(v=>v.lang && v.lang.toLowerCase().startsWith('de'));
+    el.voiceSelect.innerHTML = '';
+    if(voices.length === 0){
+      el.voiceHint.textContent = 'مفيش صوت ألماني متثبت في متصفحك حالياً. جرّب متصفح Chrome على سطح المكتب، أو ثبّت لغة ألمانية في إعدادات النظام.';
+      return;
+    }
+    el.voiceHint.textContent = `تم العثور على ${voices.length} صوت ألماني.`;
+    voices.forEach((v,i)=>{
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = `${v.name} (${v.lang})`;
+      el.voiceSelect.appendChild(opt);
+    });
+  }
+  speechSynthesis.onvoiceschanged = populateVoices;
+  populateVoices();
+
+  function speakCurrentLine(rateOverride){
+    if(lines.length === 0) return;
+    const line = lines[currentIndex];
+    if(isUserLine(line)){
+      // don't auto-speak the user's own line; just show the turn prompt
+      return;
+    }
+    speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(line.text);
+    const chosen = voices[el.voiceSelect.value];
+    if(chosen) utter.voice = chosen;
+    utter.lang = chosen ? chosen.lang : 'de-DE';
+    utter.rate = rateOverride || parseFloat(el.speedRange.value);
+    utter.onstart = ()=>{ isSpeaking = true; startMouthAnim(); el.playBtn.textContent = '⏸ إيقاف'; };
+    utter.onboundary = (e)=>{ if(e.charIndex !== undefined) highlightWord(e.charIndex); };
+    utter.onend = ()=>{ isSpeaking = false; stopMouthAnim(); el.playBtn.textContent = '▶ تشغيل'; };
+    speechSynthesis.speak(utter);
+  }
+
+  // ---------- transport controls ----------
+  el.playBtn.addEventListener('click', ()=>{
+    if(isSpeaking){ speechSynthesis.cancel(); isSpeaking=false; stopMouthAnim(); el.playBtn.textContent='▶ تشغيل'; return; }
+    speakCurrentLine();
+  });
+  el.nextBtn.addEventListener('click', ()=>{
+    speechSynthesis.cancel();
+    if(currentIndex < lines.length-1){ currentIndex++; renderLine(); speakCurrentLine(); }
+  });
+  el.prevBtn.addEventListener('click', ()=>{
+    speechSynthesis.cancel();
+    if(currentIndex > 0){ currentIndex--; renderLine(); speakCurrentLine(); }
+  });
+  el.restartBtn.addEventListener('click', ()=>{
+    speechSynthesis.cancel();
+    currentIndex = 0; renderLine(); speakCurrentLine();
+  });
+  el.repeatSlowBtn.addEventListener('click', ()=>{
+    speakCurrentLine(Math.max(0.5, parseFloat(el.speedRange.value) - 0.25));
+  });
+
+  el.speedRange.addEventListener('input', ()=>{
+    el.speedVal.textContent = parseFloat(el.speedRange.value).toFixed(2) + '×';
+    persistSettings();
+  });
+  el.roleSelect.addEventListener('change', ()=>{ renderLine(); persistSettings(); });
+  el.avatarName.addEventListener('change', persistSettings);
+  el.userName.addEventListener('change', ()=>{ renderLine(); persistSettings(); });
+  el.voiceSelect.addEventListener('change', persistSettings);
+
+  el.loadDialogBtn.addEventListener('click', ()=>{
+    loadDialog(el.dialogInput.value);
+  });
+
+  // ---------- recording ----------
+  function renderRecordingForLine(idx){
+    const rec = recordingsByLine[idx];
+    if(!rec){ return; }
+  }
+
+  function refreshRecordingsList(){
+    const keys = Object.keys(recordingsByLine);
+    if(keys.length === 0){
+      el.recordingsList.innerHTML = '<p class="pron-empty">لسه معملتش تسجيلات. سجّل ردودك وهتظهر هنا للاستماع.</p>';
+      return;
+    }
+    el.recordingsList.innerHTML = '';
+    keys.sort((a,b)=>a-b).forEach(idx=>{
+      const rec = recordingsByLine[idx];
+      const wrap = document.createElement('div');
+      wrap.className = 'rec-item';
+      const label = document.createElement('span');
+      label.textContent = `سطر ${parseInt(idx)+1}`;
+      const audio = document.createElement('audio');
+      audio.controls = true;
+      audio.src = rec.url;
+      wrap.appendChild(label);
+      wrap.appendChild(audio);
+      el.recordingsList.appendChild(wrap);
+    });
+  }
+
+  function advanceAfterUserTurn(){
+    setTimeout(()=>{
+      if(currentIndex < lines.length - 1){
+        currentIndex++;
+        renderLine();
+        speakCurrentLine(); // no-op automatically if the new line is the user's turn
+      }
+    }, 500);
+  }
+
+  async function ensureMicPermission(){
+    if(micStream) return micStream;
+    try{
+      micStream = await navigator.mediaDevices.getUserMedia({audio:true});
+      return micStream;
+    }catch(err){
+      alert('تعذّر الوصول إلى الميكروفون. تأكد من إعطاء الإذن للمتصفح.');
+      return null;
+    }
+  }
+
+  async function beginRecordingAudio(){
+    const stream = await ensureMicPermission();
+    if(!stream) return false;
+    recordedChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = e=>{ if(e.data.size>0) recordedChunks.push(e.data); };
+    mediaRecorder.onstop = ()=>{
+      const blob = new Blob(recordedChunks, {type:'audio/webm'});
+      const url = URL.createObjectURL(blob);
+      recordingsByLine[currentIndex] = {url};
+      refreshRecordingsList();
+      // note: we deliberately keep the mic stream alive (not stopping tracks)
+      // so the browser only asks for permission once per session.
+    };
+    mediaRecorder.start();
+    return true;
+  }
+
+  const RECORD_LIMIT_SECONDS = 50;
+  let recCountdownInterval = null;
+  let recSecondsLeft = RECORD_LIMIT_SECONDS;
+
+  function updateRecCountdownDisplay(){
+    const badge = document.getElementById('recCountdown');
+    if(!badge) return;
+    badge.textContent = recSecondsLeft > 0 ? `⏳ ${recSecondsLeft}` : '';
+    badge.classList.toggle('urgent', recSecondsLeft <= 10);
+  }
+  function startRecCountdown(){
+    stopRecCountdown();
+    recSecondsLeft = RECORD_LIMIT_SECONDS;
+    updateRecCountdownDisplay();
+    recCountdownInterval = setInterval(()=>{
+      recSecondsLeft--;
+      updateRecCountdownDisplay();
+      if(recSecondsLeft <= 0){
+        stopRecCountdown();
+        if(isListening) stopListening(); // time's up: the character takes over
+      }
+    }, 1000);
+  }
+  function stopRecCountdown(){
+    clearInterval(recCountdownInterval);
+    recCountdownInterval = null;
+    recSecondsLeft = RECORD_LIMIT_SECONDS;
+    updateRecCountdownDisplay();
+  }
+
+  async function startListening(){
+    const ok = await beginRecordingAudio();
+    if(!ok) return;
+    isListening = true;
+    startRecCountdown();
+
+    if(SpeechRecognitionImpl){
+      recognition = new SpeechRecognitionImpl();
+      recognition.lang = 'de-DE';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      recognition.onresult = (e)=>{
+        const transcript = e.results[0][0].transcript;
+        logLine(currentIndex, transcript, true, false);
+      };
+      recognition.onerror = ()=>{ /* fall through to onend, allow retry */ };
+      recognition.onend = ()=>{
+        stopRecCountdown();
+        isListening = false;
+        el.recBtn.textContent = '🎙️ ابدأ الرد بصوتك';
+        if(mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
+        if(!conversationLog[currentIndex] || conversationLog[currentIndex].pending){
+          logLine(currentIndex, '(اتسجل صوتك، بس ما اتفهمش الكلام - جرّب تاني لو حبيت)', true, false);
+        }
+        advanceAfterUserTurn();
+      };
+      recognition.start();
+      el.recBtn.textContent = '⏹ إيقاف الاستماع';
+    }else{
+      el.recBtn.textContent = '⏹ إيقاف التسجيل';
+    }
+  }
+
+  function stopListening(){
+    stopRecCountdown();
+    if(recognition){
+      recognition.stop(); // triggers recognition.onend above
+      return;
+    }
+    // no speech recognition support: just stop the recording and advance manually
+    if(mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
+    isListening = false;
+    el.recBtn.textContent = '🎙️ ابدأ الرد بصوتك';
+    logLine(currentIndex, '(تم تسجيل ردك بالصوت)', true, false);
+    advanceAfterUserTurn();
+  }
+
+  el.recBtn.addEventListener('click', ()=>{
+    if(isListening){ stopListening(); return; }
+    startListening();
+  });
+
+  // ---------- persistent settings (per-user, this artifact only) ----------
+  let saveTimer = null;
+  function persistSettings(){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async ()=>{
+      try{
+        const payload = {
+          avatarName: el.avatarName.value,
+          userName: el.userName.value,
+          role: el.roleSelect.value,
+          voiceIndex: el.voiceSelect.value,
+          speed: el.speedRange.value,
+          dialogText: el.dialogInput.value
+        };
+        if(window.storage && window.storage.set){
+          await window.storage.set('deutsch-partner-settings', JSON.stringify(payload), false);
+          el.savedBadge.classList.add('show');
+          setTimeout(()=>el.savedBadge.classList.remove('show'), 1200);
+        }
+      }catch(e){ /* best-effort only */ }
+    }, 500);
+  }
+
+  async function restoreSettings(){
+    let restored = null;
+    try{
+      if(window.storage && window.storage.get){
+        const res = await window.storage.get('deutsch-partner-settings', false);
+        if(res && res.value) restored = JSON.parse(res.value);
+      }
+    }catch(e){ /* no saved settings yet */ }
+
+    const dialogText = (restored && restored.dialogText && restored.dialogText.trim()) ? restored.dialogText : DEFAULT_DIALOG;
+    el.dialogInput.value = dialogText;
+    loadDialog(dialogText);
+
+    if(restored){
+      if(restored.avatarName) el.avatarName.value = restored.avatarName;
+      if(restored.userName) el.userName.value = restored.userName;
+      if(restored.role && Array.from(el.roleSelect.options).some(o=>o.value===restored.role)){
+        el.roleSelect.value = restored.role;
+      }
+      if(restored.speed){
+        el.speedRange.value = restored.speed;
+        el.speedVal.textContent = parseFloat(restored.speed).toFixed(2)+'×';
+      }
+      renderLine();
+      // voice list may not be ready yet; try to restore after a short delay
+      setTimeout(()=>{
+        if(restored.voiceIndex !== undefined && el.voiceSelect.options.length > restored.voiceIndex){
+          el.voiceSelect.value = restored.voiceIndex;
+        }
+      }, 400);
+    }
+  }
+
+  restoreSettings();
+  startSessionClock();
+})();
+</script>
+</body>
+</html>
