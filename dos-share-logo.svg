@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Drei Online Spezialesten</title>
+  <desc id="desc">DOS - Drei Online Spezialesten</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#f6f7f9"/>
+      <stop offset="1" stop-color="#fff8e5"/>
+    </linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e21b23"/>
+      <stop offset="1" stop-color="#b51219"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffd21a"/>
+      <stop offset="1" stop-color="#efad00"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <path d="M0 500L290 220 570 390 850 90 1200 300V630H0Z" fill="#f9dfe1" opacity=".45"/>
+  <g fill="none" stroke="#cbd0d5" stroke-width="2" opacity=".55">
+    <path d="M0 80L150 210 70 410 300 580"/><path d="M1200 20L1010 180 1140 410 890 610"/>
+    <circle cx="150" cy="210" r="7" fill="#cbd0d5"/><circle cx="1010" cy="180" r="7" fill="#cbd0d5"/>
+  </g>
+  <g transform="translate(110 145)">
+    <path d="M0 0h165c91 0 145 49 145 112 0 61-53 115-145 115H0l51-74h106c42 0 70-17 70-41 0-25-28-40-70-40H72L0 227Z" fill="#151515"/>
+    <path d="M250 28c-43 0-83 14-111 42l-71 72 57 73 85-91c13-14 27-21 43-21 25 0 45 18 45 43 0 29-24 49-54 49-22 0-39-9-53-25l-48 60c29 30 70 48 119 48 99 0 167-61 167-137S360 28 250 28Z" fill="url(#red)"/>
+    <path d="M500 29c-58 0-106 24-136 61l61 67c18-22 38-32 65-32h112l-37 71H518c-31 0-54 18-54 43 0 28 26 47 64 47h131l49-86c16-29 21-49 21-75 0-62-91-96-229-96Z" fill="url(#gold)"/>
+  </g>
+  <path d="M810 165v280" stroke="#191919" stroke-width="4"/>
+  <text x="860" y="250" font-family="Arial, sans-serif" font-size="62" font-weight="700" fill="#171717">Drei <tspan fill="#c51e25">Online</tspan></text>
+  <text x="860" y="325" font-family="Arial, sans-serif" font-size="62" font-weight="700" fill="#171717">Spezialesten</text>
+  <text x="862" y="382" font-family="Arial, sans-serif" font-size="25" fill="#777777">Lernen. Verstehen. Umsetzen.</text>
+</svg>
