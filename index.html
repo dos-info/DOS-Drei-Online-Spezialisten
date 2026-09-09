@@ -22,6 +22,12 @@
 <meta name="twitter:image" content="https://dos-info-eg.github.io/Drei-Online-Spezialisten/dos-share-logo.svg" />
 <meta name="twitter:image:alt" content="Drei Online Spezialesten - DOS" />
 <meta name="theme-color" content="#0B1F3A" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="DOS Web" />
+<link rel="manifest" href="./manifest.webmanifest" />
+<link rel="apple-touch-icon" href="./dos-app-icon.svg" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230B1F3A'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial,sans-serif' font-size='23' font-weight='700' fill='%23E3A825'%3EDOS%3C/text%3E%3C/svg%3E" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -40,6 +46,8 @@
   .portal-german-flag i:nth-child(1) { background:#111; }
   .portal-german-flag i:nth-child(2) { background:#D00; }
   .portal-german-flag i:nth-child(3) { background:#FFCE00; }
+  .pwa-install-button { position:fixed; right:18px; bottom:18px; z-index:1000; display:none; align-items:center; gap:8px; border:0; border-radius:999px; padding:11px 16px; color:#fff; background:#0B1F3A; box-shadow:0 8px 24px rgba(11,31,58,.3); font:600 14px/1.2 Arial,sans-serif; cursor:pointer; }
+  .pwa-install-button:hover { background:#163d6d; }
   @keyframes portalPulse { 0%,100% { transform:scale(.94); opacity:.82; } 50% { transform:scale(1); opacity:1; } }
   @media (max-width:560px) { .portal-loading-circles { gap:9px; } .portal-loading-circle { width:70px; height:70px; } .portal-german-flag { width:38px; height:25px; } }
 </style>
@@ -5025,6 +5033,30 @@ function App() {
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));
+}
+
+let deferredInstallPrompt;
+window.addEventListener("beforeinstallprompt", (event) => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  const installButton = document.createElement("button");
+  installButton.className = "pwa-install-button";
+  installButton.type = "button";
+  installButton.textContent = "تثبيت تطبيق DOS";
+  installButton.setAttribute("aria-label", "تثبيت DOS Web كتطبيق على الهاتف");
+  installButton.style.display = "flex";
+  installButton.addEventListener("click", async () => {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    installButton.remove();
+  });
+  document.body.appendChild(installButton);
+});
 </script>
 </body>
 </html>

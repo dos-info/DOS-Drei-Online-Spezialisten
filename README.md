@@ -87,6 +87,16 @@ https://dos-info-eg.github.io/Drei-Online-Spezialisten/
 
 After publishing, social platforms may cache the previous preview image. Re-scrape the URL using the platform's link debugger when necessary.
 
+## Install as a phone app (PWA)
+
+The portal includes PWA support through `manifest.webmanifest`, `service-worker.js`, and `dos-app-icon.svg`.
+
+1. Publish the complete `DOS Web` folder on GitHub Pages or another host with HTTPS.
+2. Open the published `index.html` URL in Chrome on Android, then choose **Install DOS Web** or **Add to Home screen**.
+3. On iPhone, open the URL in Safari, tap **Share**, then choose **Add to Home Screen**.
+
+The app shell is cached after the first visit, so the interface can open without a connection. Login, Supabase data, realtime updates, and remote CDN libraries still require internet access.
+
 ## Security Notes
 
 - Keep Row Level Security enabled for all Supabase tables and storage objects.

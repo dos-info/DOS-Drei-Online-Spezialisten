@@ -1,0 +1,22 @@
+{
+  "name": "DOS Web - Drei Online Spezialisten",
+  "short_name": "DOS Web",
+  "description": "بوابة DOS التعليمية لإدارة الطلاب والدورات والمكتبة الرقمية.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f7f8fa",
+  "theme_color": "#0b1f3a",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "./dos-app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
