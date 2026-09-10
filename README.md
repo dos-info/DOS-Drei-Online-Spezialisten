@@ -54,6 +54,7 @@ supabase_digital_library_migration.sql
 supabase_student_library_study_migration.sql
 supabase_employee_permissions_migration.sql
 supabase_instructors_migration.sql
+   supabase_landing_applications_migration.sql
 ```
 
 Run only the migrations that match the tables already present in your database. Review the policies before using the application in production.

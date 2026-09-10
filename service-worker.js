@@ -1,10 +1,10 @@
-const CACHE_NAME = "dos-web-shell-v1";
+const CACHE_NAME = "dos-web-shell-v3";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./dos-app-icon.svg",
-  "./logo.png",
+  "./dos-wave-logo.svg",
+  "./dos-full-logo.svg",
   "./dos-share-logo.svg"
 ];
 

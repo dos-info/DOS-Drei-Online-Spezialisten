@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" role="img" aria-labelledby="title desc">
+  <title id="title">DOS - Drei Online Spezialisten</title>
+  <desc id="desc">Three flowing waves in black, red, and gold</desc>
+  <defs>
+    <linearGradient id="black" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#050403"/><stop offset="1" stop-color="#242018"/></linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff2d00"/><stop offset="1" stop-color="#c91f13"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffd21a"/><stop offset="1" stop-color="#f0aa00"/></linearGradient>
+  </defs>
+  <path d="M82 79c38-42 84-55 132-42 37 10 55 34 91 42 35 8 66 1 99-17-25 35-67 59-112 55-38-3-63-30-95-36-40-7-75 0-115 18Z" fill="url(#black)"/>
+  <path d="M45 141c43-43 91-56 139-42 35 10 55 34 90 42 37 9 70 1 103-18-26 36-68 60-114 56-37-4-61-30-94-36-41-8-78 0-124 19Z" fill="url(#red)"/>
+  <path d="M8 204c45-43 92-56 140-42 36 10 55 34 91 42 36 8 69 1 102-18-26 36-68 60-113 56-38-3-63-30-95-36-41-8-78 0-125 19Z" fill="url(#gold)"/>
+</svg>

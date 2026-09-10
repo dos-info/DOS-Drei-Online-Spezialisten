@@ -13,7 +13,7 @@
   "categories": ["education", "productivity"],
   "icons": [
     {
-      "src": "./dos-app-icon.svg",
+      "src": "./dos-full-logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
