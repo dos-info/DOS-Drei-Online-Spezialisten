@@ -78,6 +78,27 @@ npx supabase functions deploy manage-users --project-ref YOUR_PROJECT_REF
 
 The function requires Supabase's standard environment variables. `SUPABASE_SERVICE_ROLE_KEY` must remain server-side and must never be placed in `index.html`.
 
+## Landing application email
+
+Run `supabase_landing_applications_migration.sql` before using the public reservation form. The form stores one application per normalized email, shows the request only to authorized portal users, and sends a confirmation email through:
+
+```text
+supabase/functions/send-landing-application-email/index.ts
+```
+
+Deploy the function and configure its server-side secrets:
+
+```powershell
+npx supabase functions deploy send-landing-application-email --project-ref YOUR_PROJECT_REF
+npx supabase secrets set RESEND_API_KEY=YOUR_RESEND_KEY DOS_FROM_EMAIL="DOS Academy <info@dos-eg.com>" DOS_APP_URL="https://dos-info-eg.github.io/Drei-Online-Spezialisten/"
+```
+
+The browser uses Supabase over HTTPS, so it can work with or without a VPN when the Supabase project and the visitor's network are reachable. A web page cannot create or control a VPN connection itself.
+
+## Landing reservation email
+
+Deploy `supabase/functions/send-landing-application-email/index.ts` and configure the Edge Function secrets `RESEND_API_KEY`, `DOS_FROM_EMAIL`, and `DOS_APP_URL`. The public form stores one reservation per email and sends the applicant a confirmation summary through Resend.
+
 ## GitHub Pages
 
 The repository can be published as a static GitHub Pages site. Keep all linked HTML files and `dos-share-logo.svg` in the published directory. The Open Graph metadata in `index.html` points to:

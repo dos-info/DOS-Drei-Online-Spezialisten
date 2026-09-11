@@ -16,6 +16,15 @@ create table if not exists public.landing_applications (
 
 alter table public.landing_applications enable row level security;
 
+-- Keep the newest record before enforcing one application per email.
+delete from public.landing_applications older
+using public.landing_applications newer
+where lower(trim(older.email)) = lower(trim(newer.email))
+  and (older.created_at < newer.created_at or (older.created_at = newer.created_at and older.id < newer.id));
+
+create unique index if not exists landing_applications_email_unique_idx
+  on public.landing_applications (lower(trim(email)));
+
 drop policy if exists "Public visitors can submit landing applications" on public.landing_applications;
 create policy "Public visitors can submit landing applications"
 on public.landing_applications for insert to anon, authenticated
