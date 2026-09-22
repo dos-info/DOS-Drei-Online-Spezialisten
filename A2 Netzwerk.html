@@ -110,6 +110,13 @@ a{color:inherit;}
 .kap-pill.current .num{background:var(--red);color:#fff;}
 .kap-pill.locked{opacity:.5;}
 .kap-pill.locked .num{background:var(--line);color:var(--muted);}
+@media (min-width:861px){
+  .kapitel-rail{position:fixed;left:10px;top:118px;z-index:20;width:68px;max-height:calc(100vh - 136px);padding:8px 6px;display:flex;flex-direction:column;gap:5px;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow-y:auto;}
+  .kap-pill{justify-content:center;padding:7px 5px;border-radius:9px;}
+  .kap-pill>span:not(.num){display:none;}
+  .kap-pill .num{width:28px;height:28px;border-radius:8px;font-size:13px;}
+  .layout{max-width:1180px;margin-left:92px !important;margin-right:18px !important;padding-left:18px;padding-right:18px;}
+}
 
 /* ---------- layout ---------- */
 .layout{
@@ -174,8 +181,36 @@ a{color:inherit;}
 .side-nav button:hover{background:var(--paper);color:var(--ink);}
 .side-nav button.active{background:var(--red);color:#fff;}
 .side-nav button.active .dot{background:var(--gold);}
+.media-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 12px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:12px;color:var(--muted);}
+.media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;}
+.media-card{border:1px solid var(--line);border-radius:10px;background:#fff;padding:10px;box-shadow:0 3px 12px rgba(34,27,23,.05);}
+.media-card h4{margin:0 0 3px;font-size:13px;}
+.media-meta{font:11px 'Work Sans',sans-serif;direction:ltr;overflow-wrap:anywhere;color:var(--muted);}
+.media-card audio,.media-card video{display:block;width:100%;margin-top:8px;border-radius:7px;}
+.media-card video{background:#1b1714;aspect-ratio:16/9;object-fit:contain;}
+.media-tools{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:7px;font-size:11px;color:var(--muted);}
+.media-tools select,.media-tools input{accent-color:var(--red);font:inherit;}
+.media-tools select{border:1px solid var(--line);border-radius:6px;padding:3px 4px;background:#fff;}
+.media-transcript{margin-top:8px;border-top:1px solid var(--line);padding-top:6px;font-size:12px;line-height:1.7;}
+.media-transcript summary{cursor:pointer;color:var(--red-deep);font-weight:700;}
+.media-transcript .de{display:block;margin-top:5px;white-space:pre-wrap;}
+.chapter-count{font-size:11px;color:var(--muted);font-weight:600;}
+.q-type{display:inline-block;margin-inline-start:6px;padding:2px 7px;border-radius:999px;background:#f6ead8;color:var(--red-deep);font-size:10px;font-weight:700;}
+.q-order{display:flex;flex-wrap:wrap;gap:7px;min-height:38px;margin-top:10px;}
+.q-order button,.q-match button,.q-card-choice{border:1px solid var(--line);border-radius:8px;background:#fff;padding:7px 9px;cursor:pointer;font:inherit;}
+.q-order button.selected,.q-match button.selected,.q-card-choice.selected{background:var(--red);border-color:var(--red);color:#fff;}
+.q-match{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px;}
+.q-listen{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;}
+.q-listen .spk{flex:0 0 auto;}
+.q-image{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px;}
+.q-image figure{margin:0;}
+.q-image img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;border:1px solid var(--line);}
+.q-image figcaption{font-size:10px;color:var(--muted);text-align:center;}
+.q-writing{min-height:90px;width:100%;margin-top:9px;padding:9px;border:1px solid var(--line);border-radius:8px;resize:vertical;font:inherit;}
+@media (max-width:560px){.q-image{grid-template-columns:1fr;}.q-match{grid-template-columns:1fr;}}
 @media (max-width:860px){
-  .side-nav{position:static;flex-direction:row;overflow-x:auto;}
+  .side-nav{position:static;flex-direction:row;overflow-x:auto;padding:6px;gap:4px;}
+  .side-nav button{padding:8px 10px;white-space:nowrap;font-size:12px;}
 }
 
 /* ---------- main panel ---------- */
@@ -229,16 +264,6 @@ p.section-lead{color:var(--muted); font-size:14px; margin:0 0 20px;}
   padding:16px; box-shadow:var(--shadow);
 }
 .grid-cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px;}
-.media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:16px;}
-.media-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow);}
-.media-card h4{margin:0 0 8px;font-size:15px;}
-.media-card audio,.media-card video{display:block;width:100%;margin-top:10px;border-radius:9px;background:#211914;}
-.media-card video{aspect-ratio:16/9;object-fit:cover;}
-.media-meta{font-size:11.5px;color:var(--muted);direction:ltr;text-align:left;overflow-wrap:anywhere;}
-.media-empty{padding:14px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:13px;}
-.q-type{display:inline-block;margin-inline-start:6px;padding:2px 7px;border-radius:999px;background:#fdf1e2;color:var(--gold-deep);font-size:10px;font-weight:700;}
-.q-write textarea{width:100%;min-height:74px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:14px;direction:ltr;text-align:left;}
-.q-order-hint{font-size:12px;color:var(--muted);margin-bottom:8px;direction:ltr;text-align:left;}
 
 .vocab-card{display:flex; flex-direction:column; gap:8px;}
 .vocab-top{display:flex; align-items:center; justify-content:space-between; gap:8px;}
@@ -463,6 +488,7 @@ p.section-lead{color:var(--muted); font-size:14px; margin:0 0 20px;}
   max-width:1180px; margin:30px auto 0; padding:0 28px; color:var(--muted); font-size:12px; text-align:center;
 }
 </style>
+<script src="NWA2/media-config.js"></script>
 </head>
 <body>
 
@@ -501,18 +527,18 @@ p.section-lead{color:var(--muted); font-size:14px; margin:0 0 20px;}
       <div class="grid-cards" id="uebersichtCards" style="margin-bottom:18px;"></div>
       <div class="card">
         <strong style="display:block;margin-bottom:8px;" id="storyTitle"></strong>
-        <p style="font-size:13.8px;color:var(--muted);margin:0;" id="storyText"></p>
-      </div>
-      <div class="card" style="margin-top:18px;">
-        <h3 style="margin:0;font-size:18px;">🎧📺 مركز الوسائط · NWA2</h3>
-        <p class="section-lead" style="margin:4px 0 0;">الملفات تُقرأ من مجلد <span class="de">NWA2</span> الخارجي. ارفع الصوتيات إلى <span class="de">NWA2/audio</span> والفيديوهات إلى <span class="de">NWA2/video</span>.</p>
-        <div id="mediaLibrary"></div>
-      </div>
+          <p style="font-size:13.8px;color:var(--muted);margin:0;" id="storyText"></p>
+        </div>
+        <div class="card" style="margin-top:18px;">
+          <h3 style="margin:0;font-size:18px;">&#127925; NWA2 Medien</h3>
+          <p class="section-lead" style="margin:4px 0 0;">Audio files from the NWA2 folder.</p>
+          <div id="mediaLibrary"></div>
+        </div>
     </section>
 
     <section class="section" id="sec-medien">
-      <h3 class="section-title">🎧📺 الوسائط · NWA2 Medien</h3>
-      <p class="section-lead">استمع إلى التسجيلات الأصلية وشاهد فيديوهات الفصل من المجلد الخارجي.</p>
+      <h3 class="section-title">&#127925; NWA2 Medien</h3>
+      <p class="section-lead">Listen to the original audio recordings.</p>
       <div id="mediaLibraryFull"></div>
     </section>
 
@@ -583,7 +609,7 @@ p.section-lead{color:var(--muted); font-size:14px; margin:0 0 20px;}
     <!-- ========== ÜBUNGEN ========== -->
     <section class="section" id="sec-uebungen">
       <h3 class="section-title">تدريبات · Übungen</h3>
-      <p class="section-lead">100 سؤال متنوع على مفردات وقواعد ونطق واستماع وكتابة هذا الفصل. الإجابات الموضوعية تُصحَّح تلقائياً.</p>
+      <p class="section-lead">15 سؤالاً على مفردات وقواعد ونطق هذا الفصل. الإجابات تُصحَّح تلقائياً.</p>
       <div class="q-progress">
         <span id="qProgressLabel">0 / 15</span>
         <div class="bar"><div class="fill" id="qProgressFill"></div></div>
@@ -763,7 +789,6 @@ p.section-lead{color:var(--muted); font-size:14px; margin:0 0 20px;}
 
 <p class="footer-note">أُنتج هذا المحتوى التعليمي لصالح أكاديمية DOS (Drei Online Spezialisten) — النطق الصوتي والمؤثرات الصوتية تعمل عبر متصفحك مباشرة (Web Speech API + Web Audio API) دون أي ملفات خارجية. لأفضل جودة صوت، فعّل صوت "Google Deutsch" إن توفّر في متصفحك (Chrome يُنصح به).</p>
 
-<script src="NWA2/media-config.js"></script>
 <script>
 /* =========================================================
    HEADER BACKGROUND ART (inline SVG, no external files)
@@ -3668,39 +3693,6 @@ const K12 = {
 const KAPITEL = {1:K1, 2:K2, 3:K3, 4:K4, 5:K5, 6:K6, 7:K7, 8:K8, 9:K9, 10:K10, 11:K11, 12:K12};
 let currentKap = 1;
 
-const quizTypeLabels = {
-  mc:'اختيار', fill:'إكمال', order:'ترتيب', match:'توصيل', listening:'استماع', write:'كتابة', crossword:'متقاطعة', card:'بطاقة'
-};
-function expandChapterQuiz(data){
-  if(data.quiz.length >= 100) return;
-  const original = data.quiz.slice();
-  const words = (data.vocab || []).filter(v=>v.de && v.ar);
-  const verbs = (data.verben || []).filter(v=>v.inf && v.ar);
-  const sentences = (data.textParts || []).flatMap(p=>p.sentences || []).filter(Boolean);
-  let cursor = 0;
-  while(data.quiz.length < 100){
-    const source = sentences[cursor % Math.max(sentences.length, 1)] || 'Guten Tag!';
-    const word = words[cursor % Math.max(words.length, 1)] || {de:'das Wort', ar:'الكلمة', ex:'Das Wort ist wichtig.'};
-    const verb = verbs[cursor % Math.max(verbs.length, 1)] || {inf:'lernen', ar:'يتعلم', ex:'Ich lerne Deutsch.'};
-    const mode = cursor % 8;
-    let q;
-    if(mode===0) q={type:'mc',prompt:`Was bedeutet „${word.de}“?`,options:[word.ar,'السفر','الطقس'],answer:word.ar,explain:`${word.de} = ${word.ar}.`};
-    else if(mode===1) q={type:'fill',prompt:`Ergänze den Satz: ${word.ex.replace(/[.!?]$/,'')} ___`,answer:word.de.split(',')[0],explain:`Das Schlüsselwort ist: ${word.de}.`};
-    else if(mode===2){ const tokens=source.replace(/[.!?]$/,'').split(' ').filter(Boolean); q={type:'order',prompt:'رتّب الكلمات لتكوين الجملة الصحيحة.',tokens:tokens.slice().sort(()=>Math.random()-.5),answer:source.replace(/[.!?]$/,''),explain:`الجملة الصحيحة: ${source}`}; }
-    else if(mode===3) q={type:'match',prompt:`صل الفعل بالمعنى الصحيح: „${verb.inf}“`,options:[verb.ar,'يأكل','ينام'],answer:verb.ar,explain:`${verb.inf} = ${verb.ar}.`};
-    else if(mode===4) q={type:'listening',sentence:source,prompt:'استمع ثم اختر المعنى الأقرب للجملة.',options:[source,'هذه جملة مختلفة.','لا توجد معلومات.'],answer:source,explain:'استمع إلى الجملة كاملة ثم اختر النص المطابق.'};
-    else if(mode===5) q={type:'write',prompt:`اكتب جملة ألمانية باستخدام „${word.de.split(',')[0]}“.`,answer:word.ex,explain:`نموذج ممكن: ${word.ex}`};
-    else if(mode===6) q={type:'crossword',prompt:`🧩 متقاطعة: أكمل الكلمة الألمانية لمعنى «${word.ar}».`,answer:word.de.split(',')[0],explain:`الإجابة: ${word.de}.`};
-    else q={type:'card',prompt:`🎴 بطاقة مراجعة: ما الترجمة الصحيحة لـ „${verb.inf}“؟`,options:[verb.ar,'يصل','يشتري'],answer:verb.ar,explain:`${verb.inf} = ${verb.ar}.`};
-    data.quiz.push(q);
-    cursor++;
-  }
-  data.quiz = data.quiz.slice(0,100);
-  data.quiz.forEach((q,i)=>{ q.typeLabel = quizTypeLabels[q.type] || 'تدريب'; q.id = `${data.num}-${i+1}`; });
-  data.quizOriginalLength = original.length;
-}
-Object.values(KAPITEL).forEach(expandChapterQuiz);
-
 /* =========================================================
    SPEECH ENGINE
    ========================================================= */
@@ -3733,12 +3725,13 @@ function loadVoices(){
    (Deutschland / Österreich / Schweiz) when the person picks one —
    falls back to the full list if that dialect isn't available on this device. */
 function applyDialectFilter(){
-  const dialect = document.getElementById('dialectSelect')?.value || 'all';
+  const dialect = document.querySelector('.dialectSelect')?.value || 'all';
   if(dialect === 'all'){
     voices = allVoices;
   } else {
     const filtered = allVoices.filter(v=>v.lang.toLowerCase() === dialect.toLowerCase());
-    voices = filtered.length ? filtered : allVoices;
+    const germanFallback = allVoices.filter(v=>v.lang.toLowerCase().startsWith('de-'));
+    voices = filtered.length ? filtered : (germanFallback.length ? germanFallback : allVoices);
   }
   document.querySelectorAll('.voiceSelect, .voiceSelect2').forEach(s=>{
     const cur = s.value;
@@ -3882,6 +3875,7 @@ function initRecorders(scope){
 
 function audioBarHTML(){
   return `
+   <div class="grp">Akzent <select class="dialectSelect"><option value="all">Alle</option><option value="de-DE">Deutschland</option><option value="de-AT">Österreich</option><option value="de-CH">Schweiz</option></select></div>
    <div class="grp">🔊 <select class="voiceSelect"></select></div>
    <div class="grp">السرعة <input type="range" class="rateRange" min="0.6" max="1.6" step="0.02" value="1.08"> <span class="rateVal">1.08×</span></div>
    <div class="grp">طبقة الصوت <input type="range" class="pitchRange" min="0.7" max="1.4" step="0.02" value="1.02"> <span class="pitchVal">1.02</span></div>
@@ -3926,6 +3920,13 @@ function syncSpeechControls(){
     if(e.target.classList.contains('voiceSelect2')){
       const val = e.target.value;
       document.querySelectorAll('.voiceSelect2').forEach(s=>s.value=val);
+    }
+    if(e.target.classList.contains('dialectSelect')){
+      const val = e.target.value;
+      document.querySelectorAll('.dialectSelect').forEach(s=>s.value=val);
+      const main = document.getElementById('dialectSelect');
+      if(main) main.value = val;
+      applyDialectFilter();
     }
     if(e.target.id === 'multiVoiceToggle'){
       const row = document.getElementById('voice2Row');
@@ -4198,53 +4199,89 @@ function switchToExam(){
   renderExamSideNav();
   document.querySelectorAll('#examLayout .section').forEach(s=>s.classList.remove('active'));
   document.getElementById('exam-lesen').classList.add('active');
-  renderExam();
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-function switchToFinalExam(){
-  appMode = 'finalexam';
-  window.speechSynthesis.cancel();
-  document.getElementById('kapitelLayout').style.display = 'none';
-  document.getElementById('examLayout').style.display = 'none';
-  document.getElementById('finalExamLayout').style.display = '';
-  renderRail();
-  renderFinalExamSideNav();
-  document.querySelectorAll('#finalExamLayout .section').forEach(s=>s.classList.remove('active'));
-  document.getElementById('final-lesen').classList.add('active');
-  renderFinalExam();
-  window.scrollTo({top:0, behavior:'smooth'});
 }
 
 const navItems = [
- {id:'uebersicht', label:'نظرة عامة'},
- {id:'medien', label:'🎧📺 الوسائط'},
- {id:'wortschatz', label:'المفردات'},
- {id:'verben', label:'أفعال جديدة'},
- {id:'grammatik', label:'القواعد'},
- {id:'aussprache', label:'النطق'},
- {id:'text', label:'النص القرائي'},
- {id:'dialog', label:'محادثة'},
- {id:'landeskunde', label:'ثقافة'},
- {id:'uebungen', label:'تدريبات (100)'}
+  {id:'uebersicht', label:'نظرة عامة'},
+  {id:'medien', label:'🎵 Medien'},
+  {id:'wortschatz', label:'المفردات'},
+  {id:'verben', label:'أفعال جديدة'},
+  {id:'grammatik', label:'القواعد'},
+  {id:'aussprache', label:'النطق'},
+  {id:'text', label:'النص القرائي'},
+  {id:'dialog', label:'محادثة'},
+  {id:'landeskunde', label:'ثقافة'},
+  {id:'uebungen', label:'تدريبات (100)'}
 ];
 function renderSideNav(){
-  const sideNav = document.getElementById('sideNav');
+  const sideNav=document.getElementById('sideNav');
   sideNav.innerHTML='';
-  navItems.forEach((it,i)=>{
-    const b = document.createElement('button');
-    b.innerHTML = `<span class="dot"></span>${it.label}`;
-    b.dataset.target = 'sec-'+it.id;
-    if(i===0) b.classList.add('active');
-    b.onclick = ()=>{
-      document.querySelectorAll('.side-nav button').forEach(x=>x.classList.remove('active'));
-      document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active');
-      document.getElementById(b.dataset.target).classList.add('active');
+  navItems.forEach((item,index)=>{
+    const button=document.createElement('button');
+    button.innerHTML=`<span class="dot"></span>${item.label}`;
+    button.dataset.target='sec-'+item.id;
+    if(index===0) button.classList.add('active');
+    button.onclick=()=>{
+      sideNav.querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('#kapitelLayout .section').forEach(x=>x.classList.remove('active'));
+      button.classList.add('active');
+      document.getElementById(button.dataset.target).classList.add('active');
       window.speechSynthesis.cancel();
     };
-    sideNav.appendChild(b);
+    sideNav.appendChild(button);
   });
 }
+
+  function buildQuestionBank(data){
+    const base = (data.quiz || []).slice();
+    const examples = (data.textParts || []).flatMap(part=>part.sentences || []).slice(0,20);
+    const vocab = (data.vocab || []).slice(0,20);
+    const questions = base.map(q=>({...q, type:q.type || 'fill'}));
+    vocab.slice(0,15).forEach((v,i)=>questions.push({type:'mc',prompt:`Was bedeutet „${v.de}“?`,options:[v.en,v.ar,v.fr].filter(Boolean).slice(0,3),answer:v.en,explain:`${v.de} = ${v.en}`}));
+    vocab.slice(0,15).forEach(v=>questions.push({type:'fill',prompt:`Ergänze: ${v.ex}`,answer:v.de.split(',')[0],explain:`Das Zielwort ist „${v.de}“.`}));
+    examples.slice(0,15).forEach(sentence=>{
+      const words=sentence.split(/\s+/).filter(Boolean);
+      questions.push({type:'order',prompt:'Ordne die Wörter zu einem korrekten Satz.',words:words.slice().sort(()=>0.5-Math.random()),answer:words.join(' '),explain:sentence});
+    });
+    examples.slice(0,10).forEach(sentence=>questions.push({type:'listen',prompt:'اسمع الجملة ثم اكتب الكلمة أو الجملة التي سمعتها.',sentence,answer:sentence,explain:sentence}));
+    vocab.slice(0,10).forEach(v=>questions.push({type:'match',prompt:`اختر الترجمة المناسبة لـ „${v.de}“.`,options:[v.en,v.ar,'nicht passend'].filter(Boolean),answer:v.en,explain:`${v.de} = ${v.en}`}));
+    examples.slice(0,5).forEach(sentence=>questions.push({type:'write',prompt:'اكتب جملة ألمانية جديدة باستخدام فكرة الدرس.',answer:sentence.split(' ')[0],explain:`نموذج متعلق بالدرس: ${sentence}`}));
+    vocab.slice(0,5).forEach(v=>questions.push({type:'cards',prompt:`لعبة البطاقات: اختر الكلمة الصحيحة للصورة الذهنية „${v.topic}“.`,options:[v.de,v.en,'andere Antwort'],answer:v.de,explain:`الكلمة المستهدفة: ${v.de}`}));
+    vocab.slice(0,5).forEach(v=>questions.push({type:'crossword',prompt:`كلمات متقاطعة: اكتب كلمة الدرس التي تبدأ بـ „${v.de[0]}“.`,answer:v.de.split(',')[0],explain:`الحل: ${v.de}`}));
+    const imagePrompts=['Auf dem Bild sieht man eine Person und einen wichtigen Gegenstand.','Im Vordergrund sieht man eine typische Situation aus dem Kapitel.','Im Hintergrund erkennt man einen passenden Ort.'];
+    imagePrompts.forEach((prompt,i)=>questions.push({type:'image',prompt,answer:'',imageIndex:i,explain:'اكتب وصفًا منظمًا: المقدمة، الخلفية، الأشخاص، الأفعال، والرأي الشخصي.'}));
+    while(questions.length<100){
+      const source=examples[questions.length%Math.max(1,examples.length)] || 'Das ist ein Beispiel aus diesem Kapitel.';
+      questions.push({type:'fill',prompt:`أكمل الجملة المرتبطة بالفصل: ${source}`,answer:source.split(' ').slice(-1)[0].replace(/[.!?]/g,''),explain:source});
+    }
+    return questions.slice(0,100);
+  }
+  function renderQuiz(){
+    const data = KAPITEL[currentKap];
+    const bank = buildQuestionBank(data);
+    answers = new Array(bank.length).fill(null);
+    const c = document.getElementById('quizContainer');
+    const safe = value => String(value || '').replace(/"/g,'&quot;');
+    c.innerHTML = bank.map((q,i)=>{
+      const head=`<div class="q-num">سؤال ${i+1} / ${bank.length}<span class="q-type">${q.type}</span></div><div class="q-prompt">${q.prompt}</div>`;
+      let body='';
+      if(q.type==='mc' || q.type==='match' || q.type==='cards') body=`<div class="q-options">${q.options.map(o=>`<div class="q-opt de" data-val="${safe(o)}">${o}</div>`).join('')}</div>`;
+      else if(q.type==='order') body=`<div class="q-order">${q.words.map(w=>`<button type="button" data-word="${safe(w)}">${w}</button>`).join('')}</div>`;
+      else if(q.type==='listen') body=`<div class="q-listen"><button type="button" class="spk" data-say="${safe(q.sentence)}">🔊</button><input type="text" placeholder="اكتب ما تسمع..."></div>`;
+      else if(q.type==='write' || q.type==='image') body=q.type==='image'?`<div class="q-image">${[0,1,2].map(n=>`<figure><img src="https://images.unsplash.com/photo-${['1497366811353-6870744d04b2','1516321318423-f06f85e504b3','1504150558240-0b4fd8946624'][n]}?auto=format&fit=crop&w=500&q=80" alt="Kapitel ${currentKap} Bild ${n+1}"><figcaption>Bild ${n+1}</figcaption></figure>`).join('')}</div><textarea class="q-writing" placeholder="اكتب وصف الصورة بالألمانية..."></textarea>`:`<textarea class="q-writing" placeholder="اكتب إجابتك بالألمانية..."></textarea>`;
+      else body=`<input type="text" placeholder="اكتب الإجابة بالألمانية...">`;
+      return `<div class="q-card" data-qi="${i}">${head}${body}<div class="q-explain" id="exp-${i}"></div></div>`;
+    }).join('');
+    c.querySelectorAll('.q-card').forEach(card=>{
+      const qi=Number(card.dataset.qi), q=bank[qi];
+      card.querySelectorAll('.q-opt').forEach(opt=>opt.onclick=()=>{card.querySelectorAll('.q-opt').forEach(x=>x.classList.remove('selected'));opt.classList.add('selected');answers[qi]=opt.dataset.val;updateProgress();});
+      card.querySelectorAll('.q-order button').forEach(btn=>btn.onclick=()=>{btn.classList.toggle('selected');answers[qi]=[...card.querySelectorAll('.q-order button.selected')].map(x=>x.dataset.word).join(' ');updateProgress();});
+      const input=card.querySelector('input,.q-writing'); if(input) input.oninput=()=>{answers[qi]=input.value.trim();updateProgress();};
+    });
+      bindSpeakButtons(c);
+    document.getElementById('scoreArea').innerHTML='';
+    updateProgress();
+  }
 
 /* =========================================================
    RENDER: KAPITEL HEAD + ÜBERSICHT
@@ -4271,29 +4308,43 @@ function renderUebersicht(){
   renderMedia();
 }
 
-function mediaUrl(base, name, extension){
-  return `${base}${encodeURIComponent(name)}${extension}`;
-}
 function renderMedia(){
   const targets = [document.getElementById('mediaLibrary'), document.getElementById('mediaLibraryFull')].filter(Boolean);
-  if(!targets.length) return;
   const manifest = window.NWA2_MEDIA || {};
   const audio = (manifest.audioByChapter && manifest.audioByChapter[currentKap]) || [];
   const video = (manifest.videoByChapter && manifest.videoByChapter[currentKap]) || [];
-  const audioCards = audio.map((name,i)=>`
+  const audioText = (manifest.audioTextByChapter && manifest.audioTextByChapter[currentKap]) || {};
+  const videoText = (manifest.videoTextByChapter && manifest.videoTextByChapter[currentKap]) || {};
+  const textFor = (texts, name, index) => typeof texts === 'string' ? texts : (texts[name] || texts[index] || '');
+  const transcript = (text, label) => text ? `<details class="media-transcript"><summary>${label}</summary><span class="de">${text}</span></details>` : '';
+  const audioCards = audio.map((name, index) => `
     <article class="media-card">
-      <h4>🎧 Audio ${i+1}</h4><div class="media-meta">${name}</div>
-      <audio controls preload="none" src="${mediaUrl(manifest.audioBase || 'NWA2/audio/',name,manifest.audioExtension || '.mp3')}"></audio>
+      <h4>&#127925; Audio ${index + 1}</h4>
+      <div class="media-meta">${name}${manifest.audioExtension || '.mp3'}</div>
+      <audio class="chapter-audio" controls preload="none" src="${manifest.audioBase || 'NWA2/'}${encodeURIComponent(name)}${manifest.audioExtension || '.mp3'}"></audio>
+      <div class="media-tools"><label>Tempo <select class="media-rate"><option value="0.75">0.75x</option><option value="1" selected>1x</option><option value="1.25">1.25x</option><option value="1.5">1.5x</option></select></label><label>Volume <input class="media-volume" type="range" min="0" max="1" step="0.05" value="1"></label></div>
+      ${transcript(textFor(audioText, name, index), 'Transkript anzeigen')}
     </article>`).join('');
-  const videoCards = video.map((name,i)=>`
+  const videoCards = video.map((name, index) => `
     <article class="media-card">
-      <h4>📺 Video ${i+1}</h4><div class="media-meta">${name}</div>
-      <video controls preload="metadata" src="${mediaUrl(manifest.videoBase || 'NWA2/video/',name,manifest.videoExtension || '.mp4')}"></video>
+      <h4>&#127909; Video ${index + 1}</h4>
+      <div class="media-meta">${name}${manifest.videoExtension || '.mp4'}</div>
+      <video controls preload="metadata" src="${manifest.videoBase || 'NWA2/'}${encodeURIComponent(name)}${manifest.videoExtension || '.mp4'}"></video>
+      ${transcript(textFor(videoText, name, index), 'Videotext anzeigen')}
     </article>`).join('');
   const html = audio.length || video.length
-    ? `<div class="media-grid">${audioCards}${videoCards}</div>`
-    : '<div class="media-empty">لا توجد ملفات لهذا الفصل بعد. أضف الأسماء والمسارات في NWA2/media-config.js.</div>';
-  targets.forEach(target=>{ target.innerHTML = html; });
+    ? `<div class="media-toolbar"><strong>&#127925; Kapitel ${currentKap} Medien</strong><span class="chapter-count">${audio.length} Audio · ${video.length} Video</span></div><div class="media-grid">${audioCards}${videoCards}</div>`
+    : '<div class="card">Keine Medien für dieses Kapitel konfiguriert.</div>';
+  targets.forEach(target => { target.innerHTML = html; });
+  targets.forEach(target => {
+    target.querySelectorAll('.media-card').forEach(card => {
+      const player = card.querySelector('.chapter-audio');
+      const rate = card.querySelector('.media-rate');
+      const volume = card.querySelector('.media-volume');
+      if(rate && player) rate.onchange = () => { player.playbackRate = Number(rate.value); };
+      if(volume && player) volume.oninput = () => { player.volume = Number(volume.value); };
+    });
+  });
 }
 
 /* =========================================================
@@ -4570,27 +4621,33 @@ function renderLK(){
    QUIZ ENGINE
    ========================================================= */
 let answers = [];
-function quizCardHTML(q,i,total){
-  const label = `<span class="q-type">${q.typeLabel || quizTypeLabels[q.type] || 'تدريب'}</span>`;
-  if(['mc','match','card','listening'].includes(q.type)){
-    const play = q.type==='listening' ? `<button class="btn btn-ghost" style="margin-bottom:10px;font-size:12px;" data-listen="${i}">🔊 استمع</button>` : '';
-    return `<div class="q-card" data-qi="${i}"><div class="q-num">سؤال ${i+1} / ${total} ${label}</div>${play}<div class="q-prompt de">${q.prompt}</div><div class="q-options">${q.options.map(o=>`<div class="q-opt de" data-val="${o.replace(/"/g,'&quot;')}">${o}</div>`).join('')}</div><div class="q-explain" id="exp-${i}"></div></div>`;
-  }
-  if(q.type==='write'){
-    return `<div class="q-card q-write" data-qi="${i}"><div class="q-num">سؤال ${i+1} / ${total} ${label}</div><div class="q-prompt">${q.prompt}</div><textarea placeholder="Schreib hier auf Deutsch..."></textarea><div class="q-explain" id="exp-${i}"></div></div>`;
-  }
-  const orderHint = q.type==='order' ? `<div class="q-order-hint">${q.tokens.join(' · ')}</div>` : '';
-  return `<div class="q-card q-fill" data-qi="${i}"><div class="q-num">سؤال ${i+1} / ${total} ${label}</div><div class="q-prompt de">${q.prompt}</div>${orderHint}<input type="text" placeholder="اكتب إجابتك هنا بالألمانية..."><div class="q-explain" id="exp-${i}"></div></div>`;
-}
-function renderQuiz(){
+function renderLegacyQuiz(){
   const data = KAPITEL[currentKap];
   answers = new Array(data.quiz.length).fill(null);
   const c = document.getElementById('quizContainer');
-  c.innerHTML = data.quiz.map((q,i)=>quizCardHTML(q,i,data.quiz.length)).join('');
+  c.innerHTML = data.quiz.map((q,i)=>{
+    if(q.type==='mc'){
+      return `<div class="q-card" data-qi="${i}">
+        <div class="q-num">سؤال ${i+1} / ${data.quiz.length}</div>
+        <div class="q-prompt de">${q.prompt}</div>
+        <div class="q-options">
+          ${q.options.map(o=>`<div class="q-opt de" data-val="${o.replace(/"/g,'&quot;')}">${o}</div>`).join('')}
+        </div>
+        <div class="q-explain" id="exp-${i}"></div>
+      </div>`;
+    } else {
+      return `<div class="q-card q-fill" data-qi="${i}">
+        <div class="q-num">سؤال ${i+1} / ${data.quiz.length}</div>
+        <div class="q-prompt de">${q.prompt}</div>
+        <input type="text" placeholder="اكتب إجابتك هنا بالألمانية...">
+        <div class="q-explain" id="exp-${i}"></div>
+      </div>`;
+    }
+  }).join('');
 
   c.querySelectorAll('.q-card').forEach(card=>{
     const qi = parseInt(card.dataset.qi);
-    if(['mc','match','card','listening'].includes(data.quiz[qi].type)){
+    if(data.quiz[qi].type==='mc'){
       card.querySelectorAll('.q-opt').forEach(opt=>{
         opt.onclick = ()=>{
           card.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
@@ -4599,11 +4656,8 @@ function renderQuiz(){
           updateProgress();
         };
       });
-      if(data.quiz[qi].type==='listening'){
-        card.querySelector('[data-listen]').onclick = event=>speak(data.quiz[qi].sentence,event.currentTarget);
-      }
     } else {
-      const input = card.querySelector('input,textarea');
+      const input = card.querySelector('input');
       input.oninput = ()=>{ answers[qi] = input.value.trim(); updateProgress(); };
     }
   });
@@ -4612,9 +4666,10 @@ function renderQuiz(){
 }
 function updateProgress(){
   const data = KAPITEL[currentKap];
+  const total = buildQuestionBank(data).length;
   const answered = answers.filter(a=>a && a.length>0).length;
-  document.getElementById('qProgressLabel').textContent = `${answered} / ${data.quiz.length}`;
-  document.getElementById('qProgressFill').style.width = (answered/data.quiz.length*100)+'%';
+  document.getElementById('qProgressLabel').textContent = `${answered} / ${total}`;
+  document.getElementById('qProgressFill').style.width = (answered/total*100)+'%';
 }
 function normalize(s){
   return (s||'').toLowerCase().trim().replace(/[.,!?„“"']/g,'').replace(/\s+/g,' ');
@@ -4625,19 +4680,17 @@ document.getElementById('checkAllBtn').onclick = ()=>{
   data.quiz.forEach((q,i)=>{
     const card = document.querySelector(`.q-card[data-qi="${i}"]`);
     const exp = document.getElementById('exp-'+i);
-    const isCorrect = q.type==='write' ? Boolean(answers[i] && answers[i].trim()) : normalize(answers[i]) === normalize(q.answer);
+    const isCorrect = normalize(answers[i]) === normalize(q.answer);
     if(isCorrect) score++;
     exp.classList.add('show');
-    exp.innerHTML = q.type==='write'
-      ? (isCorrect ? '📝 تمت الكتابة — راجع نموذج الإجابة: ' : '📝 اكتب إجابتك ثم قارنها بالنموذج: ') + q.explain
-      : (isCorrect? '✅ صحيح — ' : '❌ غير صحيح — الإجابة الصحيحة: <span class="de">'+q.answer+'</span> — ') + q.explain;
-    if(['mc','match','card','listening'].includes(q.type)){
+    exp.innerHTML = (isCorrect? '✅ صحيح — ' : '❌ غير صحيح — الإجابة الصحيحة: <span class="de">'+q.answer+'</span> — ') + q.explain;
+    if(q.type==='mc'){
       card.querySelectorAll('.q-opt').forEach(o=>{
         if(normalize(o.dataset.val)===normalize(q.answer)) o.classList.add('correct');
         else if(o.classList.contains('selected') && !isCorrect) o.classList.add('wrong');
       });
     } else {
-      const input = card.querySelector('input,textarea');
+      const input = card.querySelector('input');
       input.classList.add(isCorrect?'correct':'wrong');
     }
   });
@@ -4647,6 +4700,23 @@ document.getElementById('checkAllBtn').onclick = ()=>{
       <div class="big">${score} / ${data.quiz.length}</div>
       <p>نتيجتك: ${pct}% — ${pct>=80?'ممتاز! أنت جاهز للانتقال إلى الفصل التالي 🎉':(pct>=50?'جيد! راجع الأخطاء ثم أعد المحاولة 💪':'راجع القواعد والمفردات ثم أعد المحاولة 📘')}</p>
     </div>`;
+  document.getElementById('scoreArea').scrollIntoView({behavior:'smooth', block:'center'});
+};
+
+document.getElementById('checkAllBtn').onclick = ()=>{
+  const bank = buildQuestionBank(KAPITEL[currentKap]);
+  let score = 0;
+  bank.forEach((q,i)=>{
+    const exp = document.getElementById('exp-'+i);
+    const response = normalize(answers[i]);
+    const expected = normalize(q.answer);
+    const isCorrect = q.type === 'image' || q.type === 'write' ? response.length > 15 : response === expected;
+    if(isCorrect) score++;
+    if(exp){ exp.classList.add('show'); exp.innerHTML = isCorrect ? '✅ إجابة ممتازة.' : `الإجابة النموذجية: <span class="de">${q.explain || q.answer || 'راجع وصفك ثم حاول مرة أخرى.'}</span>`; }
+  });
+  const pct = Math.round(score / bank.length * 100);
+  document.getElementById('scoreArea').innerHTML = `<div class="card"><strong>نتيجتك: ${score} / ${bank.length} (${pct}%)</strong><p style="margin:6px 0 0;color:var(--muted);">تم تصحيح الإجابات مع إظهار النموذج والتغذية الراجعة.</p></div>`;
+  if(pct >= 70) sfxSuccess(); else sfxJoy();
   document.getElementById('scoreArea').scrollIntoView({behavior:'smooth', block:'center'});
 };
 
@@ -5150,6 +5220,7 @@ function generateCertificate(){
 
 renderRail();
 renderSideNav();
+initAudioBars();
 renderKapitel();
 document.getElementById('sec-uebersicht').classList.add('active');
 </script>
