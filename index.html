@@ -95,7 +95,7 @@
   .dos-pro-page { min-height:100vh; background:#fbfaf7; color:#16202d; font-family:Inter, Arial, sans-serif; }
   .dos-pro-page[dir="rtl"] { font-family:Cairo, Arial, sans-serif; }
   .dos-pro-nav { position:sticky; top:0; z-index:40; display:flex; align-items:center; gap:28px; padding:14px clamp(20px, 5vw, 76px); background:rgba(255,255,255,.92); border-bottom:1px solid #e8e4dc; backdrop-filter:blur(16px); }
-  .dos-pro-nav .dos-full-logo { width:205px; height:auto; display:block; }
+  .dos-pro-nav .dos-full-logo { width:56px; height:42px; object-fit:contain; display:block; }
   .dos-pro-nav-links { display:flex; align-items:center; gap:22px; margin-inline-start:auto; color:#657181; font-size:13px; font-weight:700; }
   .dos-pro-nav-links a { color:inherit; text-decoration:none; }
   .dos-pro-nav-links a:hover { color:#c8283a; }
@@ -118,7 +118,7 @@
   .dos-pro-hero-visual { position:relative; min-height:410px; display:grid; place-items:center; }
   .dos-pro-hero-visual:before { content:""; position:absolute; inset:8% 0 0 10%; border:1px solid #e8ded0; border-radius:34px; background:linear-gradient(145deg,#f1ebe3,#fff); transform:rotate(-5deg); }
   .dos-pro-hero-card { position:relative; width:min(100%,480px); padding:28px; border:1px solid rgba(11,31,58,.09); border-radius:22px; background:rgba(255,255,255,.94); box-shadow:0 30px 80px rgba(11,31,58,.15); }
-  .dos-pro-hero-card .dos-full-logo { width:min(100%,390px); height:auto; margin:0 auto 18px; }
+  .dos-pro-hero-card .dos-full-logo { width:118px; height:84px; object-fit:contain; margin:14px auto 6px; }
   .dos-pro-hero-card h2 { margin:0; color:#0b1f3a; font:700 29px/1.15 Fraunces, Georgia, serif; }
   .dos-pro-hero-card p { margin:10px 0 20px; color:#6b7582; font-size:13px; line-height:1.8; }
   .dos-pro-level-strip { display:grid; grid-template-columns:repeat(5,1fr); gap:7px; }
@@ -170,7 +170,7 @@
   .dos-pro-footer { display:flex; justify-content:space-between; gap:20px; padding:28px clamp(20px, 6vw, 92px); background:#0b1f3a; color:#c7d0dc; font-size:12px; }
   .dos-pro-footer strong { color:#fff; }
   @media (max-width:1000px) { .dos-pro-nav-links { display:none; } .dos-pro-hero { grid-template-columns:1fr; } .dos-pro-service-grid,.dos-pro-course-grid { grid-template-columns:repeat(2,1fr); } .dos-pro-method,.dos-pro-register { grid-template-columns:1fr; } }
-  @media (max-width:640px) { .dos-pro-nav { padding:12px 16px; gap:10px; } .dos-pro-nav .dos-full-logo { width:150px; } .dos-pro-hero { padding:62px 18px 55px; } .dos-pro-hero h1 { font-size:42px; } .dos-pro-hero-visual { min-height:310px; } .dos-pro-stats { grid-template-columns:repeat(2,1fr); padding-inline:18px; } .dos-pro-stat:nth-child(odd) { border-inline-start:0; } .dos-pro-stat:last-child { grid-column:1 / -1; } .dos-pro-section { padding:55px 18px; } .dos-pro-section-head { display:block; } .dos-pro-section-head p { margin-top:12px; } .dos-pro-service-grid,.dos-pro-course-grid,.dos-pro-feature-list { grid-template-columns:1fr; } .dos-pro-form { grid-template-columns:1fr; padding:18px; } .dos-pro-form .full,.dos-pro-form button { grid-column:auto; } .dos-pro-footer { display:block; } .dos-pro-footer span { display:block; margin-top:8px; } }
+  @media (max-width:640px) { .dos-pro-nav { padding:12px 16px; gap:10px; } .dos-pro-nav .dos-full-logo { width:48px; } .dos-pro-hero { padding:62px 18px 55px; } .dos-pro-hero h1 { font-size:42px; } .dos-pro-hero-visual { min-height:310px; } .dos-pro-stats { grid-template-columns:repeat(2,1fr); padding-inline:18px; } .dos-pro-stat:nth-child(odd) { border-inline-start:0; } .dos-pro-stat:last-child { grid-column:1 / -1; } .dos-pro-section { padding:55px 18px; } .dos-pro-section-head { display:block; } .dos-pro-section-head p { margin-top:12px; } .dos-pro-service-grid,.dos-pro-course-grid,.dos-pro-feature-list { grid-template-columns:1fr; } .dos-pro-form { grid-template-columns:1fr; padding:18px; } .dos-pro-form .full,.dos-pro-form button { grid-column:auto; } .dos-pro-footer { display:block; } .dos-pro-footer span { display:block; margin-top:8px; } }
 
   /* Public landing polish: landmark-led hero, purposeful motion, and conversion cues. */
   .dos-pro-page { background:linear-gradient(180deg,#fffdf9 0%,#fbfaf7 42%,#f4f0e9 100%); }
@@ -191,7 +191,7 @@
   .dos-pro-hero-visual:before { inset:4% -5% 3% 6%; background:linear-gradient(145deg,#e9dfd0,#fff8ee); box-shadow:0 24px 80px rgba(11,31,58,.11); }
   .dos-pro-hero-card { overflow:hidden; width:min(100%,520px); padding:0; background:#fff; }
   .dos-pro-hero-card:before { display:none; }
-  .dos-pro-hero-card > .dos-full-logo { width:min(78%,330px); margin:-45px auto 18px; position:relative; padding:10px 16px; border-radius:12px; background:rgba(255,255,255,.94); box-shadow:0 10px 24px rgba(11,31,58,.16); }
+  .dos-pro-hero-card > .dos-full-logo { width:118px; height:84px; margin:14px auto 6px; position:relative; padding:0; border-radius:0; background:transparent; box-shadow:none; }
   .dos-pro-hero-card h2,.dos-pro-hero-card p,.dos-pro-level-strip { margin-inline:28px; }
   .dos-pro-hero-card h2 { font-size:28px; }
   .dos-pro-hero-card p { margin-bottom:20px; }
@@ -846,7 +846,7 @@ function LogoMark({ height = 34, withWordmark = true }) {
   return (
     <div className="flex items-center gap-2">
       <img
-        src="./dos-full-logo.svg"
+        src="./dos-wave-logo.svg"
         alt="DOS:Drei_Online_Spezialesten"
         style={{ height, width: "auto", objectFit: "contain" }}
       />
@@ -1053,12 +1053,12 @@ function PublicLanding({ onLogin }) {
   return (
     <div className="dos-pro-page" dir={isRtl ? "rtl" : "ltr"} lang={language}>
       <nav className="dos-pro-nav">
-        <a href="#top"><img className="dos-full-logo" src="./dos-full-logo.svg" alt="DOS - Drei Online Spezialisten" /></a>
+        <a href="#top"><img className="dos-full-logo" src="./dos-wave-logo.svg" alt="DOS - Drei Online Spezialisten" /></a>
         <div className="dos-pro-nav-links"><a href="#courses">{copy.navCourses}</a><a href="#method">{copy.navMethod}</a><a href="#about">{copy.navAbout}</a><a href="#register">{copy.navContact}</a></div>
         <div className="dos-pro-nav-actions"><select className="dos-pro-lang" value={language} onChange={(event) => setLanguage(event.target.value)} aria-label="Language"><option value="de">DE</option><option value="en">EN</option><option value="ar">AR</option><option value="fr">FR</option></select><button type="button" className="dos-pro-login" onClick={onLogin}>{copy.login}</button></div>
       </nav>
       <main id="top">
-        <section className="dos-pro-hero"><div className="dos-pro-hero-copy"><div className="dos-pro-eyebrow">{copy.eyebrow}</div><h1>{copy.hero.split(" ").map((word, index) => <React.Fragment key={`${word}-${index}`}>{index === copy.hero.split(" ").length - 1 ? <em>{word}</em> : word} </React.Fragment>)}</h1><p className="dos-pro-lead">{copy.lead}</p><div className="dos-pro-cta"><button type="button" className="dos-pro-btn dos-pro-btn-primary" onClick={() => scrollTo("register")}>{copy.cta}</button><button type="button" className="dos-pro-btn dos-pro-btn-light" onClick={() => scrollTo("courses")}>{copy.secondary}</button></div><button type="button" className="dos-pro-voice" onClick={speakWelcome}><span className="dos-pro-voice-dot" />{speaking ? "Wird gesprochen ..." : "Deutsch begrüßt Sie — Willkommen bei DOS"}</button><div className="dos-pro-hero-note" aria-live="polite">{bannerImages[bannerIndex][1]}</div></div><div className="dos-pro-hero-visual"><div className="dos-pro-hero-card"><div className="dos-pro-hero-banner" style={{ backgroundImage: `linear-gradient(180deg,rgba(11,31,58,.02),rgba(11,31,58,.62)),url("${bannerImages[bannerIndex][0]}")` }} /><img className="dos-full-logo" src="./dos-full-logo.svg" alt="DOS" /><h2>{copy.plan}</h2><p>{copy.planText}</p><div className="dos-pro-level-strip"><span>A1</span><span>A2</span><span>B1</span><span>B2</span><span>C1</span></div></div></div></section>
+        <section className="dos-pro-hero"><div className="dos-pro-hero-copy"><div className="dos-pro-eyebrow">{copy.eyebrow}</div><h1>{copy.hero.split(" ").map((word, index) => <React.Fragment key={`${word}-${index}`}>{index === copy.hero.split(" ").length - 1 ? <em>{word}</em> : word} </React.Fragment>)}</h1><p className="dos-pro-lead">{copy.lead}</p><div className="dos-pro-cta"><button type="button" className="dos-pro-btn dos-pro-btn-primary" onClick={() => scrollTo("register")}>{copy.cta}</button><button type="button" className="dos-pro-btn dos-pro-btn-light" onClick={() => scrollTo("courses")}>{copy.secondary}</button></div><button type="button" className="dos-pro-voice" onClick={speakWelcome}><span className="dos-pro-voice-dot" />{speaking ? "Wird gesprochen ..." : "Deutsch begrüßt Sie — Willkommen bei DOS"}</button><div className="dos-pro-hero-note" aria-live="polite">{bannerImages[bannerIndex][1]}</div></div><div className="dos-pro-hero-visual"><div className="dos-pro-hero-card"><div className="dos-pro-hero-banner" style={{ backgroundImage: `linear-gradient(180deg,rgba(11,31,58,.02),rgba(11,31,58,.62)),url("${bannerImages[bannerIndex][0]}")` }} /><img className="dos-full-logo" src="./dos-wave-logo.svg" alt="DOS" /><h2>{copy.plan}</h2><p>{copy.planText}</p><div className="dos-pro-level-strip"><span>A1</span><span>A2</span><span>B1</span><span>B2</span><span>C1</span></div></div></div></section>
         <section className="dos-pro-stats">{statValues.map((value, index) => <div className="dos-pro-stat" key={copy.stats[index]}><strong>{value.toLocaleString("de-DE")}{index === 4 ? "+" : ""}</strong><span>{copy.stats[index]}</span></div>)}</section>
         <section className="dos-live-section" aria-labelledby="live-title"><div className="dos-live-head"><h2 id="live-title">محاضرات شغالة الآن</h2><p>انضم إلى واحدة من خمس محاضرات مباشرة تعمل الآن مع مدرّسين DOS. المقاعد محدودة والتفاعل مباشر.</p></div><div className="dos-live-grid">{[["A1","Deutsch im Alltag","Begrüßung und erste Gespräche"],["A2","Sprechen ohne Angst","Wortschatz aktiv anwenden"],["B1","Deutsch für den Beruf","Sicher kommunizieren"],["B2","Diskussion & Argumentation","Flüssig und präzise sprechen"],["C1","Akademisches Deutsch","Analyse und Präsentation"]].map(([level,title,detail]) => <article className="dos-live-card" key={level}><div className="dos-live-top"><span className="dos-live-level">{level}</span><span className="dos-live-badge">LIVE</span></div><h3>{title}</h3><p>{detail}</p><a className="dos-live-action" href="#register">انضم الآن</a></article>)}</div></section>
         <section className="dos-pro-section" id="about"><div className="dos-pro-section-head"><h2>{copy.servicesTitle}</h2><p>{copy.servicesText}</p></div><div className="dos-pro-service-grid">{copy.services.map(([title, text], index) => <article className="dos-pro-service" key={title}><div className="icon">0{index + 1}</div><h3>{title}</h3><p>{text}</p></article>)}</div></section>
@@ -3582,24 +3582,251 @@ function PaymentMethodsCard() {
   </InfoCard>;
 }
 
+function getLibraryFileExtension(book) {
+  for (const value of [book.storagePath, book.url, book.title]) {
+    const match = String(value || "").trim().match(/\.([a-z0-9]+)(?:[?#].*)?$/i);
+    if (match) return match[1].toLowerCase();
+  }
+  return "";
+}
+
 function isHtmlLibraryFile(book) {
-  return /\.html?($|[?#])/i.test([book.url, book.title, book.storagePath].filter(Boolean).join(" "));
+  return ["html", "htm"].includes(getLibraryFileExtension(book));
 }
 
 function isAudioLibraryFile(book) {
-  return /\.(mp3|wav|m4a|ogg|aac|webm)($|[?#])/i.test([book.url, book.title, book.storagePath].filter(Boolean).join(" "));
+  return ["mp3", "wav", "m4a", "ogg", "aac", "webm"].includes(getLibraryFileExtension(book));
 }
 
 const BUNDLED_DIGITAL_COURSES = [
-  { level: "A1", title: "A1 Menschen — المستوى A1", description: "منهج تفاعلي شامل مع النطق والتدريبات.", url: "A1%20Menschen.html" },
-  { level: "A1", title: "A1 Netzwerk — Netzwerk A1", description: "الحروف، المفردات، القواعد، القراءة والمحادثة.", url: "A1%20Netzwerk.html" },
-  { level: "A2", title: "A2 Netzwerk — المستوى A2", description: "12 Kapitel مع القراءة والاستماع والقواعد والاختبارات.", url: "A2%20Netzwerk.html" },
-  { level: "B1", title: "B1 Netzwerk — المستوى B1", description: "محتوى المستوى المتوسط الأول والمهارات الأربع.", url: "B1%20Netzwerk.html" },
-  { level: "Gespräch", title: "Gespräch — شريك المحادثة", description: "تدريب محادثة تفاعلي مع التسجيل والنطق الألماني.", url: "Gespr%C3%A4ch.html" },
+  { level: "A1", title: "A1 Menschen — المستوى A1", description: "منهج تفاعلي شامل مع النطق والتدريبات.", url: "./A1%20Menschen.html" },
+  { level: "A1", title: "A1 Netzwerk — Netzwerk A1", description: "الحروف، المفردات، القواعد، القراءة والمحادثة.", url: "./A1%20Netzwerk.html" },
+  { level: "A2", title: "A2 Netzwerk — المستوى A2", description: "12 Kapitel مع القراءة والاستماع والقواعد والاختبارات.", url: "./A2%20Netzwerk.html" },
+  { level: "B1", title: "B1 Netzwerk — المستوى B1", description: "محتوى المستوى المتوسط الأول والمهارات الأربع.", url: "./B1%20Netzwerk.html" },
+  { level: "Gespräch", title: "Gespräch — شريك المحادثة", description: "تدريب محادثة تفاعلي مع التسجيل والنطق الألماني.", url: "./Gespr%C3%A4ch.html" },
 ];
 
 function LibraryFileViewer({ book, onClose }) {
-  return <div className="fixed inset-0 z-[90] flex items-center justify-center p-3 md:p-6" style={{ backgroundColor: "rgba(8,21,39,.78)" }}><div className="flex h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl border bg-white shadow-2xl" style={{ borderColor: COLORS.border }}><div className="flex items-center justify-between gap-3 border-b px-4 py-3" style={{ borderColor: COLORS.border }}><div><p className="text-sm font-semibold" style={{ color: COLORS.ink }}>{book.title}</p><p className="text-xs" style={{ color: COLORS.subtle }}>عرض الكتاب داخل بوابة DOS مع الحفاظ على محتوى HTML وموارده</p></div><button type="button" onClick={onClose} className="rounded-lg border px-3 py-1.5 text-sm font-semibold" style={{ borderColor: COLORS.border, color: COLORS.red }}>إغلاق</button></div><iframe title={book.title} src={book.url} sandbox="allow-scripts allow-forms allow-popups allow-modals allow-same-origin" referrerPolicy="no-referrer" loading="eager" className="min-h-0 flex-1 border-0" /></div></div>;
+  const [source, setSource] = useState("");
+  const [htmlDocument, setHtmlDocument] = useState("");
+  const [fileKind, setFileKind] = useState("");
+  const [loadError, setLoadError] = useState(false);
+  const epubContainer = React.useRef(null);
+
+  React.useEffect(() => {
+    let active = true;
+    let objectUrl = "";
+    setSource("");
+    setHtmlDocument("");
+    setFileKind("");
+    setLoadError(false);
+
+    async function loadSource() {
+      let resolved = "";
+      try {
+        let url = book.url || "";
+        let blob = null;
+        if (book.storagePath) {
+          const { data, error } = await supabaseClient.storage
+            .from("course-library")
+            .createSignedUrl(book.storagePath, 300);
+          if (error || !data?.signedUrl) throw new Error("Could not create a temporary library link.");
+          url = data.signedUrl;
+          const { data: file, error: downloadError } = await supabaseClient.storage.from("course-library").download(book.storagePath);
+          if (downloadError || !file) throw new Error("The library file could not be read.");
+          blob = file;
+        }
+        resolved = resolveLibraryUrl(url);
+        if (!resolved && !blob) throw new Error("The library item has no valid URL.");
+
+        const extension = getLibraryFileExtension(book);
+        const likelyHtml = isHtmlLibraryFile(book) || /^(text\/html|text\/plain|application\/octet-stream)$/i.test(blob?.type || "");
+        let markup = "";
+        if (blob && likelyHtml) {
+          markup = await blob.slice(0, 4096).text();
+        } else if (!blob && isHtmlLibraryFile(book)) {
+          const response = await fetch(resolved, { credentials: "omit" });
+          if (!response.ok) throw new Error("The HTML file could not be read.");
+          markup = await response.text();
+        }
+
+        const isHtmlContent = /<!doctype\s+html|<html\b|<head\b|<body\b/i.test(markup);
+        if (isHtmlContent) {
+          if (blob) markup = await blob.text();
+          const html = new DOMParser().parseFromString(markup, "text/html");
+          html.querySelectorAll("base").forEach((base) => base.remove());
+          const base = html.createElement("base");
+          base.href = resolved || document.baseURI;
+          html.head.prepend(base);
+          const doctype = html.doctype ? `<!doctype ${html.doctype.name}>` : "<!doctype html>";
+          if (active) {
+            setFileKind("html");
+            setHtmlDocument(`${doctype}\n${html.documentElement.outerHTML}`);
+          }
+          return;
+        }
+
+        const mimeByExtension = {
+          pdf: "application/pdf", epub: "application/epub+zip", mp3: "audio/mpeg", wav: "audio/wav",
+          m4a: "audio/mp4", ogg: "audio/ogg", aac: "audio/aac", mp4: "video/mp4", webm: "video/webm",
+          png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", gif: "image/gif", webp: "image/webp", svg: "image/svg+xml",
+        };
+        const mimeType = mimeByExtension[extension] || blob?.type || "application/octet-stream";
+        let kind = mimeType.startsWith("image/") ? "image" : mimeType.startsWith("audio/") ? "audio" : mimeType.startsWith("video/") ? "video" : extension === "epub" ? "epub" : "frame";
+        if (blob) {
+          const typedBlob = blob.type === mimeType ? blob : new Blob([blob], { type: mimeType });
+          objectUrl = URL.createObjectURL(typedBlob);
+          if (active) setSource(objectUrl);
+        } else if (resolved) {
+          objectUrl = "";
+          setSource(resolved);
+        }
+        if (active) setFileKind(kind);
+      } catch {
+        if (active) setLoadError(true);
+      }
+    }
+
+    loadSource();
+    return () => {
+      active = false;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [book.id, book.storagePath, book.url, book.title]);
+
+  React.useEffect(() => {
+    if (fileKind !== "epub" || !source || !epubContainer.current) return undefined;
+    let cancelled = false;
+    let publication;
+    let rendition;
+    loadEpubReader().then((ePub) => {
+      if (cancelled || !epubContainer.current) return;
+      publication = ePub(source);
+      rendition = publication.renderTo(epubContainer.current, { width: "100%", height: "100%", flow: "scrolled-doc" });
+      return rendition.display();
+    }).catch(() => { if (!cancelled) setLoadError(true); });
+    return () => {
+      cancelled = true;
+      rendition?.destroy();
+      publication?.destroy();
+    };
+  }, [fileKind, source]);
+
+  return (
+    <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 p-2 sm:p-5" role="dialog" aria-modal="true" aria-label={book.title}>
+      <div className="flex h-[94vh] w-full max-w-6xl flex-col overflow-hidden rounded-xl border bg-white shadow-2xl" style={{ borderColor: COLORS.border }}>
+        <div className="flex items-center justify-between gap-3 border-b px-4 py-3" style={{ borderColor: COLORS.border }}>
+          <div className="flex min-w-0 items-center gap-3">
+            <img src={resolveLibraryUrl("./dos-wave-logo.svg")} alt="DOS" className="h-12 w-16 shrink-0 object-contain" />
+            <p className="truncate text-sm font-semibold" style={{ color: COLORS.ink }}>{book.title}</p>
+          </div>
+          <button type="button" onClick={onClose} className="shrink-0 rounded-lg border px-3 py-2 text-sm font-semibold" style={{ borderColor: COLORS.border, color: COLORS.red }}>إغلاق</button>
+        </div>
+        {loadError ? (
+          <p className="m-5 rounded-lg bg-red-50 p-4 text-sm text-red-800">تعذر تحميل المادة. تحقق من نوع الملف وصلاحية الوصول.</p>
+        ) : htmlDocument ? (
+          <iframe title={book.title} srcDoc={htmlDocument} sandbox="allow-scripts allow-forms" referrerPolicy="no-referrer" loading="eager" className="min-h-0 flex-1 border-0" />
+        ) : fileKind === "image" && source ? (
+          <div className="flex min-h-0 flex-1 items-center justify-center overflow-auto bg-gray-100 p-3"><img src={source} alt={book.title} className="max-h-full max-w-full object-contain" /></div>
+        ) : fileKind === "audio" && source ? (
+          <div className="flex flex-1 items-center justify-center p-6"><audio controls autoPlay src={source} className="w-full max-w-2xl" /></div>
+        ) : fileKind === "video" && source ? (
+          <div className="flex min-h-0 flex-1 items-center justify-center bg-black"><video controls autoPlay src={source} className="max-h-full max-w-full" /></div>
+        ) : fileKind === "epub" && source ? (
+          <div ref={epubContainer} className="min-h-0 flex-1 overflow-auto bg-white" />
+        ) : source ? (
+          <iframe title={book.title} src={source} referrerPolicy="no-referrer" loading="eager" className="min-h-0 flex-1 border-0" />
+        ) : (
+          <p className="m-5 text-sm" style={{ color: COLORS.subtle }}>جارٍ تحميل المادة...</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+let epubReaderPromise;
+function loadEpubReader() {
+  if (window.ePub) return Promise.resolve(window.ePub);
+  if (!epubReaderPromise) {
+    epubReaderPromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js";
+      script.onload = () => window.ePub ? resolve(window.ePub) : reject(new Error("EPUB reader unavailable."));
+      script.onerror = () => reject(new Error("EPUB reader failed to load."));
+      document.head.appendChild(script);
+    });
+  }
+  return epubReaderPromise;
+}
+
+/*
+function LibraryPage({ books, initialLevel, editable, onAdd, onDelete, onUpdate, dictionariesOnly = false, studentMode = false }) {
+  const [level, setLevel] = useState(initialLevel || LEVELS[0]);
+  const [libraryType, setLibraryType] = useState("digital");
+  const [form, setForm] = useState({ category: "course", title: "", url: "", file: null });
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState({ title: "", url: "", category: "course" });
+  const [viewerBook, setViewerBook] = useState(null);
+  const [libraryMessage, setLibraryMessage] = useState("");
+  const [viewerBook, setViewerBook] = useState(null);
+  const visibleBooks = books.filter((book) => book.level === level && book.visible !== false && book.libraryType === libraryType && (!dictionariesOnly || book.category === "dictionary"));
+  const managedBooks = books.filter((book) => book.level === level && book.libraryType === libraryType && (!dictionariesOnly || book.category === "dictionary"));
+  const displayBooks = editable ? managedBooks : visibleBooks;
+  const bundledCourses = libraryType === "digital" && !dictionariesOnly ? BUNDLED_DIGITAL_COURSES.filter((course) => course.level === level) : [];
+  async function submit(event) {
+    event.preventDefault();
+    setLibraryMessage("");
+    if (!form.title.trim() || (!form.url.trim() && !form.file && libraryType === "digital")) return setLibraryMessage("أدخل اسم الكتاب وارفع ملفاً أو أضف رابطاً.");
+    try {
+      await onAdd({ ...form, level, libraryType });
+      setForm({ ...form, title: "", url: "", file: null });
+      setLibraryMessage("تمت إضافة المادة إلى المكتبة بنجاح.");
+    } catch (error) {
+      setLibraryMessage(error.message || "تعذر إضافة المادة إلى المكتبة.");
+    }
+  }
+  function beginEdit(book) { setEditingId(book.id); setEditForm({ title: book.title, url: book.url, category: book.category }); }
+  return <InfoCard labelAr="المكتبة الورقية والرقمية" labelDe="Papier- und Digitalbibliothek">
+    <div className="flex flex-col sm:flex-row gap-2 mb-4"><label className="text-sm self-center" style={{ color: COLORS.subtle }}>اختر المستوى</label><select className={inputCls} style={inputStyle} value={level} onChange={(e) => setLevel(e.target.value)}>{LEVELS.map((item) => <option key={item} value={item}>{item}</option>)}</select></div>
+    <div className="flex gap-2 mb-4"><button type="button" onClick={() => setLibraryType("paper")} className="flex-1 rounded-lg px-3 py-2 text-sm font-semibold" style={{ backgroundColor: libraryType === "paper" ? COLORS.navy : "#F7F9FB", color: libraryType === "paper" ? "#fff" : COLORS.ink }}>مكتبة ورقية — Papier</button><button type="button" onClick={() => setLibraryType("digital")} className="flex-1 rounded-lg px-3 py-2 text-sm font-semibold" style={{ backgroundColor: libraryType === "digital" ? COLORS.red : "#F7F9FB", color: libraryType === "digital" ? "#fff" : COLORS.ink }}>مكتبة رقمية — Digital</button></div>
+    {libraryMessage && <p className="mb-3 rounded-lg px-3 py-2 text-xs" style={{ backgroundColor: libraryMessage.includes("بنجاح") ? "#EAF6EC" : "#FBE7E9", color: libraryMessage.includes("بنجاح") ? "#1E7A38" : COLORS.red }}>{libraryMessage}</p>}
+    {editable && <form onSubmit={submit} className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4"><select className={inputCls} style={inputStyle} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>{dictionariesOnly ? <option value="dictionary">قاموس — Wörterbuch</option> : LIBRARY_CATEGORIES.map((category) => <option key={category.value} value={category.value}>{category.label}</option>)}</select><input required className={inputCls} style={inputStyle} placeholder="اسم الكتاب أو الملف" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /><input type="url" className={inputCls} style={inputStyle} placeholder="رابط خارجي اختياري" value={form.url} onChange={(e) => setForm({ ...form, url: e.target.value })} /><label className="sm:col-span-3 flex cursor-pointer items-center justify-center rounded-lg border px-3 py-2 text-sm" style={{ borderColor: COLORS.border, color: COLORS.navy }}><input type="file" accept=".pdf,.epub,.html,.mp3,.wav,.m4a,.mp4,image/*" className="hidden" onChange={(e) => setForm({ ...form, file: e.target.files?.[0] || null })} />{form.file ? `تم اختيار: ${form.file.name}` : "رفع PDF أو ملف صوتي أو كتاب من الجهاز"}</label><button type="submit" className="sm:col-span-3 px-4 py-2 rounded-lg text-sm font-semibold" style={{ backgroundColor: COLORS.navy, color: "#fff" }}>{libraryType === "digital" ? "إضافة كتاب رقمي" : "إضافة كتاب ورقي أو ملف مرفق"}</button></form>}
+  </InfoCard>;
+}
+*/
+
+function LibraryPage({ books, initialLevel, editable, onAdd, onDelete, onUpdate, dictionariesOnly = false, studentMode = false }) {
+        }
+      } catch {
+        if (active && isHtml && !book.storagePath && resolved) setSource(resolved);
+        else if (active) setLoadError(true);
+      }
+    }
+
+    loadSource();
+    return () => { active = false; };
+  }, [book.id, book.storagePath, book.url, isHtml]);
+
+  return (
+    <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 p-2 sm:p-5" role="dialog" aria-modal="true" aria-label={book.title}>
+      <div className="flex h-[94vh] w-full max-w-6xl flex-col overflow-hidden rounded-xl border bg-white shadow-2xl" style={{ borderColor: COLORS.border }}>
+        <div className="flex items-center justify-between gap-3 border-b px-4 py-3" style={{ borderColor: COLORS.border }}>
+          <div className="flex min-w-0 items-center gap-3">
+            <img src={resolveLibraryUrl("./dos-wave-logo.svg")} alt="DOS" className="h-12 w-16 shrink-0 object-contain" />
+            <p className="truncate text-sm font-semibold" style={{ color: COLORS.ink }}>{book.title}</p>
+          </div>
+          <button type="button" onClick={onClose} className="shrink-0 rounded-lg border px-3 py-2 text-sm font-semibold" style={{ borderColor: COLORS.border, color: COLORS.red }}>إغلاق</button>
+        </div>
+        {loadError ? (
+          <p className="m-5 rounded-lg bg-red-50 p-4 text-sm text-red-800">تعذر تحميل المادة. تحقق من صلاحية الوصول أو أعد فتحها.</p>
+        ) : htmlDocument || source ? (
+          <iframe title={book.title} src={htmlDocument ? undefined : source} srcDoc={htmlDocument || undefined} sandbox={isHtml ? "allow-scripts allow-forms" : undefined} referrerPolicy="no-referrer" loading="eager" className="min-h-0 flex-1 border-0" />
+        ) : (
+          <p className="m-5 text-sm" style={{ color: COLORS.subtle }}>جارٍ تحميل المادة...</p>
+        )}
+      </div>
+    </div>
+  );
 }
 
 /*
@@ -3640,6 +3867,16 @@ function LibraryPage({ books, initialLevel, editable, onAdd, onDelete, onUpdate,
   </InfoCard>;
 }
 */
+
+function resolveLibraryUrl(path) {
+  if (!path) return "";
+  try {
+    const url = new URL(path, document.baseURI);
+    return ["http:", "https:", "file:"].includes(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
+}
 
 function LibraryPage({ books, initialLevel, editable, onAdd, onDelete, onUpdate, dictionariesOnly = false, studentMode = false }) {
   const [level, setLevel] = useState(initialLevel || LEVELS[0]);
@@ -3983,9 +4220,9 @@ function ElectronicLibraryPage({ student, books, request, onSubmitPayment }) {
     </div>;
   }
 
-  if (!unlocked) return <div className="rounded-2xl border p-6 text-center" style={{ borderColor: COLORS.border, backgroundColor: COLORS.panel }}><img src={LOGO_SRC} alt="DOS Akademie" className="mx-auto mb-4 h-14 w-auto object-contain" /><h1 className="text-2xl font-semibold" style={{ color: COLORS.navy, fontFamily: F_DISPLAY }}>Willkommen in der DOS Bibliothek</h1><p className="mt-2 text-sm" style={{ color: COLORS.subtle }}>أدخل كلمة مرور المكتبة التي أرسلتها الإدارة.</p><form onSubmit={(event) => { event.preventDefault(); if (password === student.libraryAccessPassword) setUnlocked(true); else setMessage("كلمة المرور غير صحيحة."); }} className="mx-auto mt-5 flex max-w-sm gap-2"><input type="password" required className={inputCls} style={inputStyle} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="كلمة المرور" /><button className="rounded-lg px-4 text-sm font-semibold" style={{ backgroundColor: COLORS.navy, color: "#fff" }}>فتح</button></form>{message && <p className="mt-3 text-xs" style={{ color: COLORS.red }}>{message}</p>}</div>;
+  if (!unlocked) return <div className="rounded-2xl border p-6 text-center" style={{ borderColor: COLORS.border, backgroundColor: COLORS.panel }}><img src="./dos-wave-logo.svg" alt="DOS Akademie" className="mx-auto mb-4 h-20 w-28 object-contain" /><h1 className="text-2xl font-semibold" style={{ color: COLORS.navy, fontFamily: F_DISPLAY }}>Willkommen in der DOS Bibliothek</h1><p className="mt-2 text-sm" style={{ color: COLORS.subtle }}>أدخل كلمة مرور المكتبة التي أرسلتها الإدارة.</p><form onSubmit={(event) => { event.preventDefault(); if (password === student.libraryAccessPassword) setUnlocked(true); else setMessage("كلمة المرور غير صحيحة."); }} className="mx-auto mt-5 flex max-w-sm gap-2"><input type="password" required className={inputCls} style={inputStyle} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="كلمة المرور" /><button className="rounded-lg px-4 text-sm font-semibold" style={{ backgroundColor: COLORS.navy, color: "#fff" }}>فتح</button></form>{message && <p className="mt-3 text-xs" style={{ color: COLORS.red }}>{message}</p>}</div>;
 
-  return <div className="space-y-5"><div className="relative overflow-hidden rounded-[28px] border p-6 md:p-9" style={{ borderColor: COLORS.gold, background: `linear-gradient(120deg, ${COLORS.navyDeep}, ${COLORS.navyMid})`, color: "#fff" }}><img src={LOGO_SRC} alt="DOS Akademie" className="relative z-10 h-14 w-auto object-contain" /><p className="relative z-10 mt-5 text-xs uppercase tracking-[0.2em]" style={{ color: COLORS.goldSoft }}>Deutsche Sprache · Lesen · Hören · Lernen</p><h1 className="relative z-10 mt-2 text-2xl md:text-4xl font-semibold" style={{ fontFamily: F_DISPLAY }}>Willkommen in der DOS Bibliothek</h1><p className="relative z-10 mt-2 text-sm" style={{ color: "#D9E3F0" }}>اختر المستوى وابدأ رحلة القراءة والاستماع بالألمانية.</p></div><LibraryPage books={books} initialLevel={student.level} studentMode /></div>;
+  return <div className="space-y-5"><div className="relative overflow-hidden rounded-[28px] border p-6 md:p-9" style={{ borderColor: COLORS.gold, background: `linear-gradient(120deg, ${COLORS.navyDeep}, ${COLORS.navyMid})`, color: "#fff" }}><img src="./dos-wave-logo.svg" alt="DOS Akademie" className="relative z-10 h-20 w-28 object-contain" /><p className="relative z-10 mt-5 text-xs uppercase tracking-[0.2em]" style={{ color: COLORS.goldSoft }}>Deutsche Sprache · Lesen · Hören · Lernen</p><h1 className="relative z-10 mt-2 text-2xl md:text-4xl font-semibold" style={{ fontFamily: F_DISPLAY }}>Willkommen in der DOS Bibliothek</h1><p className="relative z-10 mt-2 text-sm" style={{ color: "#D9E3F0" }}>اختر المستوى وابدأ رحلة القراءة والاستماع بالألمانية.</p></div><LibraryPage books={books} initialLevel={student.level} studentMode /></div>;
 }
 
 function RequestInbox({ requests, onUpdate, onDelete, readOnly = false }) {
@@ -4971,7 +5208,7 @@ function App() {
     if (!error && data) {
       const mapped = await Promise.all(data.map(async (row) => {
         const book = mapLibraryRow(row);
-        if (!book.storagePath) return book;
+        if (!book.storagePath || !isAudioLibraryFile(book)) return book;
         const { data: signed } = await supabaseClient.storage.from("course-library").createSignedUrl(book.storagePath, 3600);
         return { ...book, url: signed?.signedUrl || "" };
       }));
