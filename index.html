@@ -3612,6 +3612,7 @@ function LibraryFileViewer({ book, onClose }) {
   const [fileKind, setFileKind] = useState("");
   const [loadError, setLoadError] = useState(false);
   const epubContainer = React.useRef(null);
+  const isBundledLocalCourse = source.startsWith("file:") && BUNDLED_DIGITAL_COURSES.some((course) => resolveLibraryUrl(course.url) === source);
 
   React.useEffect(() => {
     let active = true;
@@ -3640,6 +3641,13 @@ function LibraryFileViewer({ book, onClose }) {
         if (!resolved && !blob) throw new Error("The library item has no valid URL.");
 
         const extension = getLibraryFileExtension(book);
+        if (!blob && resolved.startsWith("file:") && isHtmlLibraryFile(book)) {
+          if (active) {
+            setFileKind("html");
+            setSource(resolved);
+          }
+          return;
+        }
         const likelyHtml = isHtmlLibraryFile(book) || /^(text\/html|text\/plain|application\/octet-stream)$/i.test(blob?.type || "");
         let markup = "";
         if (blob && likelyHtml) {
@@ -3726,6 +3734,8 @@ function LibraryFileViewer({ book, onClose }) {
           <p className="m-5 rounded-lg bg-red-50 p-4 text-sm text-red-800">تعذر تحميل المادة. تحقق من نوع الملف وصلاحية الوصول.</p>
         ) : htmlDocument ? (
           <iframe title={book.title} srcDoc={htmlDocument} sandbox="allow-scripts allow-forms" referrerPolicy="no-referrer" loading="eager" className="min-h-0 flex-1 border-0" />
+        ) : fileKind === "html" && source ? (
+          <iframe title={book.title} src={source} sandbox={isBundledLocalCourse ? undefined : "allow-scripts allow-forms"} referrerPolicy="no-referrer" loading="eager" className="min-h-0 flex-1 border-0" />
         ) : fileKind === "image" && source ? (
           <div className="flex min-h-0 flex-1 items-center justify-center overflow-auto bg-gray-100 p-3"><img src={source} alt={book.title} className="max-h-full max-w-full object-contain" /></div>
         ) : fileKind === "audio" && source ? (
@@ -3794,40 +3804,6 @@ function LibraryPage({ books, initialLevel, editable, onAdd, onDelete, onUpdate,
   </InfoCard>;
 }
 */
-
-function LibraryPage({ books, initialLevel, editable, onAdd, onDelete, onUpdate, dictionariesOnly = false, studentMode = false }) {
-        }
-      } catch {
-        if (active && isHtml && !book.storagePath && resolved) setSource(resolved);
-        else if (active) setLoadError(true);
-      }
-    }
-
-    loadSource();
-    return () => { active = false; };
-  }, [book.id, book.storagePath, book.url, isHtml]);
-
-  return (
-    <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 p-2 sm:p-5" role="dialog" aria-modal="true" aria-label={book.title}>
-      <div className="flex h-[94vh] w-full max-w-6xl flex-col overflow-hidden rounded-xl border bg-white shadow-2xl" style={{ borderColor: COLORS.border }}>
-        <div className="flex items-center justify-between gap-3 border-b px-4 py-3" style={{ borderColor: COLORS.border }}>
-          <div className="flex min-w-0 items-center gap-3">
-            <img src={resolveLibraryUrl("./dos-wave-logo.svg")} alt="DOS" className="h-12 w-16 shrink-0 object-contain" />
-            <p className="truncate text-sm font-semibold" style={{ color: COLORS.ink }}>{book.title}</p>
-          </div>
-          <button type="button" onClick={onClose} className="shrink-0 rounded-lg border px-3 py-2 text-sm font-semibold" style={{ borderColor: COLORS.border, color: COLORS.red }}>إغلاق</button>
-        </div>
-        {loadError ? (
-          <p className="m-5 rounded-lg bg-red-50 p-4 text-sm text-red-800">تعذر تحميل المادة. تحقق من صلاحية الوصول أو أعد فتحها.</p>
-        ) : htmlDocument || source ? (
-          <iframe title={book.title} src={htmlDocument ? undefined : source} srcDoc={htmlDocument || undefined} sandbox={isHtml ? "allow-scripts allow-forms" : undefined} referrerPolicy="no-referrer" loading="eager" className="min-h-0 flex-1 border-0" />
-        ) : (
-          <p className="m-5 text-sm" style={{ color: COLORS.subtle }}>جارٍ تحميل المادة...</p>
-        )}
-      </div>
-    </div>
-  );
-}
 
 /*
 function LibraryPage({ books, initialLevel, editable, onAdd, onDelete, onUpdate, dictionariesOnly = false, studentMode = false }) {
@@ -5676,8 +5652,10 @@ function App() {
 
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));
+if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+  });
 }
 
 let deferredInstallPrompt;
