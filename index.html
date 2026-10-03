@@ -1785,7 +1785,7 @@ function LandingApplicationsPage({ applications, onUpdate, canManage, onBack }) 
 function AdminDashboard({
   students, instructors, adminAccounts, activityLog, profile,
   requests, refreshStudents, refreshInstructors, refreshAdmins, refreshLog, onUpdateRequest, onDeleteRequest,
-  landingApplications, onUpdateLandingApplication, addLog, onLogout, workSessions, onSaveWorkSession, onUpdateWorkSession, studySessions, libraryBooks, refreshLibrary, onUpdateLibraryBook, onUpdateAccount,
+  landingApplications, onUpdateLandingApplication, addLog, onLogout, workSessions, onSaveWorkSession, onUpdateWorkSession, studySessions, onUpdateStudySession, libraryBooks, refreshLibrary, onUpdateLibraryBook, onUpdateAccount,
 }) {
   const [query, setQuery] = useState("");
   const [modal, setModal] = useState(null); // { mode: 'new'|'edit', data }
@@ -2203,8 +2203,10 @@ function AdminDashboard({
         setAdminView("student");
         window.location.hash = "student";
       }
+      return true;
     } catch (e) {
       setErrorMsg(e.message || "حدث خطأ أثناء الحفظ.");
+      return false;
     } finally {
       setSaving(false);
     }
@@ -2516,7 +2518,7 @@ function AdminDashboard({
             <h1 className="text-2xl md:text-3xl font-semibold" style={{ color: COLORS.ink, fontFamily: F_DISPLAY }}>تقرير مذاكرة الطلاب · Lernbericht</h1>
             <p className="text-sm mt-1" style={{ color: COLORS.subtle }}>الحالات اللحظية، عدادات الوقت، تفاصيل الجلسات، وتنزيل التقارير.</p>
           </div>
-          <StudyReportCard students={students} studySessions={studySessions} />
+          <StudyReportCard students={students} studySessions={studySessions} onSaveStudent={saveStudent} onUpdateStudySession={onUpdateStudySession} />
         </div>
       )}
       {employeeHasPermission(profile, "view_activity_log") && adminView === "log" && <ActivityLogPage activityLog={activityLog} onBack={() => goTo("dashboard")} />}
@@ -3988,23 +3990,23 @@ function downloadAttendanceReport(students, attendance, student) {
   URL.revokeObjectURL(link.href);
 }
 
-function downloadStudyReport(students, studySessions) {
+function downloadStudyReport(students, studySessions, level, month, group) {
   const escapeCsv = (value) => `"${String(value ?? "").replace(/"/g, '""')}"`;
-  const lines = [["Student", "Code", "Start", "Ende", "Status", "Lernminuten", "Pause (Minuten)"]];
+  const lines = [["Student", "Code", "Group", "Level", "Month", "Start", "Ende", "Status", "Lernminuten", "Pause (Minuten)"]];
   (studySessions || []).forEach((session) => {
     const student = (students || []).find((item) => item.profileId === session.studentProfileId);
     const stats = calculateStudyStats(session);
-    lines.push([student?.name || session.studentProfileId, student?.id || "", session.startedAt, session.endedAt || "", session.status, stats.studyMinutes, stats.breakMinutes]);
+    lines.push([student?.name || session.studentProfileId, student?.id || "", student?.groupName || "", student?.level || level || "", session.startedAt?.slice(0, 7) || month || "", session.startedAt, session.endedAt || "", session.status, stats.studyMinutes, stats.breakMinutes]);
   });
   const blob = new Blob(["\ufeff" + lines.map((line) => line.map(escapeCsv).join(",")).join("\r\n")], { type: "text/csv;charset=utf-8" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "student-study-report.csv";
+  link.download = `student-study-report-${level || "all-levels"}-${group || "all-groups"}-${month || "all-months"}.csv`;
   link.click();
   URL.revokeObjectURL(link.href);
 }
 
-function StudyReportCard({ students, studySessions }) {
+function LegacyStudyReportCard({ students, studySessions }) {
   const [openStudentId, setOpenStudentId] = useState(null);
   const totalMinutes = (studySessions || []).reduce((total, session) => {
     return total + calculateStudyStats(session).studyMinutes;
@@ -4022,6 +4024,142 @@ function StudyReportCard({ students, studySessions }) {
   return <div className="rounded-2xl border p-5 mb-5" style={{ borderColor: COLORS.border, backgroundColor: COLORS.panel }}>
     <div className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="text-base font-semibold" style={{ color: COLORS.ink, fontFamily: F_DISPLAY }}>تقرير مذاكرة الطلاب · Lernbericht</h2><p className="text-xs mt-1" style={{ color: COLORS.subtle }}>{studySessions?.length || 0} جلسة · {activeSessions.length} نشطة · {Math.floor(totalMinutes / 60)} ساعة و {totalMinutes % 60} دقيقة</p></div><button type="button" onClick={() => downloadStudyReport(students, studySessions)} className="rounded-lg px-3 py-2 text-xs font-semibold" style={{ backgroundColor: COLORS.navy, color: "#fff" }}>سحب ملف منسق · CSV herunterladen</button></div>
     {studentSummaries.length > 0 && <div className="mt-4 space-y-2">{studentSummaries.map(({ student, latest, minutes, breaks }) => { const isOpen = openStudentId === student.profileId; const studentSessions = (studySessions || []).filter((session) => session.studentProfileId === student.profileId); return <div key={student.profileId} className="rounded-xl border px-3 py-2 text-xs" style={{ borderColor: COLORS.border, backgroundColor: "#F8FAFD" }}><div className="flex flex-wrap items-center justify-between gap-2"><span className="font-semibold" style={{ color: COLORS.ink }}>{student.name} · {student.id}</span><span style={{ color: latest?.status === "break" ? COLORS.goldDark : latest?.status === "studying" ? "#1E7A38" : COLORS.subtle }}>{latest?.status === "break" ? "Pause" : latest?.status === "studying" ? "Lernen" : "Beendet"}</span><span style={{ color: COLORS.subtle }}>المذاكرة: {Math.floor(minutes / 60)} س {minutes % 60} د · الراحة: {breaks} د</span><div className="flex items-center gap-2"><button type="button" onClick={() => setOpenStudentId(isOpen ? null : student.profileId)} className="rounded-lg border px-2 py-1 font-semibold" style={{ borderColor: COLORS.border, color: COLORS.navy }}>{isOpen ? "إغلاق" : "فتح الجلسات"}</button><button type="button" onClick={() => downloadStudyReport([student], studentSessions)} className="rounded-lg px-2 py-1 font-semibold" style={{ backgroundColor: COLORS.navy, color: "#fff" }}>تنزيل</button></div></div>{isOpen && <div className="mt-3 space-y-1 border-t pt-2" style={{ borderColor: COLORS.border }}>{studentSessions.map((session) => { const stats = calculateStudyStats(session); return <div key={session.id} className="flex flex-wrap justify-between gap-2" style={{ color: COLORS.subtle }}><span>{new Date(session.startedAt).toLocaleString("ar-EG", { hour12: false })}</span><span>{session.status === "studying" ? "Lernen" : session.status === "break" ? "Pause" : "Beendet"}</span><span>مذاكرة {stats.studyMinutes} د · راحة {stats.breakMinutes} د</span></div>; })}</div>}</div>; })}</div>}
+  </div>;
+}
+
+function StudyReportCard({ students, studySessions, onSaveStudent, onUpdateStudySession }) {
+  const [openStudentId, setOpenStudentId] = useState(null);
+  const [selectedLevel, setSelectedLevel] = useState("all");
+  const [selectedGroup, setSelectedGroup] = useState("all");
+  const [selectedMonth, setSelectedMonth] = useState("all");
+  const [studentEdits, setStudentEdits] = useState({});
+  const [savingStudentId, setSavingStudentId] = useState(null);
+  const [saveMessage, setSaveMessage] = useState("");
+  const availableLevels = [...new Set([...(LEVELS || []), ...(students || []).map((student) => student.level).filter(Boolean)])];
+  const availableGroups = [...new Set((students || []).map((student) => student.groupName?.trim() || "__ungrouped__"))];
+  const availableMonths = [...new Set((studySessions || []).map((session) => session.startedAt?.slice(0, 7)).filter(Boolean))].sort().reverse();
+  const filteredStudents = (students || []).filter((student) =>
+    (selectedLevel === "all" || student.level === selectedLevel)
+    && (selectedGroup === "all" || (student.groupName?.trim() || "__ungrouped__") === selectedGroup)
+  );
+  const filteredSessions = (studySessions || []).filter((session) => {
+    const student = (students || []).find((item) => item.profileId === session.studentProfileId);
+    return (selectedLevel === "all" || student?.level === selectedLevel)
+      && (selectedGroup === "all" || (student?.groupName?.trim() || "__ungrouped__") === selectedGroup)
+      && (selectedMonth === "all" || session.startedAt?.slice(0, 7) === selectedMonth);
+  });
+  const totalMinutes = filteredSessions.reduce((total, session) => total + calculateStudyStats(session).studyMinutes, 0);
+  const activeSessions = filteredSessions.filter((session) => session.status === "studying" || session.status === "break");
+  const studentSummaries = filteredStudents.map((student) => {
+    const sessions = filteredSessions.filter((session) => session.studentProfileId === student.profileId);
+    const latest = [...sessions].sort((a, b) => new Date(b.startedAt) - new Date(a.startedAt))[0];
+    const totals = sessions.reduce((total, session) => {
+      const stats = calculateStudyStats(session);
+      return { minutes: total.minutes + stats.studyMinutes, breaks: total.breaks + stats.breakMinutes };
+    }, { minutes: 0, breaks: 0 });
+    return { student, sessions, latest, ...totals };
+  });
+
+  async function saveStudentChanges(student) {
+    const changes = studentEdits[student.profileId] || {};
+    if (!Object.keys(changes).length) return;
+    setSavingStudentId(student.profileId);
+    setSaveMessage("");
+    const saved = await onSaveStudent({ ...student, ...changes }, student.id);
+    if (saved) {
+      setStudentEdits((current) => {
+        const next = { ...current };
+        delete next[student.profileId];
+        return next;
+      });
+      setSaveMessage(`تم تحديث بيانات ${student.name || student.id}.`);
+    } else {
+      setSaveMessage("تعذر حفظ التعديل. راجع رسالة الخطأ أعلى البوابة ثم أعد المحاولة.");
+    }
+    setSavingStudentId(null);
+  }
+
+  async function changeStudyStatus(student, activeSession, nextStatus) {
+    setSavingStudentId(student.profileId);
+    setSaveMessage("");
+    const changedAt = new Date().toISOString();
+    const activeSessions = (studySessions || []).filter((session) => session.studentProfileId === student.profileId && (session.status === "studying" || session.status === "break"));
+    try {
+      if (nextStatus === "studying" && !activeSession) {
+        await onUpdateStudySession({ student_profile_id: student.profileId, started_at: changedAt, status: "studying", break_minutes: 0 });
+      } else if (nextStatus === "studying" && activeSession?.status === "break") {
+        await onUpdateStudySession({ id: activeSession.id, status: "studying", break_ended_at: changedAt, break_minutes: 20 });
+      } else if (nextStatus === "break" && activeSession?.status === "studying") {
+        await onUpdateStudySession({ id: activeSession.id, status: "break", break_minutes: 20, break_started_at: changedAt });
+      } else if (nextStatus === "finished" && activeSessions.length) {
+        await onUpdateStudySession({ ids: activeSessions.map((session) => session.id), status: "finished", ended_at: changedAt });
+      }
+      setSaveMessage(`تم تحديث حالة مذاكرة ${student.name || student.id}، وستصل للطالب مباشرة.`);
+    } catch (error) {
+      setSaveMessage(`تعذر تحديث حالة المذاكرة: ${error.message || "حدث خطأ غير متوقع."}`);
+    } finally {
+      setSavingStudentId(null);
+    }
+  }
+
+  return <div className="rounded-2xl border p-5 mb-5" style={{ borderColor: COLORS.border, backgroundColor: COLORS.panel }}>
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h2 className="text-base font-semibold" style={{ color: COLORS.ink, fontFamily: F_DISPLAY }}>تقرير مذاكرة الطلاب · Lernbericht</h2>
+        <p className="text-xs mt-1" style={{ color: COLORS.subtle }}>{filteredSessions.length} جلسة · {activeSessions.length} نشطة · {Math.floor(totalMinutes / 60)} ساعة و {totalMinutes % 60} دقيقة</p>
+      </div>
+      <button type="button" onClick={() => downloadStudyReport(filteredStudents, filteredSessions, selectedLevel === "all" ? "all-levels" : selectedLevel, selectedMonth === "all" ? "all-months" : selectedMonth, selectedGroup === "all" ? "all-groups" : selectedGroup)} className="rounded-lg px-3 py-2 text-xs font-semibold" style={{ backgroundColor: COLORS.navy, color: "#fff" }}>تنزيل التقرير المحدد · CSV herunterladen</button>
+    </div>
+    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <label className="flex flex-col gap-1 text-xs font-semibold" style={{ color: COLORS.subtle }}>المستوى
+        <select value={selectedLevel} onChange={(event) => setSelectedLevel(event.target.value)} className="rounded-lg border px-3 py-2 text-sm" style={{ borderColor: COLORS.border, color: COLORS.ink, backgroundColor: "#fff" }}>
+          <option value="all">كل المستويات</option>{availableLevels.map((level) => <option key={level} value={level}>{level}</option>)}
+        </select>
+      </label>
+      <label className="flex flex-col gap-1 text-xs font-semibold" style={{ color: COLORS.subtle }}>المجموعة
+        <select value={selectedGroup} onChange={(event) => setSelectedGroup(event.target.value)} className="rounded-lg border px-3 py-2 text-sm" style={{ borderColor: COLORS.border, color: COLORS.ink, backgroundColor: "#fff" }}>
+          <option value="all">كل المجموعات</option>{availableGroups.map((group) => <option key={group} value={group}>{group === "__ungrouped__" ? "بدون مجموعة" : group}</option>)}
+        </select>
+      </label>
+      <label className="flex flex-col gap-1 text-xs font-semibold" style={{ color: COLORS.subtle }}>الشهر
+        <select value={selectedMonth} onChange={(event) => setSelectedMonth(event.target.value)} className="rounded-lg border px-3 py-2 text-sm" style={{ borderColor: COLORS.border, color: COLORS.ink, backgroundColor: "#fff" }}>
+          <option value="all">كل الشهور</option>{availableMonths.map((month) => <option key={month} value={month}>{new Date(`${month}-01T00:00:00`).toLocaleDateString("ar-EG", { year: "numeric", month: "long" })}</option>)}
+        </select>
+      </label>
+    </div>
+    {saveMessage && <p role="status" className="mt-3 text-xs" style={{ color: saveMessage.startsWith("تعذر") ? "#B42318" : "#1E7A38" }}>{saveMessage}</p>}
+    {studentSummaries.length > 0 ? <div className="mt-4 space-y-2">{studentSummaries.map(({ student, sessions, latest, minutes, breaks }) => {
+      const isOpen = openStudentId === student.profileId;
+      const changes = studentEdits[student.profileId] || {};
+      const currentActiveSession = (studySessions || []).filter((session) => session.studentProfileId === student.profileId && (session.status === "studying" || session.status === "break")).sort((a, b) => new Date(b.startedAt) - new Date(a.startedAt))[0];
+      const studyStatus = currentActiveSession?.status || "finished";
+      const isSaving = savingStudentId === student.profileId;
+      return <div key={student.profileId} className="rounded-xl border px-3 py-3 text-xs" style={{ borderColor: COLORS.border, backgroundColor: "#F8FAFD" }}>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <span className="font-semibold" style={{ color: COLORS.ink }}>{student.name} · {student.id} · المجموعة: {student.groupName || "بدون مجموعة"}</span>
+          <span style={{ color: latest?.status === "break" ? COLORS.goldDark : latest?.status === "studying" ? "#1E7A38" : COLORS.subtle }}>{latest?.status === "break" ? "استراحة" : latest?.status === "studying" ? "يذاكر الآن" : latest ? "انتهت الجلسة" : "لا توجد جلسات لهذا الشهر"}</span>
+          <span style={{ color: COLORS.subtle }}>المذاكرة: {Math.floor(minutes / 60)} س {minutes % 60} د · الراحة: {breaks} د</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <label className="flex items-center gap-1" style={{ color: COLORS.subtle }}>المستوى
+              <select aria-label={`مستوى ${student.name}`} value={changes.level ?? student.level ?? "A1"} onChange={(event) => setStudentEdits((current) => ({ ...current, [student.profileId]: { ...current[student.profileId], level: event.target.value } }))} className="rounded-md border px-2 py-1" style={{ borderColor: COLORS.border, backgroundColor: "#fff", color: COLORS.ink }}>{availableLevels.map((level) => <option key={level} value={level}>{level}</option>)}</select>
+            </label>
+            <label className="flex items-center gap-1" style={{ color: COLORS.subtle }}>الحالة
+              <select aria-label={`حالة ${student.name}`} value={changes.status ?? student.status ?? "active"} onChange={(event) => setStudentEdits((current) => ({ ...current, [student.profileId]: { ...current[student.profileId], status: event.target.value } }))} className="rounded-md border px-2 py-1" style={{ borderColor: COLORS.border, backgroundColor: "#fff", color: COLORS.ink }}><option value="active">نشط</option><option value="paused">متوقف</option></select>
+            </label>
+            <button type="button" disabled={!Object.keys(changes).length || savingStudentId === student.profileId} onClick={() => saveStudentChanges(student)} className="rounded-md px-2 py-1 font-semibold disabled:opacity-50" style={{ backgroundColor: COLORS.navy, color: "#fff" }}>{savingStudentId === student.profileId ? "جارٍ الحفظ…" : "حفظ"}</button>
+            <button type="button" onClick={() => setOpenStudentId(isOpen ? null : student.profileId)} className="rounded-md border px-2 py-1 font-semibold" style={{ borderColor: COLORS.border, color: COLORS.navy }}>{isOpen ? "إغلاق الجلسات" : "الجلسات"}</button>
+          </div>
+        </div>
+        <div className="mt-3 flex flex-wrap items-center gap-2 border-t pt-3" style={{ borderColor: COLORS.border }}>
+          <span className="font-semibold" style={{ color: COLORS.subtle }}>حالة المذاكرة: {studyStatus === "studying" ? "يذاكر الآن" : studyStatus === "break" ? "استراحة" : "لا توجد جلسة نشطة"}</span>
+          {studyStatus === "finished" && <button type="button" disabled={isSaving} onClick={() => changeStudyStatus(student, currentActiveSession, "studying")} className="rounded-md px-2 py-1 font-semibold disabled:opacity-50" style={{ backgroundColor: "#1E7A38", color: "#fff" }}>بدء المذاكرة للطالب</button>}
+          {studyStatus === "studying" && <button type="button" disabled={isSaving} onClick={() => changeStudyStatus(student, currentActiveSession, "break")} className="rounded-md px-2 py-1 font-semibold disabled:opacity-50" style={{ backgroundColor: COLORS.gold, color: COLORS.navyDeep }}>تحويل إلى استراحة</button>}
+          {studyStatus === "break" && <button type="button" disabled={isSaving} onClick={() => changeStudyStatus(student, currentActiveSession, "studying")} className="rounded-md px-2 py-1 font-semibold disabled:opacity-50" style={{ backgroundColor: "#1E7A38", color: "#fff" }}>استئناف المذاكرة</button>}
+          {currentActiveSession && <button type="button" disabled={isSaving} onClick={() => changeStudyStatus(student, currentActiveSession, "finished")} className="rounded-md px-2 py-1 font-semibold disabled:opacity-50" style={{ backgroundColor: COLORS.red, color: "#fff" }}>إنهاء الجلسة</button>}
+        </div>
+        {isOpen && <div className="mt-3 space-y-1 border-t pt-2" style={{ borderColor: COLORS.border }}>{sessions.length ? sessions.map((session) => { const stats = calculateStudyStats(session); return <div key={session.id} className="flex flex-wrap justify-between gap-2" style={{ color: COLORS.subtle }}><span>{new Date(session.startedAt).toLocaleString("ar-EG", { hour12: false })}</span><span>{session.status === "studying" ? "يذاكر" : session.status === "break" ? "استراحة" : "انتهت"}</span><span>مذاكرة {stats.studyMinutes} د · راحة {stats.breakMinutes} د</span></div>; }) : <p style={{ color: COLORS.subtle }}>لا توجد جلسات مذاكرة في الشهر المحدد.</p>}</div>}
+      </div>;
+    })}</div> : <p className="mt-4 text-sm" style={{ color: COLORS.subtle }}>لا يوجد طلاب في هذا المستوى.</p>}
   </div>;
 }
 
@@ -5106,11 +5244,15 @@ function App() {
     if (!error && data) setStudySessions(data.map(mapStudySessionRow));
   }
   async function saveStudySession(values) {
-    const { id, ...changes } = values;
-    const result = id
-      ? await supabaseClient.from("student_study_sessions").update(changes).eq("id", id)
-      : await supabaseClient.from("student_study_sessions").insert(changes);
+    const { id, ids, ...changes } = values;
+    const result = ids?.length
+      ? await supabaseClient.from("student_study_sessions").update(changes).in("id", ids).select("id,status")
+      : id
+        ? await supabaseClient.from("student_study_sessions").update(changes).eq("id", id).select("id,status").maybeSingle()
+        : await supabaseClient.from("student_study_sessions").insert(changes).select("id,status").single();
     if (result.error) throw new Error(result.error.message);
+    if (ids?.length && result.data?.length !== ids.length) throw new Error("لم تُحدّث كل الجلسات. تحقق من صلاحيات RLS للأدمن على جدول student_study_sessions.");
+    if (id && !result.data) throw new Error("لم يتم تحديث الجلسة. تحقق من صلاحيات RLS للأدمن على جدول student_study_sessions.");
     await refreshStudySessions();
   }
   async function refreshMyRecord(studentProfileId) {
@@ -5612,6 +5754,7 @@ function App() {
           onSaveWorkSession={saveWorkSession}
           onUpdateWorkSession={updateWorkSession}
           studySessions={studySessions}
+          onUpdateStudySession={saveStudySession}
           libraryBooks={libraryBooks}
           refreshLibrary={refreshLibrary}
           onUpdateLibraryBook={updateLibraryBook}
