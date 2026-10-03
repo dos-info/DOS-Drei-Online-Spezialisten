@@ -27,8 +27,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="DOS Web" />
 <link rel="manifest" href="./manifest.webmanifest" />
-<link rel="apple-touch-icon" href="./dos-wave-logo.svg" />
-<link rel="icon" type="image/svg+xml" href="./dos-wave-logo.svg" />
+<link rel="apple-touch-icon" href="./dos-app-icon.svg" />
+<link rel="icon" type="image/svg+xml" href="./dos-app-icon.svg" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230B1F3A'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial,sans-serif' font-size='23' font-weight='700' fill='%23E3A825'%3EDOS%3C/text%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -95,7 +95,7 @@
   .dos-pro-page { min-height:100vh; background:#fbfaf7; color:#16202d; font-family:Inter, Arial, sans-serif; }
   .dos-pro-page[dir="rtl"] { font-family:Cairo, Arial, sans-serif; }
   .dos-pro-nav { position:sticky; top:0; z-index:40; display:flex; align-items:center; gap:28px; padding:14px clamp(20px, 5vw, 76px); background:rgba(255,255,255,.92); border-bottom:1px solid #e8e4dc; backdrop-filter:blur(16px); }
-  .dos-pro-nav .dos-full-logo { width:56px; height:42px; object-fit:contain; display:block; }
+  .dos-pro-nav .dos-full-logo { width:132px; height:auto; object-fit:contain; display:block; }
   .dos-pro-nav-links { display:flex; align-items:center; gap:22px; margin-inline-start:auto; color:#657181; font-size:13px; font-weight:700; }
   .dos-pro-nav-links a { color:inherit; text-decoration:none; }
   .dos-pro-nav-links a:hover { color:#c8283a; }
@@ -118,7 +118,7 @@
   .dos-pro-hero-visual { position:relative; min-height:410px; display:grid; place-items:center; }
   .dos-pro-hero-visual:before { content:""; position:absolute; inset:8% 0 0 10%; border:1px solid #e8ded0; border-radius:34px; background:linear-gradient(145deg,#f1ebe3,#fff); transform:rotate(-5deg); }
   .dos-pro-hero-card { position:relative; width:min(100%,480px); padding:28px; border:1px solid rgba(11,31,58,.09); border-radius:22px; background:rgba(255,255,255,.94); box-shadow:0 30px 80px rgba(11,31,58,.15); }
-  .dos-pro-hero-card .dos-full-logo { width:118px; height:84px; object-fit:contain; margin:14px auto 6px; }
+  .dos-pro-hero-card .dos-full-logo { width:190px; height:auto; object-fit:contain; margin:14px auto 6px; }
   .dos-pro-hero-card h2 { margin:0; color:#0b1f3a; font:700 29px/1.15 Fraunces, Georgia, serif; }
   .dos-pro-hero-card p { margin:10px 0 20px; color:#6b7582; font-size:13px; line-height:1.8; }
   .dos-pro-level-strip { display:grid; grid-template-columns:repeat(5,1fr); gap:7px; }
@@ -170,7 +170,7 @@
   .dos-pro-footer { display:flex; justify-content:space-between; gap:20px; padding:28px clamp(20px, 6vw, 92px); background:#0b1f3a; color:#c7d0dc; font-size:12px; }
   .dos-pro-footer strong { color:#fff; }
   @media (max-width:1000px) { .dos-pro-nav-links { display:none; } .dos-pro-hero { grid-template-columns:1fr; } .dos-pro-service-grid,.dos-pro-course-grid { grid-template-columns:repeat(2,1fr); } .dos-pro-method,.dos-pro-register { grid-template-columns:1fr; } }
-  @media (max-width:640px) { .dos-pro-nav { padding:12px 16px; gap:10px; } .dos-pro-nav .dos-full-logo { width:48px; } .dos-pro-hero { padding:62px 18px 55px; } .dos-pro-hero h1 { font-size:42px; } .dos-pro-hero-visual { min-height:310px; } .dos-pro-stats { grid-template-columns:repeat(2,1fr); padding-inline:18px; } .dos-pro-stat:nth-child(odd) { border-inline-start:0; } .dos-pro-stat:last-child { grid-column:1 / -1; } .dos-pro-section { padding:55px 18px; } .dos-pro-section-head { display:block; } .dos-pro-section-head p { margin-top:12px; } .dos-pro-service-grid,.dos-pro-course-grid,.dos-pro-feature-list { grid-template-columns:1fr; } .dos-pro-form { grid-template-columns:1fr; padding:18px; } .dos-pro-form .full,.dos-pro-form button { grid-column:auto; } .dos-pro-footer { display:block; } .dos-pro-footer span { display:block; margin-top:8px; } }
+  @media (max-width:640px) { .dos-pro-nav { padding:12px 16px; gap:10px; } .dos-pro-nav .dos-full-logo { width:96px; } .dos-pro-hero { padding:62px 18px 55px; } .dos-pro-hero h1 { font-size:42px; } .dos-pro-hero-visual { min-height:310px; } .dos-pro-stats { grid-template-columns:repeat(2,1fr); padding-inline:18px; } .dos-pro-stat:nth-child(odd) { border-inline-start:0; } .dos-pro-stat:last-child { grid-column:1 / -1; } .dos-pro-section { padding:55px 18px; } .dos-pro-section-head { display:block; } .dos-pro-section-head p { margin-top:12px; } .dos-pro-service-grid,.dos-pro-course-grid,.dos-pro-feature-list { grid-template-columns:1fr; } .dos-pro-form { grid-template-columns:1fr; padding:18px; } .dos-pro-form .full,.dos-pro-form button { grid-column:auto; } .dos-pro-footer { display:block; } .dos-pro-footer span { display:block; margin-top:8px; } }
 
   /* Public landing polish: landmark-led hero, purposeful motion, and conversion cues. */
   .dos-pro-page { background:linear-gradient(180deg,#fffdf9 0%,#fbfaf7 42%,#f4f0e9 100%); }
@@ -191,7 +191,7 @@
   .dos-pro-hero-visual:before { inset:4% -5% 3% 6%; background:linear-gradient(145deg,#e9dfd0,#fff8ee); box-shadow:0 24px 80px rgba(11,31,58,.11); }
   .dos-pro-hero-card { overflow:hidden; width:min(100%,520px); padding:0; background:#fff; }
   .dos-pro-hero-card:before { display:none; }
-  .dos-pro-hero-card > .dos-full-logo { width:118px; height:84px; margin:14px auto 6px; position:relative; padding:0; border-radius:0; background:transparent; box-shadow:none; }
+  .dos-pro-hero-card > .dos-full-logo { width:190px; height:auto; margin:14px auto 6px; position:relative; padding:0; border-radius:0; background:transparent; box-shadow:none; }
   .dos-pro-hero-card h2,.dos-pro-hero-card p,.dos-pro-level-strip { margin-inline:28px; }
   .dos-pro-hero-card h2 { font-size:28px; }
   .dos-pro-hero-card p { margin-bottom:20px; }
@@ -846,7 +846,7 @@ function LogoMark({ height = 34, withWordmark = true }) {
   return (
     <div className="flex items-center gap-2">
       <img
-        src="./dos-wave-logo.svg"
+        src="./logo.png"
         alt="DOS:Drei_Online_Spezialesten"
         style={{ height, width: "auto", objectFit: "contain" }}
       />
@@ -1053,12 +1053,12 @@ function PublicLanding({ onLogin }) {
   return (
     <div className="dos-pro-page" dir={isRtl ? "rtl" : "ltr"} lang={language}>
       <nav className="dos-pro-nav">
-        <a href="#top"><img className="dos-full-logo" src="./dos-wave-logo.svg" alt="DOS - Drei Online Spezialisten" /></a>
+        <a href="#top"><img className="dos-full-logo" src="./logo.png" alt="DOS - Drei Online Spezialisten" /></a>
         <div className="dos-pro-nav-links"><a href="#courses">{copy.navCourses}</a><a href="#method">{copy.navMethod}</a><a href="#about">{copy.navAbout}</a><a href="#register">{copy.navContact}</a></div>
         <div className="dos-pro-nav-actions"><select className="dos-pro-lang" value={language} onChange={(event) => setLanguage(event.target.value)} aria-label="Language"><option value="de">DE</option><option value="en">EN</option><option value="ar">AR</option><option value="fr">FR</option></select><button type="button" className="dos-pro-login" onClick={onLogin}>{copy.login}</button></div>
       </nav>
       <main id="top">
-        <section className="dos-pro-hero"><div className="dos-pro-hero-copy"><div className="dos-pro-eyebrow">{copy.eyebrow}</div><h1>{copy.hero.split(" ").map((word, index) => <React.Fragment key={`${word}-${index}`}>{index === copy.hero.split(" ").length - 1 ? <em>{word}</em> : word} </React.Fragment>)}</h1><p className="dos-pro-lead">{copy.lead}</p><div className="dos-pro-cta"><button type="button" className="dos-pro-btn dos-pro-btn-primary" onClick={() => scrollTo("register")}>{copy.cta}</button><button type="button" className="dos-pro-btn dos-pro-btn-light" onClick={() => scrollTo("courses")}>{copy.secondary}</button></div><button type="button" className="dos-pro-voice" onClick={speakWelcome}><span className="dos-pro-voice-dot" />{speaking ? "Wird gesprochen ..." : "Deutsch begrüßt Sie — Willkommen bei DOS"}</button><div className="dos-pro-hero-note" aria-live="polite">{bannerImages[bannerIndex][1]}</div></div><div className="dos-pro-hero-visual"><div className="dos-pro-hero-card"><div className="dos-pro-hero-banner" style={{ backgroundImage: `linear-gradient(180deg,rgba(11,31,58,.02),rgba(11,31,58,.62)),url("${bannerImages[bannerIndex][0]}")` }} /><img className="dos-full-logo" src="./dos-wave-logo.svg" alt="DOS" /><h2>{copy.plan}</h2><p>{copy.planText}</p><div className="dos-pro-level-strip"><span>A1</span><span>A2</span><span>B1</span><span>B2</span><span>C1</span></div></div></div></section>
+        <section className="dos-pro-hero"><div className="dos-pro-hero-copy"><div className="dos-pro-eyebrow">{copy.eyebrow}</div><h1>{copy.hero.split(" ").map((word, index) => <React.Fragment key={`${word}-${index}`}>{index === copy.hero.split(" ").length - 1 ? <em>{word}</em> : word} </React.Fragment>)}</h1><p className="dos-pro-lead">{copy.lead}</p><div className="dos-pro-cta"><button type="button" className="dos-pro-btn dos-pro-btn-primary" onClick={() => scrollTo("register")}>{copy.cta}</button><button type="button" className="dos-pro-btn dos-pro-btn-light" onClick={() => scrollTo("courses")}>{copy.secondary}</button></div><button type="button" className="dos-pro-voice" onClick={speakWelcome}><span className="dos-pro-voice-dot" />{speaking ? "Wird gesprochen ..." : "Deutsch begrüßt Sie — Willkommen bei DOS"}</button><div className="dos-pro-hero-note" aria-live="polite">{bannerImages[bannerIndex][1]}</div></div><div className="dos-pro-hero-visual"><div className="dos-pro-hero-card"><div className="dos-pro-hero-banner" style={{ backgroundImage: `linear-gradient(180deg,rgba(11,31,58,.02),rgba(11,31,58,.62)),url("${bannerImages[bannerIndex][0]}")` }} /><img className="dos-full-logo" src="./logo.png" alt="DOS" /><h2>{copy.plan}</h2><p>{copy.planText}</p><div className="dos-pro-level-strip"><span>A1</span><span>A2</span><span>B1</span><span>B2</span><span>C1</span></div></div></div></section>
         <section className="dos-pro-stats">{statValues.map((value, index) => <div className="dos-pro-stat" key={copy.stats[index]}><strong>{value.toLocaleString("de-DE")}{index === 4 ? "+" : ""}</strong><span>{copy.stats[index]}</span></div>)}</section>
         <section className="dos-live-section" aria-labelledby="live-title"><div className="dos-live-head"><h2 id="live-title">محاضرات شغالة الآن</h2><p>انضم إلى واحدة من خمس محاضرات مباشرة تعمل الآن مع مدرّسين DOS. المقاعد محدودة والتفاعل مباشر.</p></div><div className="dos-live-grid">{[["A1","Deutsch im Alltag","Begrüßung und erste Gespräche"],["A2","Sprechen ohne Angst","Wortschatz aktiv anwenden"],["B1","Deutsch für den Beruf","Sicher kommunizieren"],["B2","Diskussion & Argumentation","Flüssig und präzise sprechen"],["C1","Akademisches Deutsch","Analyse und Präsentation"]].map(([level,title,detail]) => <article className="dos-live-card" key={level}><div className="dos-live-top"><span className="dos-live-level">{level}</span><span className="dos-live-badge">LIVE</span></div><h3>{title}</h3><p>{detail}</p><a className="dos-live-action" href="#register">انضم الآن</a></article>)}</div></section>
         <section className="dos-pro-section" id="about"><div className="dos-pro-section-head"><h2>{copy.servicesTitle}</h2><p>{copy.servicesText}</p></div><div className="dos-pro-service-grid">{copy.services.map(([title, text], index) => <article className="dos-pro-service" key={title}><div className="icon">0{index + 1}</div><h3>{title}</h3><p>{text}</p></article>)}</div></section>
@@ -3606,6 +3606,26 @@ const BUNDLED_DIGITAL_COURSES = [
   { level: "Gespräch", title: "Gespräch — شريك المحادثة", description: "تدريب محادثة تفاعلي مع التسجيل والنطق الألماني.", url: "./Gespr%C3%A4ch.html" },
 ];
 
+async function downloadProtectedLibraryFile(storagePath, signal) {
+  const { data, error } = await supabaseClient.auth.getSession();
+  if (error || !data.session?.access_token) throw new Error("سجّل الدخول مجدداً لعرض محتوى المكتبة.");
+  const response = await fetch(`${SUPABASE_URL}/functions/v1/library-content`, {
+    method: "POST",
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${data.session.access_token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ storagePath }),
+    signal,
+  });
+  if (!response.ok) {
+    const result = await response.json().catch(() => ({}));
+    throw new Error(result.error || "تعذر تحميل محتوى المكتبة.");
+  }
+  return response.blob();
+}
+
 function LibraryFileViewer({ book, onClose }) {
   const [source, setSource] = useState("");
   const [htmlDocument, setHtmlDocument] = useState("");
@@ -3616,6 +3636,7 @@ function LibraryFileViewer({ book, onClose }) {
   React.useEffect(() => {
     let active = true;
     let objectUrl = "";
+    const controller = new AbortController();
     setSource("");
     setHtmlDocument("");
     setFileKind("");
@@ -3626,16 +3647,7 @@ function LibraryFileViewer({ book, onClose }) {
       try {
         let url = book.url || "";
         let blob = null;
-        if (book.storagePath) {
-          const { data, error } = await supabaseClient.storage
-            .from("course-library")
-            .createSignedUrl(book.storagePath, 300);
-          if (error || !data?.signedUrl) throw new Error("Could not create a temporary library link.");
-          url = data.signedUrl;
-          const { data: file, error: downloadError } = await supabaseClient.storage.from("course-library").download(book.storagePath);
-          if (downloadError || !file) throw new Error("The library file could not be read.");
-          blob = file;
-        }
+        if (book.storagePath) blob = await downloadProtectedLibraryFile(book.storagePath, controller.signal);
         resolved = resolveLibraryUrl(url);
         if (!resolved && !blob) throw new Error("The library item has no valid URL.");
 
@@ -3682,14 +3694,15 @@ function LibraryFileViewer({ book, onClose }) {
           setSource(resolved);
         }
         if (active) setFileKind(kind);
-      } catch {
-        if (active) setLoadError(true);
+      } catch (error) {
+        if (active) setLoadError(error.message || "تعذر تحميل الملف.");
       }
     }
 
     loadSource();
     return () => {
       active = false;
+      controller.abort();
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
   }, [book.id, book.storagePath, book.url, book.title]);
@@ -3717,7 +3730,7 @@ function LibraryFileViewer({ book, onClose }) {
       <div className="flex h-[94vh] w-full max-w-6xl flex-col overflow-hidden rounded-xl border bg-white shadow-2xl" style={{ borderColor: COLORS.border }}>
         <div className="flex items-center justify-between gap-3 border-b px-4 py-3" style={{ borderColor: COLORS.border }}>
           <div className="flex min-w-0 items-center gap-3">
-            <img src={resolveLibraryUrl("./dos-wave-logo.svg")} alt="DOS" className="h-12 w-16 shrink-0 object-contain" />
+            <img src={resolveLibraryUrl("./logo.png")} alt="DOS" className="h-12 w-20 shrink-0 object-contain" />
             <p className="truncate text-sm font-semibold" style={{ color: COLORS.ink }}>{book.title}</p>
           </div>
           <button type="button" onClick={onClose} className="shrink-0 rounded-lg border px-3 py-2 text-sm font-semibold" style={{ borderColor: COLORS.border, color: COLORS.red }}>إغلاق</button>
@@ -3794,40 +3807,6 @@ function LibraryPage({ books, initialLevel, editable, onAdd, onDelete, onUpdate,
   </InfoCard>;
 }
 */
-
-function LibraryPage({ books, initialLevel, editable, onAdd, onDelete, onUpdate, dictionariesOnly = false, studentMode = false }) {
-        }
-      } catch {
-        if (active && isHtml && !book.storagePath && resolved) setSource(resolved);
-        else if (active) setLoadError(true);
-      }
-    }
-
-    loadSource();
-    return () => { active = false; };
-  }, [book.id, book.storagePath, book.url, isHtml]);
-
-  return (
-    <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 p-2 sm:p-5" role="dialog" aria-modal="true" aria-label={book.title}>
-      <div className="flex h-[94vh] w-full max-w-6xl flex-col overflow-hidden rounded-xl border bg-white shadow-2xl" style={{ borderColor: COLORS.border }}>
-        <div className="flex items-center justify-between gap-3 border-b px-4 py-3" style={{ borderColor: COLORS.border }}>
-          <div className="flex min-w-0 items-center gap-3">
-            <img src={resolveLibraryUrl("./dos-wave-logo.svg")} alt="DOS" className="h-12 w-16 shrink-0 object-contain" />
-            <p className="truncate text-sm font-semibold" style={{ color: COLORS.ink }}>{book.title}</p>
-          </div>
-          <button type="button" onClick={onClose} className="shrink-0 rounded-lg border px-3 py-2 text-sm font-semibold" style={{ borderColor: COLORS.border, color: COLORS.red }}>إغلاق</button>
-        </div>
-        {loadError ? (
-          <p className="m-5 rounded-lg bg-red-50 p-4 text-sm text-red-800">تعذر تحميل المادة. تحقق من صلاحية الوصول أو أعد فتحها.</p>
-        ) : htmlDocument || source ? (
-          <iframe title={book.title} src={htmlDocument ? undefined : source} srcDoc={htmlDocument || undefined} sandbox={isHtml ? "allow-scripts allow-forms" : undefined} referrerPolicy="no-referrer" loading="eager" className="min-h-0 flex-1 border-0" />
-        ) : (
-          <p className="m-5 text-sm" style={{ color: COLORS.subtle }}>جارٍ تحميل المادة...</p>
-        )}
-      </div>
-    </div>
-  );
-}
 
 /*
 function LibraryPage({ books, initialLevel, editable, onAdd, onDelete, onUpdate, dictionariesOnly = false, studentMode = false }) {
@@ -4205,7 +4184,7 @@ function ElectronicLibraryPage({ student, books, request, onSubmitPayment }) {
 
   if (!student.libraryAccessEnabled) {
     return <div className="relative overflow-hidden rounded-[28px] border p-6 md:p-10" style={{ borderColor: COLORS.gold, background: `linear-gradient(135deg, ${COLORS.navyDeep}, ${COLORS.navyMid})`, color: "#fff" }}>
-      <img src="./dos-wave-logo.svg" alt="DOS Akademie" className="relative z-10 mb-5 h-16 w-auto object-contain" />
+      <img src="./logo.png" alt="DOS Akademie" className="relative z-10 mb-5 h-16 w-auto object-contain" />
       <p className="relative z-10 text-xs uppercase tracking-[0.22em]" style={{ color: COLORS.goldSoft }}>DOS AKADEMIE · DEUTSCHE SPRACHE</p>
       <h1 className="relative z-10 mt-3 text-2xl md:text-4xl font-semibold" style={{ fontFamily: F_DISPLAY }}>المكتبة الإلكترونية — Digitale Bibliothek</h1>
       <p className="relative z-10 mt-3 max-w-2xl text-sm leading-7" style={{ color: "#E7ECF3" }}>مكتبة متخصصة لكتب اللغة الألمانية حسب المستوى. رسوم الاشتراك 500 جنيه مصري، والدفع غير قابل للاسترداد.</p>
@@ -4220,9 +4199,9 @@ function ElectronicLibraryPage({ student, books, request, onSubmitPayment }) {
     </div>;
   }
 
-  if (!unlocked) return <div className="rounded-2xl border p-6 text-center" style={{ borderColor: COLORS.border, backgroundColor: COLORS.panel }}><img src="./dos-wave-logo.svg" alt="DOS Akademie" className="mx-auto mb-4 h-20 w-28 object-contain" /><h1 className="text-2xl font-semibold" style={{ color: COLORS.navy, fontFamily: F_DISPLAY }}>Willkommen in der DOS Bibliothek</h1><p className="mt-2 text-sm" style={{ color: COLORS.subtle }}>أدخل كلمة مرور المكتبة التي أرسلتها الإدارة.</p><form onSubmit={(event) => { event.preventDefault(); if (password === student.libraryAccessPassword) setUnlocked(true); else setMessage("كلمة المرور غير صحيحة."); }} className="mx-auto mt-5 flex max-w-sm gap-2"><input type="password" required className={inputCls} style={inputStyle} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="كلمة المرور" /><button className="rounded-lg px-4 text-sm font-semibold" style={{ backgroundColor: COLORS.navy, color: "#fff" }}>فتح</button></form>{message && <p className="mt-3 text-xs" style={{ color: COLORS.red }}>{message}</p>}</div>;
+  if (!unlocked) return <div className="rounded-2xl border p-6 text-center" style={{ borderColor: COLORS.border, backgroundColor: COLORS.panel }}><img src="./logo.png" alt="DOS Akademie" className="mx-auto mb-4 h-20 w-36 object-contain" /><h1 className="text-2xl font-semibold" style={{ color: COLORS.navy, fontFamily: F_DISPLAY }}>Willkommen in der DOS Bibliothek</h1><p className="mt-2 text-sm" style={{ color: COLORS.subtle }}>أدخل كلمة مرور المكتبة التي أرسلتها الإدارة.</p><form onSubmit={(event) => { event.preventDefault(); if (password === student.libraryAccessPassword) setUnlocked(true); else setMessage("كلمة المرور غير صحيحة."); }} className="mx-auto mt-5 flex max-w-sm gap-2"><input type="password" required className={inputCls} style={inputStyle} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="كلمة المرور" /><button className="rounded-lg px-4 text-sm font-semibold" style={{ backgroundColor: COLORS.navy, color: "#fff" }}>فتح</button></form>{message && <p className="mt-3 text-xs" style={{ color: COLORS.red }}>{message}</p>}</div>;
 
-  return <div className="space-y-5"><div className="relative overflow-hidden rounded-[28px] border p-6 md:p-9" style={{ borderColor: COLORS.gold, background: `linear-gradient(120deg, ${COLORS.navyDeep}, ${COLORS.navyMid})`, color: "#fff" }}><img src="./dos-wave-logo.svg" alt="DOS Akademie" className="relative z-10 h-20 w-28 object-contain" /><p className="relative z-10 mt-5 text-xs uppercase tracking-[0.2em]" style={{ color: COLORS.goldSoft }}>Deutsche Sprache · Lesen · Hören · Lernen</p><h1 className="relative z-10 mt-2 text-2xl md:text-4xl font-semibold" style={{ fontFamily: F_DISPLAY }}>Willkommen in der DOS Bibliothek</h1><p className="relative z-10 mt-2 text-sm" style={{ color: "#D9E3F0" }}>اختر المستوى وابدأ رحلة القراءة والاستماع بالألمانية.</p></div><LibraryPage books={books} initialLevel={student.level} studentMode /></div>;
+  return <div className="space-y-5"><div className="relative overflow-hidden rounded-[28px] border p-6 md:p-9" style={{ borderColor: COLORS.gold, background: `linear-gradient(120deg, ${COLORS.navyDeep}, ${COLORS.navyMid})`, color: "#fff" }}><img src="./logo.png" alt="DOS Akademie" className="relative z-10 h-20 w-36 object-contain" /><p className="relative z-10 mt-5 text-xs uppercase tracking-[0.2em]" style={{ color: COLORS.goldSoft }}>Deutsche Sprache · Lesen · Hören · Lernen</p><h1 className="relative z-10 mt-2 text-2xl md:text-4xl font-semibold" style={{ fontFamily: F_DISPLAY }}>Willkommen in der DOS Bibliothek</h1><p className="relative z-10 mt-2 text-sm" style={{ color: "#D9E3F0" }}>اختر المستوى وابدأ رحلة القراءة والاستماع بالألمانية.</p></div><LibraryPage books={books} initialLevel={student.level} studentMode /></div>;
 }
 
 function RequestInbox({ requests, onUpdate, onDelete, readOnly = false }) {
@@ -5205,15 +5184,7 @@ function App() {
   }
   async function refreshLibrary() {
     const { data, error } = await supabaseClient.from("course_library").select("*").order("level").order("category").order("title");
-    if (!error && data) {
-      const mapped = await Promise.all(data.map(async (row) => {
-        const book = mapLibraryRow(row);
-        if (!book.storagePath || !isAudioLibraryFile(book)) return book;
-        const { data: signed } = await supabaseClient.storage.from("course-library").createSignedUrl(book.storagePath, 3600);
-        return { ...book, url: signed?.signedUrl || "" };
-      }));
-      setLibraryBooks(mapped);
-    }
+    if (!error && data) setLibraryBooks(data.map(mapLibraryRow));
   }
   async function updateLibraryBook(id, changes) {
     const { error } = await supabaseClient.from("course_library").update(changes).eq("id", id);
