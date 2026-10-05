@@ -459,6 +459,27 @@
   .vocab-past{font-size:11px;color:var(--green);font-weight:700;direction:ltr;}
   .vocab-play{border:0;background:var(--ink);color:#fff;border-radius:7px;padding:8px;cursor:pointer;font:700 12px 'Tajawal',sans-serif;margin-top:3px;}
   .vocab-play:hover{background:var(--red);}
+  .grammar-rules{display:grid;gap:14px;min-width:0;}
+  .grammar-rule{min-width:0;background:#fff;border:1px solid var(--line);border-right:4px solid var(--red);border-radius:9px;padding:16px;}
+  .grammar-rule h3{font-size:17px;margin:0 0 8px;}
+  .grammar-rule p{font-size:13px;line-height:1.9;margin:0 0 10px;}
+  .grammar-pattern{max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere;direction:ltr;text-align:left;background:var(--cream);border-radius:7px;padding:9px 11px;margin:8px 0;font:600 13px 'Poppins',sans-serif;}
+  .grammar-examples{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin-top:10px;min-width:0;}
+  .grammar-example{min-width:0;overflow-wrap:anywhere;background:#F1F4F1;border-radius:7px;padding:9px;font-size:12px;line-height:1.7;}
+  .grammar-example .de{display:block;overflow-wrap:anywhere;font-size:13px;font-weight:600;}
+  .grammar-quiz-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--ink);color:#fff;border-radius:9px;padding:12px 14px;margin-bottom:12px;font-size:13px;}
+  .grammar-quiz-head button{border:1px solid rgba(255,255,255,.45);border-radius:6px;background:transparent;color:#fff;padding:6px 10px;font:700 12px 'Tajawal',sans-serif;cursor:pointer;}
+  .grammar-question{background:#fff;border:1px solid var(--line);border-radius:9px;padding:14px;margin-bottom:10px;}
+  .grammar-question p{margin:0 0 10px;font-weight:700;line-height:1.7;}
+  .grammar-question .course-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:7px;}
+  .grammar-question .course-option{min-height:40px;text-align:right;border:1px solid var(--line);border-radius:7px;background:var(--cream);padding:9px 10px;color:var(--ink);font:600 12px 'Tajawal',sans-serif;cursor:pointer;}
+  .grammar-question .course-option:hover:not([disabled]){border-color:var(--red);background:#fff;}
+  .grammar-question .course-option.correct{background:var(--green);border-color:var(--green);color:#fff;}
+  .grammar-question .course-option.wrong{background:var(--red);border-color:var(--red);color:#fff;}
+  .grammar-question .course-option[disabled]{cursor:default;}
+  .grammar-question .course-feedback{min-height:20px;margin-top:8px;font-size:12px;font-weight:700;}
+  .grammar-question .course-feedback.good{color:var(--green);}
+  .grammar-question .course-feedback.bad{color:var(--red);}
   @media (max-width:760px){.studio{grid-template-columns:1fr;padding-left:16px;padding-right:16px;}.studio-panel{padding:18px;}}
 
   footer{ background:var(--ink); color:var(--paper); padding:44px 24px 28px; margin-top:20px; }
@@ -479,6 +500,145 @@
   }
   @media (max-width:640px){ .options{grid-template-columns:1fr;} }
   @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+  /* Compact lesson layout keeps more teaching content visible at once. */
+  .header-inner{padding:8px 18px;gap:10px;}
+  .hero{padding:34px 24px 24px;}
+  .hero p{margin-bottom:18px;}
+  .lesson-picker{gap:10px;}
+  .pick-card{padding:14px;border-radius:12px;}
+  section.block{padding:34px 24px;}
+  .block-head{gap:14px;margin-bottom:18px;}
+  .grid{gap:10px;}
+  .callout{padding:16px 18px;margin-bottom:18px;border-radius:12px;}
+  .studio{gap:12px;padding-bottom:24px;}
+  .studio-panel{padding:16px;border-radius:12px;}
+  .vocab-lab{padding-bottom:28px;}
+  .vocab-shell{padding:16px;border-radius:14px;}
+  .vocab-head{margin-bottom:12px;}
+  .vocab-tabs{gap:6px;margin-bottom:12px;}
+  .vocab-tab{padding:7px 10px;}
+  .vocab-pack{gap:10px;}
+  .vocab-card{min-height:285px;border-radius:10px;}
+  .vocab-card img{height:92px;}
+  .vocab-body{padding:10px;gap:5px;}
+  footer{padding:28px 20px 20px;margin-top:12px;}
+  @media (max-width:760px){
+    header .header-inner{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;}
+    .brand{grid-column:1;grid-row:1;}
+    .header-inner>.score-chip{grid-column:2;grid-row:1;}
+    .lesson-toggle{grid-column:1/-1;grid-row:2;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));width:100%;gap:3px;padding:3px;border-radius:10px;}
+    .toggle-btn{min-width:0;padding:6px 2px;font-size:12px;}
+    .hero{padding:28px 16px 18px;}
+    section.block{padding:28px 16px;}
+    .studio{padding-left:16px;padding-right:16px;}
+    .vocab-lab{padding-left:16px;padding-right:16px;}
+    .block-head{margin-bottom:16px;}
+  }
+  /* Refined DOS study interface */
+  :root{
+    --cream:#F1F4F1;
+    --paper:#FFFEFC;
+    --ink:#1C332B;
+    --red:#A94E45;
+    --gold:#C59A4A;
+    --green:#34745A;
+    --line:rgba(28,51,43,.13);
+    --shadow:0 3px 12px rgba(28,51,43,.08);
+  }
+  body{background:var(--cream);color:var(--ink);}
+  header nav,.lesson-picker,.lesson{display:none !important;}
+  #lexicon{display:none !important;}
+  .studio{grid-template-columns:minmax(0,1fr);}
+  .vocab-lab{padding-top:12px;}
+  body::before{background-image:radial-gradient(rgba(28,51,43,.12) 1px,transparent 1px);background-size:30px 30px;opacity:.28;}
+  body::after{height:4px;background:linear-gradient(90deg,#1C332B 0 34%,#A94E45 34% 67%,#C59A4A 67%);}
+  header{top:4px;background:rgba(255,254,252,.96);border-bottom:1px solid var(--line);box-shadow:0 5px 18px rgba(28,51,43,.06);backdrop-filter:blur(12px);}
+  .header-inner{max-width:1440px;display:grid;grid-template-columns:minmax(170px,.75fr) minmax(0,2fr) auto;grid-template-areas:"brand lessons score" "nav nav nav";align-items:center;padding:10px clamp(16px,2.5vw,34px);gap:8px 16px;}
+  .brand{grid-area:brand;}
+  .logo-img{height:38px;}
+  .brand-text{border-color:var(--line);}
+  .lesson-toggle{grid-area:lessons;justify-self:center;display:flex;flex-wrap:wrap;justify-content:center;gap:4px;padding:0;border:0;background:transparent;}
+  .toggle-btn{min-height:32px;padding:6px 10px;border:1px solid transparent;border-radius:7px;font-size:12px;opacity:.72;}
+  .toggle-btn:hover{border-color:var(--line);opacity:1;}
+  .toggle-btn.active{background:var(--ink);color:#fff;opacity:1;}
+  .header-inner>nav{grid-area:nav;min-height:28px;align-items:center;}
+  nav a{padding:5px 10px;border-radius:7px;color:rgba(28,51,43,.75);font-size:12px;}
+  nav a:hover{border-color:var(--line);background:var(--cream);}
+  .score-chip{grid-area:score;padding:7px 12px;border-radius:8px;background:var(--ink);}
+  .hero{max-width:1440px;padding:24px clamp(16px,2.5vw,34px) 20px;}
+  .hero{padding-bottom:12px;}
+  .lesson-picker{display:none !important;}
+  header .header-inner>nav[id^="navL"]{display:none !important;}
+  .lesson{display:none !important;}
+  .hero-shapes{opacity:.18;}
+  .hero-eyebrow{margin-bottom:10px;padding:5px 10px;border-radius:6px;background:#A94E45;font-size:12px;}
+  .hero h1{max-width:900px;margin-bottom:8px;font-size:38px;line-height:1.2;}
+  .hero p{max-width:780px;margin-bottom:14px;font-size:15px;line-height:1.7;}
+  .lesson-picker{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:6px;}
+  .pick-card{min-height:86px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:rgba(255,254,252,.94);box-shadow:0 2px 8px rgba(28,51,43,.035);}
+  .pick-card:hover{transform:translateY(-2px);box-shadow:0 7px 16px rgba(28,51,43,.08);}
+  .pick-card .num{width:25px;height:25px;margin-bottom:5px;background:#E9EEE9;color:var(--ink);font-size:12px;}
+  .pick-card h3{margin-bottom:3px;font-size:13px;line-height:1.35;}
+  .pick-card p{font-size:11px;line-height:1.4;}
+  .pick-card.active{border-color:var(--red);background:#fff;box-shadow:inset 0 0 0 1px var(--red);}
+  section.block{max-width:1440px;padding:30px clamp(16px,2.5vw,34px);border-top:1px solid var(--line);}
+  .block-head{margin-bottom:16px;}
+  .block-head h2{font-size:28px;}
+  .block-head p.desc{font-size:13px;line-height:1.7;}
+  .kicker{padding:4px 9px;border-radius:5px;font-size:11px;}
+  .hint{padding:6px 10px;border:1px solid var(--line);border-radius:7px;}
+  .grid{gap:10px;}
+  .card,.compound-card,.flag-card,.verb-card,.obj-card,.noun-card,.day-card,.essay-row,.phrase-row,.price-row,.job-card,.furniture-card{
+    border-color:var(--line);border-radius:9px;box-shadow:0 2px 8px rgba(28,51,43,.035);
+  }
+  .card,.compound-card,.flag-card,.verb-card,.obj-card,.day-card,.phrase-row,.price-row{transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;}
+  .card:hover,.compound-card:hover,.flag-card:hover,.verb-card:hover,.obj-card:hover,.day-card:hover,.phrase-row:hover,.price-row:hover{transform:translateY(-2px);border-color:rgba(169,78,69,.42);box-shadow:0 8px 18px rgba(28,51,43,.08);}
+  .callout{border-radius:10px;line-height:1.75;}
+  .callout.tips{background:#A94E45;}
+  .studio{max-width:1440px;gap:12px;padding-bottom:24px;}
+  .studio-panel{border-radius:11px;background:#1C332B;}
+  .studio-panel.light{background:var(--paper);border:1px solid var(--line);}
+  .studio-title h2{font-size:18px;}
+  .vocab-lab{max-width:1440px;padding-bottom:30px;}
+  .vocab-shell{padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--paper);box-shadow:0 8px 24px rgba(28,51,43,.045);}
+  .vocab-head h2{font-size:25px;}
+  .vocab-tab{border:1px solid var(--line);border-radius:7px;background:#fff;font-size:12px;}
+  .vocab-tab.active,.vocab-tab:hover{border-color:var(--ink);background:var(--ink);color:#fff;}
+  .vocab-pack{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;}
+  .vocab-card{min-height:300px;border:1px solid var(--line);border-radius:9px;background:#fff;box-shadow:0 3px 12px rgba(28,51,43,.045);}
+  .vocab-card:hover{transform:translateY(-3px);box-shadow:0 12px 24px rgba(28,51,43,.1);}
+  .vocab-card img{height:130px;}
+  .vocab-word{font-size:17px;}
+  .vocab-sentence{border-radius:6px;background:#F1F4F1;font-size:12px;}
+  .vocab-play{border-radius:6px;background:var(--ink);}
+  .quiz-shell{border-radius:13px;background:#1C332B;padding:22px;}
+  .question-card{border-radius:10px;}
+  .opt-btn{border-radius:8px;border-width:1px;}
+  .btn{border-radius:8px;border-width:1px;box-shadow:0 3px 0 rgba(28,51,43,.75);}
+  .btn.gold{background:#D2AD62;}
+  footer{margin-top:8px;padding:28px 20px 20px;background:#1C332B;}
+  @media (max-width:1100px){.lesson-picker{grid-template-columns:repeat(4,minmax(0,1fr));}}
+  @media (max-width:760px){
+    .header-inner{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"brand score" "lessons lessons" "nav nav";padding:8px 14px;}
+    .lesson-toggle{width:100%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));justify-self:stretch;gap:3px;}
+    .toggle-btn{min-width:0;padding:6px 2px;font-size:11px;}
+    .hero{padding:20px 14px 14px;}
+    .hero h1{font-size:30px;}
+    .lesson-picker{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;}
+    .pick-card{min-height:56px;display:grid;grid-template-columns:25px minmax(0,1fr);align-items:center;gap:7px;padding:7px 8px;}
+    .pick-card .num{grid-column:1;grid-row:1;margin:0;}
+    .pick-card h3{grid-column:2;grid-row:1;margin:0;font-size:12px;}
+    .pick-card p{display:none;}
+    section.block{padding:24px 14px;}
+    .block-head h2{font-size:23px;}
+    .studio{padding-left:14px;padding-right:14px;}
+    .vocab-lab{padding-left:14px;padding-right:14px;}
+    .vocab-shell{padding:12px;}
+    .vocab-pack{grid-template-columns:repeat(auto-fill,minmax(155px,1fr));}
+    .vocab-card{min-height:280px;}
+    .vocab-card img{height:100px;}
+  }
+  @media (min-width:361px) and (max-width:760px){.lesson-picker{grid-template-columns:repeat(3,minmax(0,1fr));}}
 </style>
 </head>
 <body>
@@ -606,74 +766,24 @@
   <h1>رحلتك في <span class="accent">اللغة الألمانية</span> تتوسّع خطوة بخطوة</h1>
   <p>مع Drei Online Spezialisten: تعلّم. افهم. طبّق. اختر الدرس الذي تريد البدء به وتقدّم من الأساسيات إلى المحادثة الحقيقية.</p>
 
-  <div class="lesson-picker">
-    <div class="pick-card active" id="pickCard1" onclick="setLesson(1)">
-      <span class="num">١</span>
-      <h3>الحروف والأرقام</h3>
-      <p>الأبجدية، الحروف المركّبة، والأرقام من ١ إلى ٢٠.</p>
+</section>
+
+<section class="vocab-lab" id="lessonVocab" aria-label="مفردات الدرس">
+  <div class="vocab-shell">
+    <div class="vocab-head">
+      <div><h2>مفردات وجمل الدرس</h2><p>بطاقات مرتّبة حسب نوع الكلمة، ثم جمل وحوار وتدريب خاص بالدرس المحدد.</p></div>
+      <span class="mono" id="vocabLessonLabel">LEKTION 1</span>
     </div>
-    <div class="pick-card" id="pickCard2" onclick="setLesson(2)">
-      <span class="num">٢</span>
-      <h3>الضمائر والتحيات</h3>
-      <p>الضمائر الشخصية، التحيات، وتصريف الأفعال القياسية.</p>
-    </div>
-    <div class="pick-card" id="pickCard3" onclick="setLesson(3)">
-      <span class="num">٣</span>
-      <h3>التعارف والمحادثة</h3>
-      <p>أفعال شاذة، أرقام حتى ٥٠٠، أسئلة W، والتعارف مع محادثة كاملة.</p>
-    </div>
-    <div class="pick-card" id="pickCard4" onclick="setLesson(4)">
-      <span class="num">٤</span>
-      <h3>الوظائف وأدوات التعريف</h3>
-      <p>المهن المختلفة، "أنا أعمل كـ..."، أدوات التعريف der/die/das، وتقديم نفسك بثقة.</p>
-    </div>
-    <div class="pick-card" id="pickCard5" onclick="setLesson(5)">
-      <span class="num">٥</span>
-      <h3>ما هذا؟ والألوان</h3>
-      <p>أشياء يومية، وصفها، ١٢ لونًا، والسؤال عن الخامة: زجاج، خشب، معدن، بلاستيك.</p>
-    </div>
-    <div class="pick-card" id="pickCard6" onclick="setLesson(6)">
-      <span class="num">٦</span>
-      <h3>المكتب وحالة النصب</h3>
-      <p>أدوات المكتب، حالة النصب (Akkusativ) و٢٠ فعلًا، مكالمة هاتفية، وتعريف شامل بنفسك.</p>
-    </div>
-    <div class="pick-card" id="pickCard7" onclick="setLesson(7)">
-      <span class="num">٧</span>
-      <h3>الهوايات والمجاملات</h3>
-      <p>Du kannst wirklich toll...! هوايات، مجاملات، طلب شيء، والشكر.</p>
-    </div>
-    <div class="pick-card" id="pickCard8" onclick="setLesson(8)">
-      <span class="num">٨</span>
-      <h3>تحديد المواعيد</h3>
-      <p>Kein Problem. Ich habe Zeit! أيام الأسبوع، الاقتراحات، رسائل، ودعوات.</p>
-    </div>
-    <div class="pick-card" id="pickCard9" onclick="setLesson(9)">
-      <span class="num">٩</span>
-      <h3>الطعام والدعوة للمنزل</h3>
-      <p>Ich möchte was essen! المفضلات الغذائية، فعل möchten، ومحادثة على المائدة.</p>
-    </div>
-    <div class="pick-card" id="pickCard10" onclick="setLesson(10)">
-      <span class="num">١٠</span>
-      <h3>السفر ووسائل النقل</h3>
-      <p>Ich steige jetzt in die U-Bahn ein. وسائل النقل، الاستعلام، وإنهاء المكالمة.</p>
-    </div>
-    <div class="pick-card" id="pickCard11" onclick="setLesson(11)">
-      <span class="num">١١</span>
-      <h3>يوميات وزمن الماضي</h3>
-      <p>Was hast du heute gemacht? زمن الـ Perfekt، ووصف يوم كامل.</p>
-    </div>
-    <div class="pick-card" id="pickCard12" onclick="setLesson(12)">
-      <span class="num">١٢</span>
-      <h3>الأعياد وزمن الماضي</h3>
-      <p>Was ist denn hier passiert؟ الأعياد، الرحلات، ومقابلة صحفية.</p>
-    </div>
+    <div class="vocab-tabs" id="vocabCategoryTabs" aria-label="نوع المحتوى"></div>
+    <div class="vocab-meta"><span id="vocabSummary">مفردات الدرس</span><span id="vocabInteractionHint">اضغط على البطاقة للاستماع</span></div>
+    <div class="vocab-pack" id="vocabPackGrid"></div>
   </div>
 </section>
 
-<section class="studio" aria-label="استوديو الدراسة">
+<section class="studio" aria-label="استوديو الصوتيات">
   <div class="studio-panel">
     <div class="studio-title">
-      <div><h2>استوديو الصوتيات</h2><p>استمع إلى ملفات الدرس الحقيقية، أو استخدم النطق الآلي للعبارات التي لم تُرفع بعد.</p></div>
+      <div><h2>استوديو الصوتيات</h2><p>ملفات الصوت الأصلية الخاصة بالدرس المحدد.</p></div>
       <span class="mono" style="color:var(--gold);font-size:12px;">DOS A1 · AUDIO</span>
     </div>
     <select class="audio-select" id="lessonAudioSelect" aria-label="اختيار ملف صوتي"></select>
@@ -685,29 +795,6 @@
     </div>
     <input class="audio-progress" id="audioProgress" type="range" min="0" max="100" value="0" aria-label="تقدم الملف الصوتي">
     <audio id="lessonAudio" preload="metadata"></audio>
-  </div>
-  <div class="studio-panel light" id="lexicon">
-    <div class="studio-title"><div><h2>المعجم الذكي</h2><p>ابحث بالعربية أو الألمانية، وراجع الكلمة مع نوعها وجملتها.</p></div><span class="mono" style="color:var(--red);font-size:12px;">WORTSCHATZ</span></div>
-    <div class="lexicon-tools">
-      <input id="lexiconSearch" type="search" placeholder="ابحث عن كلمة..." aria-label="البحث في المعجم">
-      <select id="lexiconFilter" aria-label="تصفية نوع الكلمة"><option value="all">كل الأقسام</option><option value="noun">أسماء</option><option value="verb">أفعال</option><option value="adj">صفات وحال</option><option value="other">أدوات وتعبيرات</option></select>
-    </div>
-    <div class="lexicon-list" id="lexiconList"></div>
-    <label class="file-label">＋ استيراد كلمات JSON <input id="lexiconImport" type="file" accept="application/json"></label>
-    <p class="import-note">صيغة الملف: <span class="de">[{"word":"der Abend","mean":"المساء","type":"noun","sentence":"Der Abend ist ruhig."}]</span>. تُحفظ الإضافات على هذا الجهاز.</p>
-  </div>
-</section>
-
-<section class="vocab-lab" id="lessonVocab" aria-label="باقة مفردات الدرس">
-  <div class="vocab-shell">
-    <div class="vocab-head">
-      <div><h2>باقة مفردات الدرس</h2><p>كلمة جديدة مع صورتها، أداتها وجمعها، جملة عملية، وتصريف الماضي للأفعال.</p></div>
-      <span class="mono" id="vocabLessonLabel">LEKTION 1</span>
-    </div>
-    <div class="vocab-tabs" id="vocabTabs"></div>
-    <div class="vocab-tabs" id="vocabCategoryTabs" aria-label="نوع المحتوى"></div>
-    <div class="vocab-meta"><span id="vocabSummary">مفردات الدرس</span><span>اضغط على البطاقة للاستماع</span></div>
-    <div class="vocab-pack" id="vocabPackGrid"></div>
   </div>
 </section>
 
@@ -1881,7 +1968,7 @@ function burstConfetti(){
     particles.push({
       x: innerWidth/2 + (Math.random()-0.5)*200, y: innerHeight*0.35,
       vx:(Math.random()-0.5)*9, vy: Math.random()*-9 - 3,
-      size: 5+Math.random()*6, color: colors[Math.floor(Math.random()*colors.length)],
+      size: 8+Math.random()*7, color: colors[Math.floor(Math.random()*colors.length)],
       rot: Math.random()*360, vr:(Math.random()-0.5)*14, life:100
     });
   }
@@ -1892,7 +1979,11 @@ function tickConfetti(){
   particles.forEach(p=>{
     p.vy += 0.28; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.life--;
     ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
-    ctx.fillStyle = p.color; ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size); ctx.restore();
+    ctx.fillStyle = p.color;
+    ctx.beginPath(); ctx.ellipse(0,0,p.size*.42,p.size*.55,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(-p.size*.14,p.size*.5); ctx.lineTo(0,p.size*.7); ctx.lineTo(p.size*.14,p.size*.5); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(0,p.size*.7); ctx.quadraticCurveTo(p.size*.3,p.size*1.05,0,p.size*1.4);
+    ctx.strokeStyle=p.color; ctx.lineWidth=1; ctx.stroke(); ctx.restore();
   });
   particles = particles.filter(p=>p.life>0 && p.y < innerHeight+40);
   if (particles.length) requestAnimationFrame(tickConfetti);
@@ -1907,15 +1998,15 @@ function addStar(){ totalStars++; document.getElementById('starCount').textConte
    ========================================================= */
 function setLesson(n){
   [1,2,3,4,5,6,7,8,9,10,11,12].forEach(i=>{
-    document.getElementById('lesson'+i).classList.toggle('active', i===n);
-    document.getElementById('navL'+i).style.display = i===n ? 'flex' : 'none';
-    document.getElementById('pickCard'+i).classList.toggle('active', i===n);
+    const legacyLesson=document.getElementById('lesson'+i);
+    const legacyNav=document.getElementById('navL'+i);
+    if(legacyLesson) legacyLesson.classList.remove('active');
+    if(legacyNav) legacyNav.style.display='none';
   });
   document.querySelectorAll('.toggle-btn').forEach(b=> b.classList.toggle('active', Number(b.dataset.lesson)===n));
-  const firstId = {1:'letters', 2:'pronouns', 3:'irregverbs', 4:'jobs', 5:'objects', 6:'techwords',
-                   7:'hobbies', 8:'appointments', 9:'food', 10:'transport', 11:'perfekt', 12:'feste'}[n];
-  const target = document.getElementById(firstId);
-  if (target) window.scrollTo({top: target.offsetTop - 90, behavior:'smooth'});
+  const target = document.getElementById('lessonVocab');
+  const headerHeight=document.querySelector('header').getBoundingClientRect().height;
+  if (target) window.scrollTo({top:target.offsetTop-headerHeight-14,behavior:'smooth'});
   if (window.studyStudio) window.studyStudio.setLesson(n);
   if (window.vocabLab) window.vocabLab.setLesson(n);
 }
@@ -2061,12 +2152,62 @@ const nounMaster = [
 ].map(([word,plural,mean,image])=>({type:'noun',word,plural,mean,image,sentence:`Das ist ${word}.`,translation:`هذا هو ${mean}.`}));
 
 const verbMaster = [
-  ['sein','bin','gewesen','سوف أكون','يكون'],['haben','habe','gehabt','سوف أملك','يملك'],['machen','mache','gemacht','سوف أفعل','يفعل'],['lernen','lerne','gelernt','سوف أتعلم','يتعلم'],
-  ['arbeiten','arbeite','gearbeitet','سوف أعمل','يعمل'],['wohnen','wohne','gewohnt','سوف أسكن','يسكن'],['kommen','komme','gekommen','سوف آتي','يأتي'],['gehen','gehe','gegangen','سوف أذهب','يذهب'],
-  ['sprechen','spreche','gesprochen','سوف أتحدث','يتحدث'],['schreiben','schreibe','geschrieben','سوف أكتب','يكتب'],['lesen','lese','gelesen','سوف أقرأ','يقرأ'],['hören','höre','gehört','سوف أستمع','يستمع'],
-  ['sehen','sehe','gesehen','سوف أرى','يرى'],['essen','esse','gegessen','سوف آكل','يأكل'],['trinken','trinke','getrunken','سوف أشرب','يشرب'],['fahren','fahre','gefahren','سوف أسافر','يسافر'],
-  ['kaufen','kaufe','gekauft','سوف أشتري','يشتري'],['fragen','frage','gefragt','سوف أسأل','يسأل'],['antworten','antworte','geantwortet','سوف أجيب','يجيب'],['verstehen','verstehe','verstanden','سوف أفهم','يفهم']
-].map(([word,present,past, future,mean],i)=>({type:'verb',word,past:`habe ${past}`,future:`werde ${word}`,mean,image:i%2?'study':'people',sentence:`Ich ${present} Deutsch.`,translation:`أنا ${mean}.`,tenses:`Präsens: Ich ${present} · Perfekt: Ich habe ${past} · Futur I: Ich werde ${word}`}));
+  ['besuchen','besuche','besucht','سوف أزور','يزور','habe','Ich besuche meine Familie.','أزور عائلتي.'],
+  ['üben','übe','geübt','سوف أتدرّب','يتدرّب','habe','Ich übe jeden Tag Deutsch.','أتدرّب على الألمانية كل يوم.'],
+  ['warten','warte','gewartet','سوف أنتظر','ينتظر','habe','Ich warte auf den Bus.','أنتظر الحافلة.'],
+  ['bleiben','bleibe','geblieben','سوف أبقى','يبقى','bin','Ich bleibe heute zu Hause.','سأبقى في البيت اليوم.'],
+  ['vergessen','vergesse','vergessen','سوف ينسى','ينسى','habe','Ich vergesse den Termin nicht.','لا أنسى الموعد.'],
+  ['erklären','erkläre','erklärt','سوف يشرح','يشرح','habe','Ich erkläre das Wort.','أشرح الكلمة.'],
+  ['wiederholen','wiederhole','wiederholt','سوف يكرّر','يكرّر','habe','Ich wiederhole den Satz.','أكرّر الجملة.'],
+  ['bestellen','bestelle','bestellt','سوف يطلب','يطلب','habe','Ich bestelle einen Tee.','أطلب شايًا.'],
+  ['sein','bin','gewesen','سوف أكون','يكون','bin','Ich bin Student.','أنا طالب.'],
+  ['haben','habe','gehabt','سوف أملك','يملك','habe','Ich habe Zeit.','لدي وقت.'],
+  ['machen','mache','gemacht','سوف أفعل','يفعل','habe','Ich mache meine Hausaufgaben.','أقوم بواجبي المنزلي.'],
+  ['lernen','lerne','gelernt','سوف أتعلم','يتعلم','habe','Ich lerne Deutsch.','أتعلم الألمانية.'],
+  ['arbeiten','arbeite','gearbeitet','سوف أعمل','يعمل','habe','Ich arbeite heute.','أعمل اليوم.'],
+  ['wohnen','wohne','gewohnt','سوف أسكن','يسكن','habe','Ich wohne in Berlin.','أسكن في برلين.'],
+  ['kommen','komme','gekommen','سوف آتي','يأتي','bin','Ich komme aus Ägypten.','أنا من مصر.'],
+  ['gehen','gehe','gegangen','سوف أذهب','يذهب','bin','Ich gehe zur Schule.','أذهب إلى المدرسة.'],
+  ['sprechen','spreche','gesprochen','سوف أتحدث','يتحدث','habe','Ich spreche Deutsch.','أتحدث الألمانية.'],
+  ['schreiben','schreibe','geschrieben','سوف أكتب','يكتب','habe','Ich schreibe eine E-Mail.','أكتب بريدًا إلكترونيًا.'],
+  ['lesen','lese','gelesen','سوف أقرأ','يقرأ','habe','Ich lese ein Buch.','أقرأ كتابًا.'],
+  ['hören','höre','gehört','سوف أستمع','يستمع','habe','Ich höre Musik.','أستمع إلى الموسيقى.'],
+  ['sehen','sehe','gesehen','سوف أرى','يرى','habe','Ich sehe einen Film.','أشاهد فيلمًا.'],
+  ['essen','esse','gegessen','سوف آكل','يأكل','habe','Ich esse einen Apfel.','آكل تفاحة.'],
+  ['trinken','trinke','getrunken','سوف أشرب','يشرب','habe','Ich trinke Wasser.','أشرب الماء.'],
+  ['fahren','fahre','gefahren','سوف أسافر','يسافر','bin','Ich fahre mit dem Bus.','أذهب بالحافلة.'],
+  ['kaufen','kaufe','gekauft','سوف أشتري','يشتري','habe','Ich kaufe ein Buch.','أشتري كتابًا.'],
+  ['fragen','frage','gefragt','سوف أسأل','يسأل','habe','Ich frage den Lehrer.','أسأل المدرّس.'],
+  ['antworten','antworte','geantwortet','سوف أجيب','يجيب','habe','Ich antworte auf die Frage.','أجيب عن السؤال.'],
+  ['verstehen','verstehe','verstanden','سوف أفهم','يفهم','habe','Ich verstehe die Frage.','أفهم السؤال.']
+].map(([word,present,participle,future,mean,aux='habe',sentence,translation],i)=>({type:'verb',word,past:`${aux} ${participle}`,future:`werde ${word}`,mean,image:i%2?'study':'people',sentence,translation,tenses:`Präsens: Ich ${present} · Perfekt: Ich ${aux} ${participle} · Futur I: Ich werde ${word}`}));
+
+const adjectiveMaster = [
+  ['freundlich','ودود','Die Lehrerin ist freundlich.','المعلمة ودودة.','people'],
+  ['müde','متعب','Ich bin heute müde.','أنا متعب اليوم.','home'],
+  ['glücklich','سعيد','Das Kind ist glücklich.','الطفل سعيد.','family'],
+  ['traurig','حزين','Der Mann ist traurig.','الرجل حزين.','people'],
+  ['schnell','سريع','Der Zug ist schnell.','القطار سريع.','transport'],
+  ['langsam','بطيء','Der Bus fährt langsam.','الحافلة تسير ببطء.','transport'],
+  ['warm','دافئ','Der Tee ist warm.','الشاي دافئ.','food'],
+  ['kalt','بارد','Das Wasser ist kalt.','الماء بارد.','food'],
+  ['interessant','مثير للاهتمام','Das Buch ist interessant.','الكتاب ممتع.','book'],
+  ['langweilig','ممل','Der Film ist langweilig.','الفيلم ممل.','study'],
+  ['wichtig','مهم','Die Prüfung ist wichtig.','الامتحان مهم.','study'],
+  ['richtig','صحيح','Die Antwort ist richtig.','الإجابة صحيحة.','study'],
+  ['falsch','خطأ','Das Wort ist falsch.','الكلمة خاطئة.','book'],
+  ['sauber','نظيف','Das Zimmer ist sauber.','الغرفة نظيفة.','home'],
+  ['schmutzig','متّسخ','Der Schuh ist schmutzig.','الحذاء متّسخ.','home'],
+  ['stark','قوي','Der Kaffee ist stark.','القهوة قوية.','food'],
+  ['leicht','خفيف','Die Tasche ist leicht.','الحقيبة خفيفة.','work'],
+  ['schwer','ثقيل','Der Koffer ist schwer.','الحقيبة ثقيلة.','travel'],
+  ['hungrig','جائع','Ich bin hungrig.','أنا جائع.','food'],
+  ['durstig','عطشان','Wir sind durstig.','نحن عطشى.','food'],
+  ['ruhig','هادئ','Das Dorf ist ruhig.','القرية هادئة.','nature'],
+  ['laut','صاخب','Die Musik ist laut.','الموسيقى صاخبة.','people'],
+  ['leise','منخفض الصوت','Bitte sprechen Sie leise.','من فضلك تحدّث بصوت منخفض.','people'],
+  ['gesund','صحي','Obst ist gesund.','الفاكهة صحية.','food']
+].map(([word,mean,sentence,translation,image])=>({type:'adj',word,mean,sentence,translation,image}));
 
 const connectorMaster = [
   ['und','و'],['aber','لكن'],['oder','أو'],['denn','لأن'],['weil','لأن'],['dann','ثم'],['auch','أيضًا'],['deshalb','لذلك'],['zuerst','أولًا'],['danach','بعد ذلك'],
@@ -2077,38 +2218,447 @@ const dailyPhraseMaster = [
   ['Guten Morgen!','صباح الخير!'],['Wie geht es dir?','كيف حالك؟'],['Mir geht es gut, danke.','أنا بخير، شكرًا.'],['Wie heißt du?','ما اسمك؟'],['Ich heiße ...','اسمي ...'],
   ['Woher kommst du?','من أين أنت؟'],['Ich komme aus ...','أنا من ...'],['Was machst du?','ماذا تفعل؟'],['Ich verstehe nicht.','أنا لا أفهم.'],['Wie bitte?','عفوًا؟'],
   ['Noch einmal, bitte.','مرة أخرى من فضلك.'],['Sprechen Sie bitte langsam.','تحدث ببطء من فضلك.'],['Wie viel kostet das?','كم سعر هذا؟'],['Ich möchte ...','أريد ...'],['Ich brauche Hilfe.','أحتاج إلى مساعدة.'],
-  ['Entschuldigung!','عفوًا!'],['Kein Problem.','لا مشكلة.'],['Vielen Dank!','شكرًا جزيلًا!'],['Auf Wiedersehen!','إلى اللقاء!'],['Bis morgen!','إلى الغد!']
+  ['Entschuldigung!','عفوًا!'],['Kein Problem.','لا مشكلة.'],['Vielen Dank!','شكرًا جزيلًا!'],['Auf Wiedersehen!','إلى اللقاء!'],['Bis morgen!','إلى الغد!'],
+  ['Kann ich bitte die Speisekarte sehen?','هل يمكنني رؤية قائمة الطعام من فضلك؟'],
+  ['Der Unterricht beginnt um neun Uhr.','يبدأ الدرس الساعة التاسعة.'],
+  ['Ich fahre am Wochenende nach Köln.','أسافر إلى كولونيا في نهاية الأسبوع.'],
+  ['Heute ist das Wetter sehr schön.','الطقس جميل جدًا اليوم.'],
+  ['Können Sie mir den Weg zeigen?','هل يمكن أن تريني الطريق؟'],
+  ['Ich habe meine Schlüssel zu Hause vergessen.','نسيت مفاتيحي في المنزل.'],
+  ['Nach dem Kurs trinke ich einen Tee.','بعد الدورة أشرب الشاي.'],
+  ['Wir lernen zusammen für die Prüfung.','ندرس معًا للامتحان.']
 ].map(([word,mean],i)=>({type:'phrase',word,mean,image:i%2?'people':'study',sentence:word,translation:mean}));
 
+const coursebookLessons = {
+  1:{title:'Hallo! Ich bin Nicole',nouns:[
+    ['der Name','-n','الاسم','person portrait'],['der Vorname','-n','الاسم الأول','first name portrait'],['der Familienname','-n','اسم العائلة','surname document'],['die Frau','-en','السيدة / المرأة','woman portrait'],['der Herr','-en','السيد','man portrait'],['die Sprache','-n','اللغة','language book'],['das Alphabet','-e','الأبجدية','alphabet letters'],['der Buchstabe','-n','الحرف','letter tiles']
+  ],verbs:[
+    ['heißen','يُدعى','heiße','hat geheißen','habe','introducing name'],['buchstabieren','يتهجّى','buchstabiere','hat buchstabiert','habe','spelling a name'],['wiederholen','يكرّر','wiederhole','hat wiederholt','habe','repeating a phrase'],['kennenlernen','يتعرّف إلى','lerne kennen','hat kennengelernt','habe','meeting people']
+  ],adjectives:[
+    ['höflich','مهذّب','polite greeting'],['freundlich','ودود','friendly greeting'],['formell','رسمي','formal introduction']
+  ],phrases:[
+    ['Hallo, ich heiße Nicole.','مرحبًا، اسمي نيكول.'],['Wie heißen Sie?','ما اسم حضرتك؟'],['Wie ist Ihr Name?','ما اسمك؟'],['Mein Name ist Peter Müller.','اسمي بيتر مولر.'],['Wer bist du?','من أنت؟'],['Ich bin Maria.','أنا ماريا.'],['Guten Tag, Frau Schultz!','نهارك سعيد، سيدة شولتس!'],['Guten Abend, Herr Weber!','مساء الخير، سيد فيبر!'],['Wie geht es Ihnen?','كيف حال حضرتك؟'],['Danke, gut. Und Ihnen?','شكرًا، أنا بخير. وحضرتك؟'],["Wie geht's?",'كيف الحال؟'],['Auf Wiedersehen!','إلى اللقاء!'],['Tschüss, bis bald!','وداعًا، أراك قريبًا!'],['Woher kommen Sie?','من أين حضرتك؟'],['Ich komme aus Ägypten.','أنا من مصر.'],['Welche Sprachen sprechen Sie?','ما اللغات التي تتحدثها؟'],['Ich spreche Arabisch und Deutsch.','أتحدث العربية والألمانية.'],['Wie buchstabiert man das?','كيف يُتهجّى ذلك؟'],['Können Sie das bitte wiederholen?','هل يمكنك تكرار ذلك من فضلك؟'],['Freut mich, Sie kennenzulernen.','سعيد بلقائك.']
+  ]},
+  2:{title:"Wie geht's?",nouns:[
+    ['die Zahl','-en','الرقم','number counting'],['die Adresse','-n','العنوان','street address'],['die Telefonnummer','-n','رقم الهاتف','telephone number'],['die E-Mail-Adresse','-n','عنوان البريد الإلكتروني','email address'],['der Wohnort','-e','محل الإقامة','city residence'],['das Befinden','Singular','الحال','wellbeing person'],['die Visitenkarte','-n','بطاقة العمل','business card']
+  ],verbs:[
+    ['sich fühlen','يشعر','fühle mich','hat sich gefühlt','habe','wellbeing check in'],['wohnen','يسكن','wohne','hat gewohnt','habe','residential address'],['anrufen','يتصل هاتفيًا','rufe an','hat angerufen','habe','phone call'],['ausfüllen','يملأ','fülle aus','hat ausgefüllt','habe','form completion']
+  ],adjectives:[
+    ['gut','بخير','feeling well'],['schlecht','سيئ','feeling unwell'],['angenehm','لطيف','pleasant meeting'],['ledig','أعزب','single status']
+  ],phrases:[
+    ['Wie geht es dir heute?','كيف حالك اليوم؟'],['Mir geht es sehr gut, danke.','أنا بخير جدًا، شكرًا.'],['Es geht so.','لا بأس.'],['Nicht so gut.','لست بخير تمامًا.'],['Wo wohnen Sie?','أين تسكن؟'],['Ich wohne in Kairo.','أسكن في القاهرة.'],['Wie ist Ihre Adresse?','ما عنوانك؟'],['Meine Adresse ist Hauptstraße 10.','عنواني هو هاوبتشتراسه 10.'],['Wie ist deine Telefonnummer?','ما رقم هاتفك؟'],['Meine Telefonnummer ist 012345678.','رقم هاتفي هو 012345678.'],['Haben Sie eine E-Mail-Adresse?','هل لديك عنوان بريد إلكتروني؟'],['Meine E-Mail-Adresse ist max@gmail.com.','عنوان بريدي الإلكتروني هو max@gmail.com.'],['Wie alt bist du?','كم عمرك؟'],['Ich bin zwanzig Jahre alt.','عمري عشرون عامًا.'],['Sind Sie Herr Braun?','هل حضرتك السيد براون؟'],['Ja, das bin ich.','نعم، هذا أنا.'],['Nein, ich heiße nicht Braun.','لا، اسمي ليس براون.'],['Hier ist meine Visitenkarte.','تفضّل بطاقتي الشخصية.'],['Das ist mein Freund Lukas.','هذا صديقي لوكاس.'],['Sehr angenehm!','تشرفت بلقائك!']
+  ]},
+  3:{title:'Das ist meine Mutter',nouns:[
+    ['die Familie','-n','العائلة','family portrait'],['die Mutter','die Mütter','الأم','mother child'],['der Vater','die Väter','الأب','father child'],['die Eltern','Plural','الوالدان','parents family'],['die Tochter','die Töchter','الابنة','daughter family'],['der Sohn','die Söhne','الابن','son family'],['die Schwester','-n','الأخت','sisters portrait'],['der Bruder','die Brüder','الأخ','brothers portrait'],['die Geschwister','Plural','الإخوة والأخوات','siblings family'],['die Großmutter','die Großmütter','الجدة','grandmother family'],['der Großvater','die Großväter','الجد','grandfather family'],['die Großeltern','Plural','الجدّان','grandparents family'],['der Mann','die Männer','الرجل / الزوج','man portrait'],['die Ehefrau','-en','الزوجة','wife portrait'],['das Kind','-er','الطفل','child portrait']
+  ],verbs:[
+    ['kochen','يطبخ','koche','hat gekocht','habe','grandmother cooking'],['heiraten','يتزوّج','heirate','hat geheiratet','habe','wedding couple'],['aufwachsen','ينشأ','wachse auf','ist aufgewachsen','bin','child growing'],['erzählen','يحكي','erzähle','hat erzählt','habe','family conversation'],['lieben','يحب','liebe','hat geliebt','habe','family affection']
+  ],adjectives:[
+    ['einzig','وحيد','only child portrait'],['verheiratet','متزوّج','married couple'],['klein','صغير','small child'],['verwandt','قريب / ذو صلة','relatives family']
+  ],phrases:[
+    ['Das ist meine Familie.','هذه عائلتي.'],['Das ist meine Mutter und das ist mein Vater.','هذه أمي وهذا أبي.'],['Meine Eltern wohnen in Berlin.','والداي يسكنان في برلين.'],['Hast du Geschwister?','هل لديك إخوة؟'],['Ja, ich habe einen Bruder und eine Schwester.','نعم، لدي أخ وأخت.'],['Nein, ich bin Einzelkind.','لا، أنا ابن وحيد.'],['Mein Bruder heißt Thomas.','اسم أخي توماس.'],['Wie alt ist deine Schwester?','كم عمر أختك؟'],['Sie ist fünfzehn Jahre alt.','عمرها خمسة عشر عامًا.'],['Sind Sie verheiratet?','هل حضرتك متزوج؟'],['Ja, ich bin verheiratet.','نعم، أنا متزوج.'],['Ich bin ledig.','أنا أعزب.'],['Wir haben zwei Kinder.','لدينا طفلان.'],['Meine Tochter geht in die Schule.','ابنتي تذهب إلى المدرسة.'],['Mein Sohn ist noch klein.','ابني ما زال صغيرًا.'],['Meine Oma kocht sehr gut.','جدتي تطبخ جيدًا جدًا.'],['Mein Opa liest gern die Zeitung.','جدي يحب قراءة الجريدة.'],['Ist das deine Tante?','هل هذه عمتك أو خالتك؟'],['Das sind meine Großeltern.','هذان جدّي وجدّتي.'],['Wir lieben unsere Familie.','نحن نحب عائلتنا.']
+  ]},
+  4:{title:'Der Tisch ist schön',nouns:[
+    ['der Tisch','-e','الطاولة','wooden table'],['der Stuhl','die Stühle','الكرسي','chair furniture'],['der Schrank','die Schränke','الدولاب','wardrobe cabinet'],['das Bett','-en','السرير','bed bedroom'],['das Sofa','-s','الأريكة','sofa living room'],['die Lampe','-n','المصباح','table lamp'],['der Preis','-e','السعر','price tag shopping'],['der Euro','-s','اليورو','euro coin'],['der Cent','-s','السنت','cent coin']
+  ],verbs:[
+    ['kosten','يكلّف','koste','hat gekostet','habe','price shopping'],['finden','يرى / يجد','finde','hat gefunden','habe','customer furniture'],['brauchen','يحتاج','brauche','hat gebraucht','habe','sofa shopping'],['gefallen','يعجب','gefalle','hat gefallen','habe','interior design'],['wirken','يبدو','wirke','hat gewirkt','habe','modern chair']
+  ],adjectives:[
+    ['schön','جميل','beautiful table'],['teuer','غالٍ','expensive lamp'],['günstig','مناسب السعر','affordable price'],['groß','كبير','large wardrobe'],['bequem','مريح','comfortable armchair'],['modern','حديث','modern furniture'],['alt','قديم','old lamp']
+  ],phrases:[
+    ['Was ist das?','ما هذا؟'],['Das ist ein Tisch.','هذه طاولة.'],['Der Tisch ist sehr schön.','الطاولة جميلة جدًا.'],['Ist das ein Stuhl?','هل هذا كرسي؟'],['Nein, das ist kein Stuhl, das ist ein Sessel.','لا، هذا ليس كرسيًا عاديًا، بل مقعد مريح.'],['Wie viel kostet die Lampe?','كم سعر المصباح؟'],['Die Lampe kostet 50 Euro.','سعر المصباح 50 يورو.'],['Das ist aber teuer!','هذا غالٍ جدًا!'],['Das ist wirklich günstig.','هذا مناسب السعر حقًا.'],['Der Schrank ist sehr groß.','الدولاب كبير جدًا.'],['Das Bett ist bequem.','السرير مريح.'],['Brauchst du ein Sofa?','هل تحتاج إلى أريكة؟'],['Ja, ich brauche ein neues Sofa.','نعم، أحتاج إلى أريكة جديدة.'],['Wie findest du den Stuhl?','ما رأيك في الكرسي؟'],['Ich finde ihn modern.','أراه حديثًا.'],['Die Lampe ist zu alt.','المصباح قديم جدًا.'],['Das Angebot ist gut.','العرض جيد.'],['Das Produkt kommt aus Deutschland.','المنتج من ألمانيا.'],['Was kostet dieser Tisch?','كم سعر هذه الطاولة؟'],['Das kostet nur einen Euro.','هذا يكلف يوروًا واحدًا فقط.']
+  ]},
+  5:{title:'Was ist das?',nouns:[
+    ['der Bleistift','-e','قلم رصاص','pencil stationery'],['der Kugelschreiber','Plural: -','قلم جاف','ballpoint pen'],['das Buch','die Bücher','كتاب','book reading'],['das Heft','-e','كراس','notebook school'],['die Tasche','-n','حقيبة','handbag bag'],['das Papier','-e','ورق','paper sheet'],['die Brille','-n','نظارة','eyeglasses'],['der Schlüssel','Plural: -','مفتاح','door key'],['das Handy','-s','هاتف محمول','mobile phone']
+  ],verbs:[
+    ['schreiben','يكتب','schreibe','hat geschrieben','habe','writing phone'],['funktionieren','يعمل','funktioniere','hat funktioniert','habe','pen writing'],['suchen','يبحث عن','suche','hat gesucht','habe','looking for glasses'],['mitbringen','يحضر معه','bringe mit','hat mitgebracht','habe','paper document'],['notieren','يدوّن','notiere','hat notiert','habe','writing notes']
+  ],adjectives:[
+    ['nützlich','مفيد','useful dictionary'],['kaputt','معطّل','broken pen'],['voll','ممتلئ','full school bag'],['leer','فارغ','empty notebook']
+  ],phrases:[
+    ['Hast du einen Bleistift?','هل لديك قلم رصاص؟'],['Ja, hier ist ein Bleistift.','نعم، ها هو قلم رصاص.'],['Ich brauche einen Kugelschreiber.','أحتاج إلى قلم جاف.'],['Das Buch liegt auf dem Tisch.','الكتاب على الطاولة.'],['Wie heißt das auf Deutsch?','ما اسم هذا بالألمانية؟'],['Das heißt „Brille“.','هذا اسمه «نظارة».'],['Wo ist mein Schlüssel?','أين مفتاحي؟'],['Dein Schlüssel ist in der Tasche.','مفتاحك في الحقيبة.'],['Ist das deine Tasche?','هل هذه حقيبتك؟'],['Nein, das ist nicht meine Tasche.','لا، هذه ليست حقيبتي.'],['Ich schreibe eine E-Mail mit dem Handy.','أكتب بريدًا إلكترونيًا باستخدام الهاتف.'],['Ist das ein Heft oder ein Buch?','هل هذا كراس أم كتاب؟'],['Das ist ein Heft.','هذا كراس.'],['Haben Sie Papier?','هل لديك ورق؟'],['Wie schreibt man das Wort?','كيف تُكتب هذه الكلمة؟'],['Der Kuli funktioniert nicht.','القلم الجاف لا يعمل.'],['Ich suche meine Brille.','أبحث عن نظارتي.'],['Das Wörterbuch ist sehr nützlich.','القاموس مفيد جدًا.'],['Bringen Sie bitte ein Blatt Papier mit.','أحضر معك ورقة من فضلك.'],['Ich verstehe das Wort nicht.','لا أفهم هذه الكلمة.']
+  ]},
+  6:{title:'Ich brauche Käse',nouns:[
+    ['das Lebensmittel','Plural: -','المادة الغذائية','groceries food'],['der Käse','Singular','الجبن','cheese dairy'],['die Milch','Singular','الحليب','milk bottle'],['das Brot','-e','الخبز','bread bakery'],['die Butter','Singular','الزبدة','butter dairy'],['das Ei','-er','البيضة','egg food'],['der Apfel','die Äpfel','التفاح','apple fruit'],['die Banane','-n','الموز','banana fruit'],['die Tomate','-n','الطماطم','tomatoes vegetable'],['das Fleisch','Singular','اللحم','meat food'],['der Fisch','-e','السمك','fish market'],['der Markt','die Märkte','السوق','market stalls'],['der Supermarkt','die Supermärkte','السوبرماركت','grocery supermarket']
+  ],verbs:[
+    ['einkaufen','يتسوّق','kaufe ein','hat eingekauft','habe','grocery shopping'],['wiegen','يزن','wiege','hat gewogen','habe','weighing apples'],['probieren','يتذوّق','probiere','hat probiert','habe','tasting food'],['schmecken','يكون مذاقه','schmecke','hat geschmeckt','habe','food tasting'],['backen','يخبز','backe','hat gebacken','habe','baking cake']
+  ],adjectives:[
+    ['frisch','طازج','fresh tomatoes'],['süß','حلو','sweet banana'],['sauer','حامض','sour fruit'],['salzig','مالح','salty cheese'],['satt','شبعان','satisfied meal']
+  ],phrases:[
+    ['Was kaufen wir heute ein?','ماذا سنشتري اليوم؟'],['Wir brauchen Käse und Brot.','نحتاج إلى الجبن والخبز.'],['Wie viel kostet ein Kilo Äpfel?','كم سعر كيلو التفاح؟'],['Ein Kilo kostet drei Euro.','الكيلو يكلف ثلاثة يورو.'],['Ich möchte bitte zwei Flaschen Milch.','أريد زجاجتي حليب من فضلك.'],['Haben Sie frische Tomaten?','هل لديكم طماطم طازجة؟'],['Ja, die Tomaten sind sehr gut.','نعم، الطماطم جيدة جدًا.'],['Isst du gern Fleisch?','هل تحب أكل اللحم؟'],['Nein, ich esse lieber Fisch.','لا، أفضل السمك.'],['Wir müssen in den Supermarkt gehen.','يجب أن نذهب إلى السوبرماركت.'],['Wie viel Butter brauchen wir?','كم نحتاج من الزبدة؟'],['Wir brauchen eine Packung Butter.','نحتاج إلى عبوة زبدة.'],['Gibt es hier eine Bäckerei?','هل يوجد مخبز هنا؟'],['Ich trinke morgens immer Milch.','أشرب الحليب دائمًا في الصباح.'],['Möchten Sie noch etwas?','هل تريد شيئًا آخر؟'],['Nein, danke. Das ist alles.','لا، شكرًا. هذا كل شيء.'],['Ich brauche sechs Eier für den Kuchen.','أحتاج إلى ست بيضات للكعكة.'],['Die Bananen sind süß.','الموز حلو.'],['Was kostet eine Packung Reis?','كم سعر عبوة الأرز؟'],['Guten Appetit!','بالهناء والشفاء!']
+  ]},
+  7:{title:'Meine Wohnung ist schön',nouns:[
+    ['die Wohnung','-en','الشقة','apartment living room'],['das Haus','die Häuser','المنزل','house exterior'],['das Zimmer','Plural: -','الغرفة','room interior'],['das Wohnzimmer','Plural: -','غرفة المعيشة','living room sofa'],['das Schlafzimmer','Plural: -','غرفة النوم','bedroom bed'],['die Küche','-n','المطبخ','kitchen interior'],['das Bad','die Bäder','الحمّام','bathroom interior'],['der Balkon','-e','الشرفة','apartment balcony'],['der Garten','die Gärten','الحديقة','home garden'],['die Miete','-n','الإيجار','rent apartment']
+  ],verbs:[
+    ['mieten','يستأجر','miete','hat gemietet','habe','rent apartment'],['umziehen','ينتقل إلى مسكن آخر','ziehe um','ist umgezogen','bin','moving house'],['einrichten','يؤثّث','richte ein','hat eingerichtet','habe','decorating room'],['stehen','يقف / يوجد','stehe','hat gestanden','habe','bed bedroom'],['liegen','يقع / يوجد','liege','hat gelegen','habe','apartment floor plan']
+  ],adjectives:[
+    ['hell','مضيء','bright living room'],['gemütlich','مريح وأليف','cozy home'],['hoch','مرتفع','high rent'],['geräumig','واسع','spacious room'],['bunt','مُلوّن','colorful children room'],['möbliert','مفروش','furnished apartment']
+  ],phrases:[
+    ['Meine Wohnung hat drei Zimmer.','تتكوّن شقتي من ثلاث غرف.'],['Das Wohnzimmer ist sehr hell und groß.','غرفة المعيشة مضيئة وواسعة جدًا.'],['Die Küche ist neu und klein.','المطبخ جديد وصغير.'],['Wo ist das Badezimmer?','أين الحمّام؟'],['Das Bad ist hinten links.','الحمّام في الخلف على اليسار.'],['Hat die Wohnung einen Balkon?','هل للشقة شرفة؟'],['Ja, sie hat einen großen Balkon.','نعم، لها شرفة كبيرة.'],['Wir haben einen schönen Garten.','لدينا حديقة جميلة.'],['Die Miete ist sehr hoch.','الإيجار مرتفع جدًا.'],['Ich suche eine neue Wohnung.','أبحث عن شقة جديدة.'],['Ist das Haus alt oder neu?','هل المنزل قديم أم جديد؟'],['Das Haus ist sehr alt.','المنزل قديم جدًا.'],['Im Schlafzimmer steht ein großes Bett.','يوجد سرير كبير في غرفة النوم.'],['Gefällt dir die Wohnung?','هل أعجبتك الشقة؟'],['Ja, sie gefällt mir sehr gut.','نعم، أعجبتني كثيرًا.'],['Wie hoch ist die Warmmiete?','كم يبلغ الإيجار شاملًا التدفئة؟'],['Die Wohnung liegt im zweiten Stock.','تقع الشقة في الطابق الثاني.'],['Ich wohne gern hier.','أحب السكن هنا.'],['Das Kinderzimmer ist bunt.','غرفة الأطفال ملوّنة.'],['Hier ist der Flur.','هذا هو الممر.']
+  ]},
+  8:{title:'Mein Tag',nouns:[
+    ['der Tag','-e','اليوم','calendar day'],['der Morgen','Plural: -','الصباح','morning sunrise'],['der Vormittag','-e','قبل الظهيرة','morning clock'],['der Mittag','-e','الظهيرة','noon lunch'],['der Nachmittag','-e','بعد الظهيرة','afternoon clock'],['der Abend','-e','المساء','evening sunset'],['die Nacht','die Nächte','الليل','night bedroom'],['die Uhrzeit','-en','الوقت','clock time'],['die Uhr','-en','الساعة','wristwatch clock']
+  ],verbs:[
+    ['aufstehen','ينهض / يستيقظ','stehe auf','ist aufgestanden','bin','waking up bed'],['frühstücken','يتناول الفطور','frühstücke','hat gefrühstückt','habe','breakfast table'],['beginnen','يبدأ','beginne','hat begonnen','habe','class clock'],['arbeiten','يعمل','arbeite','hat gearbeitet','habe','office desk'],['fernsehen','يشاهد التلفاز','sehe fern','hat ferngesehen','habe','watching television'],['abfahren','ينطلق','fahre ab','ist abgefahren','bin','train departure']
+  ],adjectives:[
+    ['pünktlich','في الموعد','punctual clock'],['früh','مبكر','early morning'],['spät','متأخر','late night'],['beschäftigt','مشغول','busy office'],['frei','متفرّغ','free calendar']
+  ],phrases:[
+    ['Ich stehe jeden Tag um sechs Uhr auf.','أستيقظ كل يوم في السادسة.'],['Wann frühstückst du?','متى تتناول الفطور؟'],['Ich frühstücke um sieben Uhr morgens.','أتناول الفطور في السابعة صباحًا.'],['Wie spät ist es?','كم الساعة الآن؟'],['Es ist genau acht Uhr.','الساعة الثامنة تمامًا.'],['Um wie viel Uhr beginnt der Deutschkurs?','في أي ساعة تبدأ دورة الألمانية؟'],['Der Kurs beginnt um neun Uhr.','تبدأ الدورة في التاسعة.'],['Am Nachmittag arbeite ich im Büro.','أعمل في المكتب بعد الظهيرة.'],['Wann machst du Mittagspause?','متى تأخذ استراحة الغداء؟'],['Ich mache um zwölf Uhr Pause.','آخذ استراحة في الثانية عشرة.'],['Am Abend sehe ich fern.','أشاهد التلفاز في المساء.'],['Wann gehst du schlafen?','متى تذهب إلى النوم؟'],['Ich gehe um elf Uhr nachts schlafen.','أذهب إلى النوم في الحادية عشرة ليلًا.'],['Heute habe ich viel Arbeit.','لدي عمل كثير اليوم.'],['Am Vormittag kaufe ich ein.','أتسوّق قبل الظهيرة.'],['Was machst du am Wochenende?','ماذا تفعل في عطلة نهاية الأسبوع؟'],['Der Zug fährt um zehn Uhr ab.','ينطلق القطار في العاشرة.'],['Ich rufe dich heute Abend an.','سأتصل بك هذا المساء.'],['Hast du heute Zeit?','هل لديك وقت اليوم؟'],['Gute Nacht und schlaf gut!','ليلة سعيدة ونومًا هنيئًا!']
+  ]},
+  9:{title:'Freizeit und Hobbys',nouns:[
+    ['die Freizeit','Singular','وقت الفراغ','leisure park'],['das Hobby','-s','الهواية','hobby painting'],['der Sport','Singular','الرياضة','sports field'],['der Fußball','Singular','كرة القدم','soccer ball'],['die Musik','Singular','الموسيقى','music headphones'],['der Roman','-e','الرواية','novel reading'],['das Kino','-s','السينما','cinema seats'],['der Freund','-e','الصديق','friends meeting'],['die Freundin','-nen','الصديقة','friends meeting']
+  ],verbs:[
+    ['schwimmen','يسبح','schwimme','ist geschwommen','bin','swimming pool'],['spielen','يلعب','spiele','hat gespielt','habe','football play'],['hören','يستمع','höre','hat gehört','habe','music listening'],['treffen','يلتقي','treffe','hat getroffen','habe','friends meeting'],['tanzen','يرقص','tanze','hat getanzt','habe','dance floor'],['fotografieren','يلتقط الصور','fotografiere','hat fotografiert','habe','camera photography']
+  ],adjectives:[
+    ['sportlich','رياضي','sporty person'],['kreativ','مبدع','creative art'],['musikalisch','موسيقي','musical instrument'],['regelmäßig','منتظم','regular exercise'],['spannend','مثير','exciting movie']
+  ],phrases:[
+    ['Was sind deine Hobbys?','ما هواياتك؟'],['Meine Hobbys sind Lesen und Schwimmen.','هواياتي القراءة والسباحة.'],['Spielst du gern Fußball?','هل تحب لعب كرة القدم؟'],['Ja, ich spiele jeden Samstag Fußball.','نعم، ألعب كرة القدم كل يوم سبت.'],['Ich höre sehr gern Musik.','أحب الاستماع إلى الموسيقى كثيرًا.'],['Gehen wir am Freitag ins Kino?','هل نذهب إلى السينما يوم الجمعة؟'],['Das ist eine gute Idee!','هذه فكرة جيدة!'],['Ich treffe am Abend meine Freunde.','ألتقي أصدقائي مساءً.'],['Liest du gern Bücher?','هل تحب قراءة الكتب؟'],['Ja, ich lese oft Romane.','نعم، أقرأ الروايات كثيرًا.'],['Tanzt du gern?','هل تحب الرقص؟'],['Nein, ich tanze nicht gern.','لا، لا أحب الرقص.'],['Am Sonntag mache ich einen Ausflug.','أقوم برحلة قصيرة يوم الأحد.'],['Ich koche gern für meine Familie.','أحب الطبخ لعائلتي.'],['Fotografierst du in deiner Freizeit?','هل تلتقط الصور في وقت فراغك؟'],['Wir reisen sehr gern im Sommer.','نحن نحب السفر كثيرًا في الصيف.'],['Machst du regelmäßig Sport?','هل تمارس الرياضة بانتظام؟'],['Ich fahre jeden Tag Fahrrad.','أركب الدراجة كل يوم.'],['Haben Sie am Samstag Zeit?','هل لديك وقت يوم السبت؟'],['Leider habe ich keine Zeit.','للأسف، ليس لدي وقت.']
+  ]},
+  10:{title:'In Berlin',nouns:[
+    ['die Stadt','die Städte','المدينة','city street'],['der Bahnhof','die Bahnhöfe','محطة القطار','train station'],['die Haltestelle','-n','موقف الحافلة أو الترام','bus stop'],['der Flughafen','die Flughäfen','المطار','airport terminal'],['das Hotel','-s','الفندق','hotel building'],['das Museum','die Museen','المتحف','museum gallery'],['die Straße','-n','الشارع','city street'],['der Platz','die Plätze','الميدان','town square'],['die Wegbeschreibung','-en','وصف الطريق','city map directions']
+  ],verbs:[
+    ['abbiegen','ينعطف','biege ab','ist abgebogen','bin','street turning'],['überqueren','يعبر','überquere','hat überquert','habe','crosswalk crossing'],['erreichen','يصل إلى','erreiche','hat erreicht','habe','arriving city'],['umsteigen','يغيّر وسيلة النقل','steige um','ist umgestiegen','bin','subway transfer'],['verlassen','يغادر','verlasse','hat verlassen','habe','leaving station']
+  ],adjectives:[
+    ['nah','قريب','nearby station'],['weit','بعيد','far city road'],['zentral','في مركز المدينة','central hotel'],['öffentlich','عام','public transport'],['direkt','مباشر','straight road']
+  ],phrases:[
+    ['Wo ist der Bahnhof?','أين محطة القطار؟'],['Der Bahnhof ist in der Nähe.','محطة القطار قريبة.'],['Entschuldigung, wie komme ich zum Museum?','عذرًا، كيف أصل إلى المتحف؟'],['Gehen Sie geradeaus und dann links.','امشِ إلى الأمام ثم انعطف يسارًا.'],['Wo liegt das Hotel Central?','أين يقع فندق سنترال؟'],['Das Hotel liegt an der Ecke.','يقع الفندق عند الزاوية.'],['Gibt es hier eine Haltestelle?','هل يوجد موقف هنا؟'],['Ja, die Haltestelle ist dort drüben.','نعم، الموقف هناك.'],['Wie komme ich zum Flughafen?','كيف أصل إلى المطار؟'],['Sie können mit dem Taxi fahren.','يمكنك الذهاب بسيارة أجرة.'],['Ist das weit von hier?','هل يبعد هذا من هنا؟'],['Nein, das ist ganz nah.','لا، إنه قريب جدًا.'],['Wo ist die nächste Bank?','أين أقرب بنك؟'],['Biegen Sie rechts ab.','انعطف يمينًا.'],['Berlin ist eine sehr schöne Stadt.','برلين مدينة جميلة جدًا.'],['Auf dem Platz gibt es viele Cafés.','يوجد كثير من المقاهي في الميدان.'],['Ich suche die Goethestraße.','أبحث عن شارع غوته.'],['Fahren Sie mit der U-Bahn, Linie 2.','استقل مترو الخط الثاني.'],['Wo kann ich ein Ticket kaufen?','أين يمكنني شراء تذكرة؟'],['Vielen Dank für die Hilfe!','شكرًا جزيلًا على المساعدة!']
+  ]},
+  11:{title:'Beruf und Arbeit',nouns:[
+    ['der Beruf','-e','المهنة','profession workplace'],['der Arzt','die Ärzte','الطبيب','doctor clinic'],['die Ärztin','-nen','الطبيبة','woman doctor'],['der Lehrer','Plural: -','المعلم','teacher classroom'],['die Lehrerin','-nen','المعلمة','woman teacher'],['der Schüler','Plural: -','طالب المدرسة','school student'],['der Student','-en','الطالب الجامعي','university student'],['der Ingenieur','-e','المهندس','engineer hardhat'],['der Kellner','Plural: -','النادل','waiter restaurant'],['die Arbeit','Singular','العمل','office work'],['die Firma','die Firmen','الشركة','company office'],['das Büro','-s','المكتب','office desk']
+  ],verbs:[
+    ['studieren','يدرس في الجامعة','studiere','hat studiert','habe','university studying'],['verdienen','يكسب','verdiene','hat verdient','habe','salary work'],['sich bewerben','يتقدّم لوظيفة','bewerbe mich','hat sich beworben','habe','job application'],['einstellen','يوظّف','stelle ein','hat eingestellt','habe','hiring interview'],['kündigen','يستقيل','kündige','hat gekündigt','habe','resignation letter'],['bedienen','يخدم الزبائن','bediene','hat bedient','habe','waiter serving']
+  ],adjectives:[
+    ['arbeitslos','عاطل عن العمل','unemployed job search'],['fleißig','مجتهد','diligent worker'],['nett','لطيف','kind colleague'],['selbstständig','يعمل لحسابه','self employed'],['erfahren','ذو خبرة','experienced professional']
+  ],phrases:[
+    ['Was sind Sie von Beruf?','ما مهنتك؟'],['Ich bin Arzt von Beruf.','أنا طبيب بالمهنة.'],['Was machst du beruflich?','ماذا تعمل؟'],['Ich arbeite als Lehrerin in einer Schule.','أعمل معلمة في مدرسة.'],['Wo arbeiten Sie?','أين تعمل؟'],['Ich arbeite bei einer großen Firma.','أعمل في شركة كبيرة.'],['Mein Vater ist Ingenieur.','أبي مهندس.'],['Meine Mutter arbeitet im Büro.','أمي تعمل في المكتب.'],['Studierst du noch?','هل ما زلت تدرس في الجامعة؟'],['Ja, ich bin Student an der Universität.','نعم، أنا طالب في الجامعة.'],['Ich habe derzeit keinen Job.','ليس لدي عمل حاليًا.'],['Ich suche eine Arbeitsstelle.','أبحث عن وظيفة.'],['Der Kellner bringt das Essen.','النادل يحضر الطعام.'],['Haben Sie heute viel Arbeit?','هل لديك عمل كثير اليوم؟'],['Meine Arbeit macht mir Spaß.','أستمتع بعملي.'],['Wie lange arbeiten Sie täglich?','كم ساعة تعمل يوميًا؟'],['Ich arbeite acht Stunden am Tag.','أعمل ثماني ساعات في اليوم.'],['Meine Kollegin ist sehr nett.','زميلتي لطيفة جدًا.'],['Wann haben Sie Feierabend?','متى تنتهي من العمل؟'],['Ich habe um fünf Uhr Feierabend.','أنتهي من العمل في الخامسة.']
+  ]},
+  12:{title:'Urlaubsgrüße',nouns:[
+    ['der Urlaub','-e','العطلة','vacation beach'],['die Reise','-n','الرحلة','travel journey'],['das Meer','-e','البحر','ocean sea'],['der Strand','die Strände','الشاطئ','beach coast'],['die Sonne','Singular','الشمس','sun sunshine'],['das Wetter','Singular','الطقس','weather sky'],['die Karte','-n','البطاقة','postcard writing'],['der Bus','-se','الحافلة','bus travel'],['der Zug','die Züge','القطار','train travel'],['das Flugzeug','-e','الطائرة','airplane travel']
+  ],verbs:[
+    ['fliegen','يسافر بالطائرة','fliege','ist geflogen','bin','airplane flight'],['scheinen','يشرق','scheine','hat geschienen','habe','sunshine weather'],['packen','يحزم','packe','hat gepackt','habe','travel suitcase'],['wünschen','يتمنى','wünsche','hat gewünscht','habe','holiday greeting'],['genießen','يستمتع','genieße','hat genossen','habe','relaxing vacation'],['sich erholen','يستجم',' erhole mich','habe mich erholt','habe','relaxing beach']
+  ],adjectives:[
+    ['sonnig','مشمس','sunny beach'],['traumhaft','خيالي','dream vacation'],['interessant','ممتع','interesting journey'],['entspannt','مسترخٍ','relaxed holiday'],['warm','دافئ','warm sea']
+  ],phrases:[
+    ['Ich mache Urlaub am Meer.','أقضي إجازة على البحر.'],['Wohin fährst du im Sommer?','إلى أين تسافر في الصيف؟'],['Ich fliege nach Deutschland.','أسافر بالطائرة إلى ألمانيا.'],['Das Wetter ist wunderbar und die Sonne scheint.','الطقس رائع والشمس مشرقة.'],['Wir liegen jeden Tag am Strand.','نقضي وقتنا على الشاطئ كل يوم.'],['Ich schreibe eine Ansichtskarte an meine Eltern.','أكتب بطاقة بريدية إلى والديّ.'],['Die Reise war sehr interessant.','كانت الرحلة ممتعة جدًا.'],['Wir fahren mit dem Zug nach Wien.','نسافر بالقطار إلى فيينا.'],['Wie ist das Wetter in Kairo?','كيف الطقس في القاهرة؟'],['Es ist warm und sonnig.','الجو دافئ ومشمس.'],['Wir haben ein schönes Hotel am Strand.','لدينا فندق جميل على الشاطئ.'],['Ich wünsche dir einen schönen Urlaub!','أتمنى لك عطلة سعيدة!'],['Wie lange bleibst du dort?','كم ستبقى هناك؟'],['Ich bleibe zwei Wochen.','سأبقى أسبوعين.'],['Das Meer ist sehr warm.','البحر دافئ جدًا.'],['Wir machen viele Fotos im Urlaub.','نلتقط صورًا كثيرة في العطلة.'],['Fährst du mit dem Auto oder mit dem Bus?','هل تسافر بالسيارة أم بالحافلة؟'],['Ich fahre am liebsten mit dem Flugzeug.','أفضل السفر بالطائرة.'],['Viele Grüße aus dem Urlaub!','أطيب التحيات من العطلة!'],['Es war ein traumhafter Urlaub.','كانت عطلة لا تُنسى.']
+  ]}
+};
+
+const grammarLessons = {
+  1:{title:'Hallo! Ich bin Nicole',rules:[
+    {title:'المضارع: heißen و kommen و sein',explanation:'الفعل الألماني يتغير بحسب الفاعل. في الأفعال المنتظمة نحذف -en من المصدر ثم نضيف النهاية: ich غالبًا -e، وdu غالبًا -st، وSie الرسمية -en. الفعلان heißen وkommen يتبعان هذا النمط في هذه الصيغ؛ أما sein فشاذ ويجب حفظ أشكاله كما هي. لا نضع ضمير المخاطب غير الرسمي du عند مخاطبة شخص رسميًا؛ نستخدم Sie بحرف كبير.',pattern:'heißen: ich heiße · du heißt · Sie heißen\nkommen: ich komme · du kommst · Sie kommen\nsein: ich bin · du bist · Sie sind',examples:[['Ich heiße Nicole.','اسمي نيكول.'],['Woher kommen Sie?','من أين حضرتك؟'],['Ich bin Maria.','أنا ماريا.']]},
+    {title:'الضمائر: ich و du و Sie',explanation:'ich تعني أنا، وdu تعني أنت لشخص واحد في حديث غير رسمي، وSie تعني حضرتك أو حضراتكم في الحديث الرسمي. تأتي Sie الرسمية بحرف كبير حتى لا تختلط بـ sie التي تعني هي أو هم. الفعل في الجملة يتصرف بما يوافق الضمير، لذلك نقول du heißt لكن Sie heißen.',pattern:'ich = أنا · du = أنت (غير رسمي) · Sie = حضرتك/حضراتكم (رسمي)',examples:[['Ich komme aus Ägypten.','أنا من مصر.'],['Wie heißt du?','ما اسمك؟'],['Wie heißen Sie?','ما اسم حضرتك؟']]},
+    {title:'ترتيب الجملة وأسئلة W',explanation:'في الجملة الخبرية يأتي الفعل المصرف عادةً في الموقع الثاني: Ich komme aus Ägypten. في سؤال W تبدأ الجملة بأداة السؤال، ثم يأتي الفعل، ثم الفاعل: Woher kommen Sie? أداة Wie تسأل عن الكيفية أو الاسم، وWoher عن الأصل، وWer عن الشخص. لا نضع الفاعل قبل الفعل في هذا النوع من الأسئلة.',pattern:'خبر: الفاعل + الفعل + بقية الجملة\nW-Frage: أداة السؤال + الفعل + الفاعل + بقية الجملة',examples:[['Wie heißt du?','ما اسمك؟'],['Woher kommen Sie?','من أين حضرتك؟'],['Wer bist du?','من أنت؟']]}
+  ],practice:[
+    [0,'Ich ___ Nicole.','heiße',['heiße','heißt','heißen'],'اسمي نيكول.','أعرّف عن نفسي باسمي.'],[0,'Du ___ aus Berlin.','kommst',['komme','kommst','kommen'],'أنت من برلين.','أتحدث مع صديق عن أصله.'],[0,'Sie ___ aus Ägypten.','kommen',['komme','kommst','kommen'],'حضرتك من مصر.','أسأل شخصًا رسميًا عن أصله.'],[0,'Ich ___ Max.','bin',['bin','bist','sind'],'أنا ماكس.','أذكر من أكون.'],[0,'Du ___ sehr freundlich.','bist',['bin','bist','sind'],'أنت ودود جدًا.','أصف مخاطبًا غير رسمي.'],[1,'___ heißt du?','Wie',['Wer','Wie','Woher'],'ما اسمك؟','أسأل عن الاسم.'],[2,'___ kommen Sie?','Woher',['Wer','Wie','Woher'],'من أين حضرتك؟','أسأل رسميًا عن الأصل.'],[2,'___ bist du?','Wer',['Wer','Wie','Woher'],'من أنت؟','أسأل عن هوية شخص.'],[2,'Woher ___ du?','kommst',['komme','kommst','kommen'],'من أين أنت؟','رتّب سؤال الأصل مع du.'],[2,'Wie ___ Sie?','heißen',['heiße','heißt','heißen'],'ما اسم حضرتك؟','أخاطب شخصًا بصيغة رسمية.']
+  ]},
+  2:{title:'Ich bin Journalistin',rules:[
+    {title:'تصريف haben و arbeiten',explanation:'haben فعل شائع معناه يملك أو لديه، وتصريفه غير منتظم جزئيًا: ich habe، du hast، er/sie hat. arbeiten فعل منتظم، لكن جذره ينتهي بصوت يحتاج إلى e وصل قبل بعض النهايات لتسهيل النطق: du arbeitest وer arbeitet. احفظ الفعل مع الضمير ولا تطبق نهاية واحدة على الجميع.',pattern:'haben: ich habe · du hast · er/sie hat · wir haben\narbeiten: ich arbeite · du arbeitest · er arbeitet · wir arbeiten',examples:[['Ich habe eine Telefonnummer.','لدي رقم هاتف.'],['Du hast Zeit.','لديك وقت.'],['Sie arbeitet als Journalistin.','هي تعمل صحفية.']]},
+    {title:'صيغة المهنة المؤنثة -in',explanation:'غالبًا تتكون صيغة المؤنث من المهنة بإضافة اللاحقة -in: Journalist → Journalistin، Lehrer → Lehrerin. في الجمع المؤنث تُضاف غالبًا -nen إلى صيغة -in: Journalistinnen. بعض الكلمات يتغير فيها حرف علة أيضًا، مثل Arzt → Ärztin؛ لذلك ليست الإضافة آلية في كل المهن. عند قول المهنة بعد sein لا نضع عادةً ein/eine: Ich bin Journalistin.',pattern:'der Journalist → die Journalistin\nder Lehrer → die Lehrerin\nder Arzt → die Ärztin',examples:[['Er ist Journalist.','هو صحفي.'],['Sie ist Journalistin.','هي صحفية.'],['Ich bin Ärztin.','أنا طبيبة.']]},
+    {title:'الأعداد إلى 100',explanation:'الأعداد من 13 إلى 19 تتكون غالبًا من رقم الآحاد متبوعًا بـ zehn، مع صيغ محفوظة مثل sechzehn وsiebzehn. العشرات تنتهي غالبًا بـ -zig، مثل dreißig وvierzig. من 21 إلى 99 يقال الآحاد أولًا، ثم und، ثم العشرات: 24 = vierundzwanzig. انتبه إلى أن eins تصبح ein داخل العدد المركب.',pattern:'24 = vier + und + zwanzig\n35 = fünf + und + dreißig',examples:[['Ich bin dreißig Jahre alt.','عمري ثلاثون عامًا.'],['Meine Nummer ist vierundzwanzig.','رقمي أربعة وعشرون.'],['Sie ist fünfundzwanzig Jahre alt.','عمرها خمسة وعشرون عامًا.']]},
+    {title:'النفي بـ nicht',explanation:'nicht تنفي فعلًا أو صفة أو معلومة محددة، وتأتي غالبًا قبل الجزء المنفي أو قرب نهاية الجملة إذا كان النفي يشمل الفعل/الجملة كلها. مع صفة بعد sein نقول: Ich bin nicht verheiratet. ومع اسم له أداة نكرة أو بلا أداة نستخدم kein/keine بدل nicht: Ich habe keine Telefonnummer. لا تخلط بين النفي العام nicht ونفي الاسم kein.',pattern:'Ich bin nicht verheiratet.\nIch arbeite heute nicht.',examples:[['Ich bin nicht verheiratet.','أنا لست متزوجة.'],['Er arbeitet heute nicht.','هو لا يعمل اليوم.'],['Sie ist nicht vierzig.','هي ليست في الأربعين.']]},
+    {title:'حروف الجر als وbei وin',explanation:'تُستخدم als قبل المهنة بمعنى «بصفتي/كـ» من دون أداة نكرة غالبًا: Ich arbeite als Journalistin. وتأتي bei مع جهة العمل أو الشركة: bei Siemens، bei einer Firma. أما in فتحدد المدينة أو المكان: in Berlin. مع أسماء المدن لا نضع أداة تعريف عادةً، بينما تتغير الأداة مع بعض أسماء الدول.',pattern:'als + مهنة · bei + جهة العمل · in + مدينة/مكان',examples:[['Ich arbeite als Arzt.','أعمل طبيبًا.'],['Er arbeitet bei BMW.','هو يعمل لدى BMW.'],['Sie wohnt in Berlin.','هي تسكن في برلين.']]}
+  ],practice:[
+    [0,'Ich ___ eine Adresse.','habe',['habe','hast','hat'],'لدي عنوان.','أذكر ما أملكه.'],[0,'Du ___ eine Telefonnummer.','hast',['habe','hast','hat'],'لديك رقم هاتف.','الفاعل du مع haben.'],[0,'Er ___ in Berlin.','arbeitet',['arbeite','arbeitest','arbeitet'],'هو يعمل في برلين.','الفاعل er مع arbeiten.'],[1,'Sie ist ___.','Journalistin',['Journalist','Journalistin','Journalisten'],'هي صحفية.','أختار صيغة المهنة للمؤنث.'],[1,'Anna ist ___.','Ärztin',['Arzt','Ärztin','Ärzte'],'آنا طبيبة.','صيغة مؤنث تتغير فيها حركة الكلمة.'],[2,'24 = ___.','vierundzwanzig',['vierundzwanzig','zwanzigvier','vierzwanzig'],'العدد 24.','أركب عددًا من الآحاد والعشرات.'],[3,'Ich bin ___ verheiratet.','nicht',['nicht','kein','keine'],'أنا لست متزوجًا.','أنفي صفة بعد sein.'],[4,'Ich arbeite ___ Journalistin.','als',['als','bei','in'],'أعمل صحفية.','als تسبق اسم المهنة.'],[4,'Er arbeitet ___ BMW.','bei',['als','bei','in'],'هو يعمل لدى BMW.','bei تسبق جهة العمل.'],[4,'Sie wohnt ___ Berlin.','in',['als','bei','in'],'هي تسكن في برلين.','in تسبق اسم المدينة.']
+  ]},
+  3:{title:'Das ist meine Mutter',rules:[
+    {title:'الملكية: mein/meine و dein/deine',explanation:'ضمير الملكية يحدد صاحب الشيء، لكن نهايته تتأثر بجنس الاسم الذي يأتي بعده. قبل اسم مذكر أو محايد في حالة الرفع نستخدم mein/dein بلا e: mein Vater، mein Kind. قبل اسم مؤنث أو جمع نستخدم meine/deine: meine Mutter، meine Eltern. الضمير يتبع جنس المملوك لا جنس المتكلم.',pattern:'der Vater → mein/dein Vater\ndie Mutter → meine/deine Mutter\ndas Kind → mein/dein Kind',examples:[['Das ist mein Vater.','هذا أبي.'],['Das ist meine Mutter.','هذه أمي.'],['Ist das dein Bruder?','هل هذا أخوك؟']]},
+    {title:'تغير حرف العلة في sprechen',explanation:'بعض الأفعال تغير حرف العلة في الجذر مع du وer/sie/es، بينما تبقى صيغ الجمع عادةً على الجذر الأصلي. في sprechen تتحول e إلى i: du sprichst وer spricht. لا نضيف هذا التغيير إلى ich أو wir: ich spreche، wir sprechen. احفظ الصيغ المتغيرة ولا تستنتجها من قاعدة الأفعال المنتظمة وحدها.',pattern:'ich spreche · du sprichst · er/sie spricht\nwir sprechen · ihr sprecht · sie sprechen',examples:[['Ich spreche Arabisch.','أتحدث العربية.'],['Sprichst du Deutsch?','هل تتحدث الألمانية؟'],['Sie spricht Englisch.','هي تتحدث الإنجليزية.']]},
+    {title:'أسئلة نعم/لا وإجابات Ja و Nein و Doch',explanation:'في سؤال نعم/لا يأتي الفعل المصرف أولًا ثم الفاعل: Hast du Geschwister? الإجابة Ja تؤكد الإثبات، وNein تنفيه. Doch تُستخدم للرد بالإيجاب على سؤال منفي، بمعنى «بلى»: Hast du keine Geschwister? Doch, ich habe einen Bruder. لا تستخدم Doch لمجرد الموافقة على سؤال مثبت.',pattern:'سؤال: الفعل + الفاعل + ...؟\nإثبات: Ja, ... · نفي: Nein, ... · عكس سؤال منفي: Doch, ...',examples:[['Bist du verheiratet? — Nein, ich bin ledig.','هل أنت متزوج؟ — لا، أنا أعزب.'],['Hast du Geschwister? — Ja, ich habe eine Schwester.','هل لديك إخوة؟ — نعم، لدي أخت.'],['Hast du keine Schwester? — Doch, ich habe eine.','أليس لديك أخت؟ — بلى، لدي أخت.']]}
+  ],practice:[
+    [0,'Das ist ___ Vater.','mein',['mein','meine','dein'],'هذا أبي.','الاسم Vater مذكر.'],[0,'Das ist ___ Mutter.','meine',['mein','meine','deine'],'هذه أمي.','الاسم Mutter مؤنث.'],[0,'Ist das ___ Schwester?','deine',['dein','deine','mein'],'هل هذه أختك؟','الاسم Schwester مؤنث.'],[0,'Das ist ___ Kind.','mein',['mein','meine','deine'],'هذا طفلي.','الاسم Kind محايد.'],[1,'Du ___ Deutsch.','sprichst',['spreche','sprichst','sprechen'],'أنت تتحدث الألمانية.','تصريف sprechen مع du.'],[1,'Er ___ Arabisch.','spricht',['spreche','sprichst','spricht'],'هو يتحدث العربية.','تصريف sprechen مع er.'],[1,'Wir ___ Deutsch.','sprechen',['spricht','sprecht','sprechen'],'نحن نتحدث الألمانية.','صيغة الجمع تحافظ على e.'],[2,'___ du Geschwister?','Hast',['Hast','Hat','Haben'],'هل لديك إخوة؟','أبدأ سؤال نعم/لا بالفعل.'],[2,'Hast du keine Geschwister? — ___, ich habe einen Bruder.','Doch',['Ja','Nein','Doch'],'أليس لديك إخوة؟ — بلى، لدي أخ.','أعكس سؤالًا منفيًا.'],[2,'Bist du verheiratet? — ___, ich bin ledig.','Nein',['Ja','Nein','Doch'],'هل أنت متزوج؟ — لا، أنا أعزب.','أجيب بالنفي عن سؤال مثبت.']
+  ]},
+  4:{title:'Die Tischlampe ist schön',rules:[
+    {title:'أدوات التعريف والتنكير',explanation:'لكل اسم ألماني جنس نحوي يجب حفظه معه: der للمذكر، die للمؤنث، وdas للمحايد. أداة النكرة المقابلة هي ein للمذكر والمحايد وeine للمؤنث. أداة التعريف تشير عادةً إلى شيء معروف أو محدد، أما أداة النكرة فتقدم شيئًا غير محدد أو يذكر لأول مرة. لا توجد أداة نكرة في الجمع.',pattern:'der Tisch → ein Tisch · die Lampe → eine Lampe · das Bett → ein Bett',examples:[['Der Tisch ist schön.','الطاولة جميلة.'],['Das ist eine Lampe.','هذا مصباح.'],['Das ist ein Bett.','هذا سرير.']]},
+    {title:'نفي الاسم بـ kein/keine',explanation:'kein ينفي اسمًا جاء بلا أداة أو مع أداة نكرة، ويتصرف مثل ein: kein Tisch للمذكر والمحايد، وkeine Lampe للمؤنث والجمع. عند وجود أداة تعريف أو ضمير ملكية، نستخدم غالبًا nicht: Das ist nicht der Tisch. / Das ist nicht mein Tisch. إذن اختَر أداة النفي بحسب نوع الاسم لا بحسب وجود النفي فقط.',pattern:'ein Tisch → kein Tisch\neine Lampe → keine Lampe\nmein Tisch → nicht mein Tisch',examples:[['Das ist kein Tisch.','هذا ليس طاولة.'],['Das ist keine Lampe.','هذا ليس مصباحًا.'],['Das ist nicht mein Bett.','هذا ليس سريري.']]},
+    {title:'الضمائر er و sie و es',explanation:'يمكن استبدال الاسم المتكرر بضمير يوافق جنسه النحوي: der Tisch يصبح er، وdie Lampe تصبح sie، وdas Bett يصبح es. الضمير هنا يشير إلى الاسم ولا يترجم دائمًا كجنس طبيعي؛ فالأشياء لها جنس نحوي. يبقى الفعل مصرفًا بما يناسب الضمير المفرد: er ist، sie ist، es ist.',pattern:'der Tisch → er · die Lampe → sie · das Bett → es',examples:[['Der Tisch ist alt. Er ist nicht modern.','الطاولة قديمة. هي ليست حديثة.'],['Die Lampe ist schön. Sie ist teuer.','المصباح جميل. هو غالٍ.'],['Das Bett ist groß. Es ist bequem.','السرير كبير. إنه مريح.']]}
+  ],practice:[
+    [0,'___ Tisch ist modern.','Der',['Der','Die','Das'],'الطاولة حديثة.','Tisch اسم مذكر.'],[0,'Das ist ___ Lampe.','eine',['ein','eine','einen'],'هذا مصباح.','Lampe اسم مؤنث مع نكرة.'],[0,'Das ist ___ Bett.','ein',['ein','eine','einen'],'هذا سرير.','Bett اسم محايد مع نكرة.'],[1,'Das ist ___ Sofa.','kein',['kein','keine','nicht'],'هذه ليست أريكة.','أنفي اسمًا محايدًا.'],[1,'Das ist ___ Lampe.','keine',['kein','keine','nicht'],'هذا ليس مصباحًا.','أنفي اسمًا مؤنثًا.'],[1,'Das ist ___ mein Tisch.','nicht',['kein','keine','nicht'],'هذه ليست طاولتي.','أنفي ضمير ملكية.'],[2,'Der Tisch ist alt. ___ ist nicht modern.','Er',['Er','Sie','Es'],'الطاولة قديمة. هي ليست حديثة.','أستبدل Tisch المذكر.'],[2,'Die Lampe ist neu. ___ ist schön.','Sie',['Er','Sie','Es'],'المصباح جديد. هو جميل.','أستبدل Lampe المؤنث.'],[2,'Das Bett ist groß. ___ ist bequem.','Es',['Er','Sie','Es'],'السرير كبير. إنه مريح.','أستبدل Bett المحايد.'],[0,'___ Sofa ist teuer.','Das',['Der','Die','Das'],'الأريكة غالية.','Sofa محايد في الألمانية.']
+  ]},
+  5:{title:'Was ist das?',rules:[
+      {title:'أدوات التنكير والنفي في Nominativ: ein/eine وkein/keine',explanation:'نستخدم ein للمذكر والمحايد، وeine للمؤنث عندما نعرّف شيئًا غير محدد: ein Schlüssel، ein Buch، eine Brille. عند نفي الاسم نضيف k إلى أداة النكرة: kein Schlüssel، kein Buch، keine Brille. لا توجد أداة نكرة في الجمع، لكن النفي في الجمع يأخذ keine: keine Bücher. هذا الدرس يركز على Nominativ؛ أما المذكر في Akkusativ فيتغير لاحقًا إلى einen/keinen.',pattern:'der Schlüssel → ein Schlüssel → kein Schlüssel\ndas Buch → ein Buch → kein Buch\ndie Brille → eine Brille → keine Brille\nPlural: Bücher → keine Bücher',examples:[['Das ist ein Schlüssel.','هذا مفتاح.'],['Das ist keine Brille.','هذه ليست نظارة.'],['Das sind keine Bücher.','هذه ليست كتبًا.']]},
+    {title:'تكوين جمع الأسماء',explanation:'لا توجد نهاية واحدة لكل الجموع الألمانية؛ قد يضاف -e أو -er أو -en/-n أو -s، وقد يتغير حرف العلة إلى Umlaut، وقد لا تتغير الكلمة. أداة التعريف في الجمع هي die، لكن أداة النكرة لا تستخدم في الجمع. احفظ كل اسم مع جمعه كما تحفظه مع أداة التعريف، وانتبه للأسماء التي تستعمل غالبًا مفردًا فقط مثل Papier.',pattern:'das Buch → die Bücher · die Tasche → die Taschen\nder Tisch → die Tische · das Handy → die Handys',examples:[['zwei Bücher','كتابان'],['drei Taschen','ثلاث حقائب'],['viele Tische','طاولات كثيرة']]},
+    {title:'الخامات والأوزان والمقادير',explanation:'للتعبير عن مادة الشيء نستخدم aus ثم اسم المادة: aus Holz، aus Glas، aus Metall. وبعد aus تظهر المادة عادةً بلا أداة في هذه الأمثلة. عند ذكر كمية نضع العدد أو وحدة القياس قبل الاسم: ein Kilo Äpfel، zwei Flaschen Wasser، ein Stück Papier. بعض المواد أسماء غير معدودة وتبقى مفردة عند الحديث عن مقدار عام.',pattern:'aus + مادة: aus Holz / aus Glas\nعدد أو وحدة + اسم: zwei Kilo Äpfel · eine Flasche Wasser',examples:[['Der Bleistift ist aus Holz.','قلم الرصاص مصنوع من الخشب.'],['Ich kaufe zwei Kilo Äpfel.','أشتري كيلوغرامين من التفاح.'],['Eine Flasche Wasser, bitte.','زجاجة ماء من فضلك.']]},
+    {title:'وصف الشيء بجملة بسيطة',explanation:'تأتي الصفة الخبرية بعد sein ولا تأخذ نهاية بحسب جنس الاسم: Das Buch ist interessant، وDie Tasche ist groß. أما الاسم فيحافظ على أداة التعريف أو النكرة المناسبة. السؤال Was ist das? يجيب عنه غالبًا: Das ist ein/eine ...، والسؤال Wie ist ...? يطلب صفة أو تقييمًا.',pattern:'الاسم + sein المصرف + الصفة\nDas ist ein Buch. · Das Buch ist interessant.',examples:[['Die Tasche ist schön.','الحقيبة جميلة.'],['Das Handy ist neu.','الهاتف جديد.'],['Wie ist der Bleistift? — Er ist kurz.','كيف قلم الرصاص؟ — إنه قصير.']]}
+  ],practice:[
+    [1,'ein Buch — zwei ___.','Bücher',['Bücher','Buchs','Buche'],'كتاب واحد — كتابان.','أحوّل Buch إلى الجمع.'],[1,'eine Tasche — drei ___.','Taschen',['Taschen','Tasche','Taschens'],'حقيبة واحدة — ثلاث حقائب.','أضيف نهاية الجمع الشائعة -n.'],[1,'ein Tisch — viele ___.','Tische',['Tische','Tischs','Tischen'],'طاولة واحدة — طاولات كثيرة.','أكوّن جمع Tisch.'],[0,'Das ist ___ Schlüssel.','ein',['ein','eine','einen'],'هذا مفتاح.','Schlüssel مذكر في Nominativ.'],[2,'Der Stuhl ist aus ___.','Holz',['Holz','Holzen','Hölzer'],'الكرسي مصنوع من الخشب.','أذكر مادة بعد aus.'],[2,'Ich kaufe zwei ___ Äpfel.','Kilo',['Kilo','Kilos','Kilen'],'أشتري كيلوغرامين من التفاح.','أذكر وحدة قياس للوزن.'],[0,'Das ist ___ Brille.','eine',['ein','eine','einen'],'هذه نظارة.','Brille مؤنث في Nominativ.'],[3,'Das Buch ist ___.','interessant',['interessant','interessantes','interessante'],'الكتاب ممتع.','الصفة الخبرية بعد ist بلا نهاية.'],[0,'Das ist ___ Buch.','kein',['kein','keine','nicht'],'هذا ليس كتابًا.','أنفي اسمًا محايدًا في Nominativ.'],[0,'Das sind ___ Bücher.','keine',['kein','keine','keinen'],'هذه ليست كتبًا.','أستخدم keine مع الجمع عند النفي.']
+  ]},
+  6:{title:'Ich brauche einen Schlüssel',rules:[
+    {title:'حالة المفعول به Akkusativ',explanation:'المفعول به المباشر هو الشخص أو الشيء الذي يقع عليه الفعل. في Akkusativ يتغير المذكر المفرد فقط في أدوات التعريف والنكرة والملكية والنفي: der→den، ein→einen، mein→meinen، kein→keinen. المؤنث والمحايد والجمع لا تتغير أدواتها في هذه المقارنة الأساسية. أفعال مثل brauchen وhaben وkaufen تأخذ غالبًا مفعولًا مباشرًا.',pattern:'Nominativ → Akkusativ\nder Schlüssel → den Schlüssel\nein Schlüssel → einen Schlüssel\nkein Schlüssel → keinen Schlüssel',examples:[['Ich brauche einen Schlüssel.','أحتاج إلى مفتاح.'],['Sie kauft den Computer.','هي تشتري الحاسوب.'],['Wir haben keine Rechnung.','ليس لدينا فاتورة.']]},
+    {title:'اختيار أداة النفي kein في Akkusativ',explanation:'kein ينفي الاسم غير المعرّف ويتصرف مثل أداة النكرة. لذلك يتحول المذكر المفرد إلى keinen في المفعول به: Ich brauche keinen Schlüssel. المؤنث تحتفظ بـ keine، والمحايد بـ kein: Ich kaufe keine Tasche، Ich brauche kein Papier. إذا كان الاسم معرفًا بضمير ملكية أو أداة تعريف نستخدم nicht بدلًا من kein.',pattern:'مذكر: keinen Schlüssel · مؤنث: keine Tasche\nمحايد: kein Papier · غير ذلك: nicht meinen Schlüssel',examples:[['Ich brauche keinen Schlüssel.','لا أحتاج إلى مفتاح.'],['Sie kauft keine Tasche.','هي لا تشتري حقيبة.'],['Wir brauchen kein Papier.','لا نحتاج إلى ورق.']]},
+    {title:'موضع المفعول به مع الأفعال',explanation:'في الجملة الخبرية الألمانية يبقى الفعل المصرف في الموقع الثاني، ويأتي المفعول به بعده غالبًا. يمكن أن يسبق المفعولُ بهُ ظرفًا أو يأتي بعده بحسب التركيز، لكن أداة الحالة تظل ضرورية لفهم دوره. اسأل: ماذا/من يقع عليه الفعل؟ ثم حدّد جنس الاسم واختر صيغة Akkusativ المناسبة.',pattern:'الفاعل + الفعل المصرف + المفعول به Akkusativ\nIch brauche + einen Schlüssel.',examples:[['Ich suche den Schlüssel.','أبحث عن المفتاح.'],['Er nimmt einen Stift.','هو يأخذ قلمًا.'],['Sie schreibt eine E-Mail.','هي تكتب بريدًا إلكترونيًا.']]}
+  ],practice:[
+    [0,'Ich brauche ___ Schlüssel.','einen',['ein','einen','eine'],'أحتاج إلى مفتاح.','Schlüssel مذكر ومفعول به.'],[0,'Ich sehe ___ Computer.','den',['der','den','das'],'أرى الحاسوب.','أحوّل أداة التعريف المذكرة إلى Akkusativ.'],[0,'Sie kauft ___ Tasche.','eine',['eine','einen','einer'],'هي تشتري حقيبة.','Tasche مؤنث ولا تتغير أداتها.'],[0,'Wir lesen ___ Buch.','das',['der','den','das'],'نقرأ الكتاب.','Buch محايد في المفعول به.'],[1,'Ich brauche ___ Schlüssel.','keinen',['kein','keinen','keine'],'لا أحتاج إلى مفتاح.','نفي اسم مذكر في Akkusativ.'],[1,'Sie kauft ___ Tasche.','keine',['kein','keinen','keine'],'هي لا تشتري حقيبة.','نفي اسم مؤنث.'],[1,'Er braucht ___ Papier.','kein',['kein','keinen','keine'],'هو لا يحتاج إلى ورق.','نفي اسم محايد.'],[2,'Ich ___ einen Schlüssel.','brauche',['brauche','braucht','brauchen'],'أحتاج إلى مفتاح.','الفعل المصرف يأتي ثانيًا مع ich.'],[2,'Er nimmt ___ Stift.','einen',['ein','einen','einem'],'هو يأخذ قلمًا.','المفعول به Stift مذكر.'],[2,'Sie schreibt ___ E-Mail.','eine',['ein','eine','einen'],'هي تكتب بريدًا إلكترونيًا.','المفعول به E-Mail مؤنث.']
+  ]},
+  7:{title:'Nie arbeitest du!',rules:[
+    {title:'الأفعال المساعدة وترتيب الجملة',explanation:'الأفعال الناقصة مثل können وmüssen وwollen تتصرف مع الفاعل، ويأتي الفعل الأساسي في المصدر إلى نهاية الجملة: Ich kann gut schwimmen. الفعل المنفصل ينقسم في المضارع؛ يتصرف الجزء الأول ويذهب المقطع المنفصل إلى نهاية الجملة: Ich rufe dich an. وعند اجتماع الفعل الناقص مع فعل منفصل يبقى المصدر كاملًا في النهاية: Ich kann dich anrufen.',pattern:'Modalverb مصرف + ... + Infinitiv\nفعل منفصل: الفاعل + الفعل المصرف ... + المقطع المنفصل',examples:[['Ich kann gut schwimmen.','أستطيع السباحة جيدًا.'],['Ich rufe dich am Abend an.','أتصل بك مساءً.'],['Wir wollen Musik hören.','نريد الاستماع إلى الموسيقى.']]},
+    {title:'ظروف التكرار nie و manchmal و oft و immer',explanation:'توضح هذه الظروف كم مرة يتكرر الفعل: nie أبدًا، manchmal أحيانًا، oft غالبًا، immer دائمًا. تأتي عادةً بعد الفعل المصرف وقبل المفعول به أو بقية الجملة: Ich spiele oft Fußball. إذا بدأنا بالظرف للتأكيد، يأتي الفعل المصرف ثانيًا ثم الفاعل: Oft spiele ich Fußball. انتبه إلى أن ترتيب الفعل يبقى ثانيًا.',pattern:'الفاعل + الفعل + ظرف التكرار + بقية الجملة\nNie arbeite ich ... (الظرف أولًا، والفعل ثانيًا)',examples:[['Ich lese oft Bücher.','أقرأ الكتب غالبًا.'],['Sie spielt manchmal Tennis.','تلعب التنس أحيانًا.'],['Er tanzt nie.','هو لا يرقص أبدًا.']]},
+    {title:'الفاعل والمفعول به: Nominativ وAkkusativ',explanation:'الفاعل هو من يقوم بالفعل ويأتي في Nominativ، أما المفعول به المباشر فهو ما يقع عليه الفعل ويأتي في Akkusativ. في Ich lese ein Buch، الفاعل ich والمفعول به ein Buch؛ وفي Ich treffe den Freund يتغير der إلى den لأن Freund مذكر ومفعول به. اسأل wer? لتحديد الفاعل وwen?/was? لتحديد المفعول، ثم غيّر أداة المذكر المفرد عند الحاجة.',pattern:'Nominativ (الفاعل) + الفعل + Akkusativ (المفعول)\nDer Mann kauft den Schlüssel.',examples:[['Der Mann kauft den Schlüssel.','الرجل يشتري المفتاح.'],['Die Frau braucht einen Computer.','المرأة تحتاج إلى حاسوب.'],['Das Kind liest ein Buch.','الطفل يقرأ كتابًا.']]}
+  ],practice:[
+    [0,'Ich kann gut ___.','schwimmen',['schwimmen','schwimme','schwimmt'],'أستطيع السباحة جيدًا.','بعد können يأتي المصدر في نهاية الجملة.'],[0,'Wir wollen Musik ___.','hören',['hören','hört','hören wir'],'نريد الاستماع إلى الموسيقى.','الفعل الأساسي يبقى مصدرًا.'],[0,'Ich rufe dich später ___.','an',['an','auf','aus'],'سأتصل بك لاحقًا.','مقطع an ينفصل إلى نهاية الجملة.'],[0,'Er kann seine Mutter ___.','anrufen',['anrufen','ruft an','anruft'],'يستطيع الاتصال بأمه.','بعد modal يبقى الفعل المنفصل كاملًا مصدرًا.'],[1,'Ich spiele ___ Fußball.','oft',['oft','ofts','ofter'],'ألعب كرة القدم غالبًا.','أضع ظرف التكرار بعد الفعل.'],[1,'Sie tanzt ___.','manchmal',['manchmal','manchmals','manchmalen'],'هي ترقص أحيانًا.','ظرف تكرار قبل نهاية الجملة.'],[1,'Er spielt ___ Tennis.','nie',['nie','niemalsen','niee'],'هو لا يلعب التنس أبدًا.','أختار ظرف النفي التكراري.'],[2,'Ich lese ___ Roman.','einen',['ein','einen','einem'],'أقرأ رواية.','Roman مذكر مفعول به.'],[2,'Sie hört ___.','Musik',['Musik','Musiken','Musike'],'هي تستمع إلى الموسيقى.','أكمل مفعول الفعل hören.'],[2,'Wir treffen ___ Freund.','den',['der','den','dem'],'نلتقي الصديق.','Freund مفعول به مذكر.']
+  ]},
+  8:{title:'Kein Problem. Ich habe Zeit!',rules:[
+    {title:'السؤال عن الوقت وقراءة الساعة',explanation:'للسؤال عن الوقت استخدم Wie spät ist es? أو Wie viel Uhr ist es? في التعبير الرسمي تُذكر الساعة ثم الدقائق: Es ist acht Uhr dreißig. وفي الكلام اليومي تستخدم halb مع الساعة التالية؛ halb sieben تعني السادسة والنصف، لا السابعة والنصف. Viertel nach تعني وربع، وViertel vor تعني إلا ربعًا في الاستعمال الشائع.',pattern:'8:00 = acht Uhr · 8:15 = Viertel nach acht\n6:30 = halb sieben · 8:45 = Viertel vor neun',examples:[['Es ist sieben Uhr.','الساعة السابعة.'],['Der Film beginnt um halb neun.','يبدأ الفيلم في الثامنة والنصف.'],['Wie spät ist es?','كم الساعة؟']]},
+    {title:'حروف الجر الزمنية am و um',explanation:'نستخدم um مع وقت الساعة المحدد: um acht Uhr، ونستخدم am مع أيام الأسبوع وأجزاء اليوم التي تعامل كفترة: am Montag، am Abend، am Wochenende. لا نخلط am مع الساعة الدقيقة؛ نقول Der Kurs beginnt um neun Uhr. أسماء الأيام والأشهر تبدأ بحرف كبير لأنها أسماء ألمانية.',pattern:'um + ساعة: um 9 Uhr\nam + يوم/فترة: am Montag · am Abend · am Wochenende',examples:[['Wir treffen uns am Samstag.','نلتقي يوم السبت.'],['Der Kurs beginnt um neun Uhr.','تبدأ الدورة الساعة التاسعة.'],['Am Abend habe ich Zeit.','لدي وقت في المساء.']]},
+    {title:'الفترة من ... إلى ...: von ... bis',explanation:'تحدد von ... bis بداية الفترة ونهايتها: von neun bis elf Uhr، أي من التاسعة إلى الحادية عشرة. يمكن ذكر وحدة الزمن بعد الطرفين أو بعد الأخير بحسب الصياغة. عند الحديث عن يوم أو وقت محدد استخدم حرف الجر المناسب أيضًا: von Montag bis Freitag، لكن الموعد عند الساعة يبقى um.',pattern:'von + البداية + bis + النهاية\nvon 9 bis 11 Uhr · von Montag bis Freitag',examples:[['Ich arbeite von neun bis fünf.','أعمل من التاسعة إلى الخامسة.'],['Der Laden ist von Montag bis Samstag geöffnet.','المتجر مفتوح من الاثنين إلى السبت.'],['Hast du um sechs Uhr Zeit?','هل لديك وقت الساعة السادسة؟']]}
+  ],practice:[
+    [0,'Es ist 6:30: halb ___.','sieben',['sechs','sieben','acht'],'الساعة السادسة والنصف.','أقرأ halb مع الساعة التالية.'],[0,'Es ist 8:00: acht ___.','Uhr',['Uhr','Stunde','Zeit'],'الساعة الثامنة تمامًا.','أذكر الساعة بصيغة رسمية.'],[0,'Viertel nach acht bedeutet ___.','8:15',['8:15','8:30','7:45'],'الثامنة والربع.','أفسر Viertel nach.'],[1,'Wir treffen uns ___ Samstag.','am',['am','um','im'],'نلتقي يوم السبت.','أستخدم حرف الجر مع يوم.'],[1,'Der Film beginnt ___ acht Uhr.','um',['am','um','von'],'يبدأ الفيلم الساعة الثامنة.','أستخدم حرف الجر مع ساعة محددة.'],[1,'Ich lerne ___ Abend.','am',['am','um','von'],'أدرس في المساء.','أستخدم am مع فترة اليوم.'],[2,'Der Kurs dauert ___ neun ___ elf Uhr.','von ... bis',['am ... um','von ... bis','um ... am'],'تستمر الدورة من التاسعة إلى الحادية عشرة.','أحدد بداية الفترة ونهايتها.'],[2,'Ich arbeite ___ Montag ___ Freitag.','von ... bis',['von ... bis','am ... um','um ... bis'],'أعمل من الاثنين إلى الجمعة.','أحدد فترة أيام.'],[1,'Hast du ___ Wochenende Zeit?','am',['am','um','von'],'هل لديك وقت في عطلة نهاية الأسبوع؟','تعبير ثابت مع Wochenende.'],[1,'Der Zug fährt ___ 17 Uhr.','um',['am','um','bis'],'ينطلق القطار الساعة الخامسة مساءً.','وقت محدد على الساعة.']
+  ]},
+  9:{title:'Was machst du in der Freizeit?',rules:[
+    {title:'تغير حرف العلة في fahren و lesen و sehen',explanation:'في بعض الأفعال يتغير حرف العلة في الجذر مع du وer/sie/es فقط. fahren تتحول a إلى ä: du fährst، er fährt؛ وlesen وsehen تتحول e إلى ie: du liest/er liest، du siehst/er sieht. تبقى ich وwir على الجذر المعتاد: ich fahre، ich lese، ich sehe؛ wir fahren/lesen/sehen. أضف نهاية التصريف بعد تغيير الجذر.',pattern:'fahren: ich fahre · du fährst · er fährt\nlesen: ich lese · du liest · sie liest\nsehen: ich sehe · du siehst · er sieht',examples:[['Fährst du am Wochenende nach Berlin?','هل تسافر إلى برلين في عطلة الأسبوع؟'],['Liest du gern Romane?','هل تحب قراءة الروايات؟'],['Er sieht einen Film.','هو يشاهد فيلمًا.']]},
+    {title:'الأفعال المنفصلة',explanation:'يتكون الفعل المنفصل من بادئة وفعل، مثل aufstehen وfernsehen وeinkaufen. في الجملة الرئيسية بالمضارع يتصرف الجزء الفعلي ويأتي منفصلًا، بينما تنتقل البادئة إلى نهاية الجملة: Ich stehe früh auf. عند استخدام فعل ناقص يبقى الفعل المنفصل كاملًا في المصدر في نهاية الجملة: Ich möchte früh aufstehen. لا تنفصل البادئة في المصدر أو في نهاية الجملة التابعة.',pattern:'مضارع رئيسي: الفاعل + الفعل المصرف ... + البادئة\nمع Modalverb: الفعل الناقص ... + الفعل كاملًا مصدرًا',examples:[['Ich stehe um sieben Uhr auf.','أستيقظ الساعة السابعة.'],['Wir kaufen am Samstag ein.','نتسوق يوم السبت.'],['Er sieht am Abend fern.','يشاهد التلفاز مساءً.']]},
+    {title:'ترتيب الظروف وتحديد وقت الفراغ',explanation:'تأتي عبارات الزمن مثل am Wochenende غالبًا في بداية الجملة أو بعد الفعل/الفاعل. إذا بدأت بها الجملة، يبقى الفعل المصرف في الموقع الثاني ويتبعه الفاعل: Am Samstag fahre ich Rad. ويمكن ذكر الهواية باستخدام gern بعد الفعل: Ich lese gern. لا تضف أداة مع أسماء أنشطة مثل Lesen عندما تستخدمها كاسم نشاط في التعبير Meine Hobbys sind Lesen und Schwimmen.',pattern:'Am Wochenende + الفعل المصرف + الفاعل ...\nالفعل + gern + النشاط',examples:[['Am Samstag spiele ich Fußball.','ألعب كرة القدم يوم السبت.'],['Ich höre gern Musik.','أحب الاستماع إلى الموسيقى.'],['Meine Hobbys sind Lesen und Schwimmen.','هواياتي القراءة والسباحة.']]}
+  ],practice:[
+    [0,'Du ___ nach Berlin.','fährst',['fahre','fährst','fahren'],'أنت تسافر إلى برلين.','تصريف fahren مع du.'],[0,'Er ___ mit dem Bus.','fährt',['fahre','fährst','fährt'],'هو يذهب بالحافلة.','تتغير a إلى ä مع er.'],[0,'Du ___ einen Film.','siehst',['sehe','siehst','sehen'],'أنت تشاهد فيلمًا.','تتغير e إلى ie مع du في sehen.'],[0,'Sie ___ ein Buch.','liest',['lese','liest','lesen'],'هي تقرأ كتابًا.','تتغير e إلى ie مع sie المفرد.'],[1,'Ich stehe früh ___.','auf',['auf','stehe','stehen'],'أستيقظ مبكرًا.','أنقل بادئة auf إلى نهاية الجملة.'],[1,'Er sieht am Abend ___.','fern',['fern','sieht','sehen'],'يشاهد التلفاز مساءً.','الفعل fernsehen ينفصل في الجملة الرئيسية.'],[1,'Wir möchten am Samstag ___.','einkaufen',['kaufen ein','einkaufen','einkauft'],'نريد التسوق يوم السبت.','بعد möchten أستخدم مصدر الفعل كاملًا.'],[2,'Am Wochenende ___ ich Rad.','fahre',['fahre','ich fahre','fahren'],'أركب الدراجة في عطلة الأسبوع.','الفعل يظل ثانيًا بعد ظرف في البداية.'],[2,'Ich ___ gern Musik.','höre',['höre','hören','hört'],'أحب الاستماع إلى الموسيقى.','أضع gern بعد الفعل المصرف.'],[1,'Du ___ um sieben Uhr ___.','stehst ... auf',['stehst ... auf','aufstehst','steht ... auf'],'أنت تستيقظ الساعة السابعة.','أصرف الفعل وأفصل بادئته.']
+  ]},
+  10:{title:'Essen und Trinken',rules:[
+    {title:'möchten للطلب والرغبة',explanation:'möchten صيغة مهذبة للتعبير عما ترغب فيه أو لطلب شيء. يتصرف الفعل بحسب الفاعل: ich möchte، du möchtest، er/sie möchte، wir möchten، ihr möchtet، sie/Sie möchten. يأتي الشيء المطلوب بعده، وإذا أضفت فعلًا آخر فيأتي ذلك الفعل مصدرًا في نهاية الجملة: Ich möchte bezahlen.',pattern:'ich möchte · du möchtest · er/sie möchte\nwir möchten · ihr möchtet · Sie möchten',examples:[['Ich möchte einen Tee, bitte.','أريد شايًا من فضلك.'],['Möchten Sie etwas essen?','هل ترغب حضرتك في تناول شيء؟'],['Wir möchten bezahlen.','نريد أن ندفع.']]},
+    {title:'Akkusativ مع الطعام والشراب',explanation:'الفعلين essen وtrinken يأخذان ما نأكله أو نشربه مفعولًا به مباشرًا. لذلك يتغير المذكر المفرد من ein إلى einen، ومن kein إلى keinen: einen Apfel، keinen Kaffee. المؤنث يأخذ eine/keine، والمحايد ein/kein. أسماء المواد غير المعدودة مثل Wasser وBrot تأتي كثيرًا بلا أداة عند الحديث العام.',pattern:'der Apfel → einen Apfel · die Suppe → eine Suppe\ndas Brot → ein Brot · kein Tee → keinen Tee',examples:[['Ich esse einen Apfel.','آكل تفاحة.'],['Sie trinkt eine Cola.','تشرب كولا.'],['Wir möchten kein Fleisch.','لا نريد لحمًا.']]},
+    {title:'gern وlieber للتفضيل',explanation:'gern يوضح أنك تحب فعلًا ما، ويأتي عادةً بعد الفعل المصرف: Ich esse gern Gemüse. lieber تعني «أفضل» وتستخدم للمقارنة أو الاختيار: Ich trinke lieber Tee. للسؤال عن تفضيل شخص اسأل: Was möchtest du essen? أو Was isst du gern? أما الطلب المهذب فيستخدم möchten.',pattern:'الفعل + gern + المفعول\nالفعل + lieber + البديل المفضّل',examples:[['Ich esse gern Obst.','أحب أكل الفاكهة.'],['Ich trinke lieber Wasser.','أفضل شرب الماء.'],['Was möchtest du bestellen?','ماذا ترغب في طلبه؟']]}
+  ],practice:[
+    [0,'Ich ___ einen Kaffee, bitte.','möchte',['möchte','möchtest','möchten'],'أريد قهوة من فضلك.','تصريف möchten مع ich.'],[0,'___ Sie etwas essen?','Möchten',['Möchtest','Möchten','Möchte'],'هل ترغب حضرتك في تناول شيء؟','صيغة المخاطب الرسمي.'],[0,'Wir ___ bezahlen.','möchten',['möchte','möchtet','möchten'],'نريد أن ندفع.','تصريف möchten مع wir.'],[0,'Du ___ einen Tee.','möchtest',['möchte','möchtest','möchten'],'أنت تريد شايًا.','تصريف möchten مع du.'],[1,'Ich esse ___ Apfel.','einen',['ein','einen','eine'],'آكل تفاحة.','Apfel مذكر مفعول به.'],[1,'Sie trinkt ___ Suppe.','eine',['ein','eine','einen'],'هي تشرب حساءً.','Suppe مؤنث مفعول به.'],[1,'Wir möchten ___ Kaffee.','keinen',['kein','keinen','keine'],'لا نريد قهوة.','Kaffee مذكر منفي في Akkusativ.'],[1,'Er isst ___ Brot.','ein',['ein','einen','eine'],'يأكل خبزًا.','Brot محايد.'],[2,'Ich esse ___ Gemüse.','gern',['gern','gerne ich','lieber'],'أحب أكل الخضار.','أعبر عن فعل أحبه.'],[2,'Ich trinke ___ Tee als Kaffee.','lieber',['gern','lieber','gerne'],'أفضل الشاي على القهوة.','أعبر عن تفضيل بين بديلين.']
+  ]},
+  11:{title:'Was hast du heute gemacht?',rules:[
+    {title:'بناء Perfekt مع haben',explanation:'Perfekt هو الزمن الأكثر شيوعًا في الحديث اليومي عن الماضي. يتكون من haben المصرف في الموقع الثاني، ثم بقية الجملة، ثم Partizip II في النهاية: Ich habe heute gearbeitet. نستخدم haben مع معظم الأفعال، خصوصًا الأفعال التي لها مفعول به أو لا تدل على انتقال من مكان/حالة. يتغير haben بحسب الضمير: ich habe، du hast، er hat، wir haben.',pattern:'فاعل + haben المصرف + ... + Partizip II\nIch habe gelernt. · Wir haben gearbeitet.',examples:[['Ich habe heute gelernt.','درست اليوم.'],['Sie hat Kaffee getrunken.','شربت القهوة.'],['Wir haben die Hausaufgaben gemacht.','قمنا بالواجبات.']]},
+    {title:'تكوين Partizip II',explanation:'في الأفعال المنتظمة يتكون Partizip II غالبًا من ge + جذر الفعل + t: lernen → gelernt، machen → gemacht. إذا انتهى الجذر بـ t أو d تضاف غالبًا -et لتسهيل النطق: arbeiten → gearbeitet. الأفعال المنتهية بـ -ieren لا تأخذ ge: studieren → studiert. بعض الأفعال غير المنتظمة تغير الجذر ويجب حفظ صورتها: trinken → getrunken.',pattern:'lernen → gelernt · machen → gemacht\narbeiten → gearbeitet · studieren → studiert\ntrinken → getrunken',examples:[['Ich habe gelernt.','تعلمت.'],['Er hat gearbeitet.','عمل.'],['Wir haben Wasser getrunken.','شربنا الماء.']]},
+    {title:'ترتيب الكلمات والظرف الزمني',explanation:'في Perfekt يبقى الفعل المساعد المصرف في الموقع الثاني، بينما ينتقل Partizip II إلى نهاية الجملة الرئيسية. يمكن وضع ظرف الزمن في البداية، وعندها يأتي الفعل المساعد ثانيًا: Gestern habe ich gearbeitet. لا تصرف Partizip II بحسب الفاعل، بل يتغير المساعد وحده. في السؤال نعم/لا ينتقل haben إلى البداية: Hast du gelernt?',pattern:'Gestern + haben المصرف + الفاعل + ... + Partizip II\nسؤال: Hast + الفاعل + ... + gelernt?',examples:[['Gestern habe ich gearbeitet.','عملت أمس.'],['Hast du heute gelernt?','هل درست اليوم؟'],['Am Abend hat sie ferngesehen.','شاهدت التلفاز مساءً.']]},
+    {title:'حروف الجر الزمنية von ... bis و ab',explanation:'تحدد von ... bis بداية الفترة ونهايتها: von 8 Uhr bis 16 Uhr (من الثامنة حتى الرابعة). أما ab فتعني «ابتداءً من» وتحدد بداية فترة مستمرة أو موعد يبدأ لاحقًا: ab morgen، ab Montag، ab 8 Uhr. يأتي اسم اليوم أو الوقت بعد حرف الجر مباشرة، ويظل الفعل المصرف في موقعه الثاني إذا بدأت الجملة بعبارة ab.',pattern:'von + بداية الفترة + bis + نهايتها\nab + نقطة البداية: ab morgen · ab Montag · ab 8 Uhr',examples:[['Ich arbeite von 8 Uhr bis 16 Uhr.','أعمل من الثامنة حتى الرابعة.'],['Ab morgen habe ich Urlaub.','ابتداءً من الغد أكون في إجازة.'],['Der Deutschkurs beginnt ab Montag.','تبدأ دورة الألمانية ابتداءً من الاثنين.']]}
+  ],practice:[
+    [0,'Ich ___ heute gelernt.','habe',['habe','hast','hat'],'درست اليوم.','أختار المساعد مع ich.'],[0,'Du ___ Kaffee getrunken.','hast',['habe','hast','hat'],'شربت القهوة.','أختار المساعد مع du.'],[1,'lernen → ___.','gelernt',['gelern','gelernt','gelernen'],'التصريف الثالث من lernen.','فعل منتظم: ge + الجذر + t.'],[1,'arbeiten → ___.','gearbeitet',['gearbeitet','gearbeit','gearbeiten'],'التصريف الثالث من arbeiten.','أضيف -et بعد الجذر المنتهي بصوت مناسب.'],[1,'studieren → ___.','studiert',['gestudiert','studiert','studieren'],'التصريف الثالث من studieren.','الأفعال المنتهية بـ -ieren لا تأخذ ge.'],[2,'Gestern ___ ich Deutsch ___.','habe ... gelernt',['habe ... gelernt','habe gelernt ich','hat ... gelernt'],'درست الألمانية أمس.','المساعد ثانيًا وPartizip في النهاية.'],[2,'___ du heute gelernt?','Hast',['Hast','Habe','Hat'],'هل درست اليوم؟','في سؤال نعم/لا يتقدم المساعد.'],[3,'Ich arbeite ___ acht Uhr ___ sechzehn Uhr.','von ... bis',['von ... bis','ab ... bis','um ... bis'],'أعمل من الثامنة حتى الرابعة.','von...bis تحدد طرفي فترة.'],[3,'___ morgen habe ich Urlaub.','Ab',['Ab','Von','Bis'],'ابتداءً من الغد أكون في إجازة.','ab تحدد بداية الفترة.'],[3,'Der Deutschkurs beginnt ___ Montag.','ab',['ab','von','bis'],'تبدأ الدورة ابتداءً من الاثنين.','أستخدم ab مع نقطة بداية.']
+  ]},
+  12:{title:'Was ist denn hier passiert?',rules:[
+    {title:'Perfekt مع sein',explanation:'نستخدم sein مساعدًا في Perfekt مع كثير من أفعال الانتقال من مكان إلى آخر أو التغير من حالة إلى حالة، مثل gehen وfahren وfliegen، وكذلك بعض الأفعال الشائعة مثل bleiben. يتصرف sein بحسب الفاعل: ich bin، du bist، er ist، wir sind. يبقى Partizip II في نهاية الجملة كما في Perfekt مع haben.',pattern:'فاعل + sein المصرف + ... + Partizip II\nIch bin nach Berlin gefahren. · Wir sind gereist.',examples:[['Ich bin nach Spanien gereist.','سافرت إلى إسبانيا.'],['Er ist nach Hause gegangen.','ذهب إلى المنزل.'],['Wir sind lange geblieben.','بقينا طويلًا.']]},
+    {title:'كيف أختار بين haben وsein؟',explanation:'اسأل هل يصف الفعل انتقالًا أو تغيرًا في الحالة؟ إذا كان نعم، فغالبًا يستخدم sein: gehen → ist gegangen، einschlafen → ist eingeschlafen. معظم الأفعال الأخرى تستخدم haben: feiern → hat gefeiert، tanzen → hat getanzt. لا يكفي وجود حركة جسدية وحده؛ المهم نمط الفعل واستعماله، لذا احفظ الأفعال الشائعة مع مساعدها وصيغتها الماضية.',pattern:'انتقال/تغير: sein + Partizip II\nمعظم الأفعال الأخرى: haben + Partizip II',examples:[['Sie ist nach Wien gefahren.','ذهبت إلى فيينا.'],['Wir haben gefeiert.','احتفلنا.'],['Es hat geregnet.','أمطرت.']]},
+    {title:'Präteritum من sein وhaben: war وhatte',explanation:'في الكلام اليومي، كثيرًا ما نستخدم Perfekt للماضي، لكن sein وhaben يشيعان جدًا بصيغة Präteritum لأنها أخف: ich war، du warst، er/sie war، wir waren، ihr wart، sie/Sie waren؛ وich hatte، du hattest، er/sie hatte، wir hatten، ihr hattet، sie/Sie hatten. تستخدم war لوصف حالة أو مكان في الماضي، وhatte لما كان لدى الشخص. هذه الصيغ لا تحتاج فعلًا مساعدًا آخر.',pattern:'sein: ich war · du warst · er war · wir waren · ihr wart · Sie waren\nhaben: ich hatte · du hattest · er hatte · wir hatten · ihr hattet · Sie hatten',examples:[['Ich war im Urlaub.','كنت في إجازة.'],['Wir waren in München.','كنا في ميونخ.'],['Sie hatte eine schöne Reise.','كانت لديها رحلة جميلة.']]}
+  ],practice:[
+    [0,'Ich ___ nach Berlin gefahren.','bin',['bin','habe','ist'],'سافرت إلى برلين.','fahren انتقال ويأخذ sein.'],[0,'Du ___ nach Hause gegangen.','bist',['bist','hast','sind'],'ذهبت إلى المنزل.','تصريف sein مع du.'],[0,'Wir ___ nach Wien gereist.','sind',['sind','haben','ist'],'سافرنا إلى فيينا.','تصريف sein مع wir.'],[1,'Wir ___ zusammen gefeiert.','haben',['sind','haben','seid'],'احتفلنا معًا.','feiern يأخذ haben.'],[1,'Es ___ gestern geregnet.','hat',['ist','hat','haben'],'أمطرت أمس.','regnen يأخذ haben.'],[1,'Er ___ lange geblieben.','ist',['hat','ist','sind'],'بقي طويلًا.','bleiben من الأفعال التي تأخذ sein.'],[2,'Ich ___ im Urlaub.','war',['war','hatte','bin'],'كنت في إجازة.','Präteritum من sein مع ich.'],[2,'Wir ___ in München.','waren',['war','waren','hatten'],'كنا في ميونخ.','Präteritum من sein مع wir.'],[2,'Sie ___ eine Karte.','hatte',['war','hatte','hatten'],'كان لديها بطاقة.','Präteritum من haben مع sie المفرد.'],[2,'Du ___ viel Zeit.','hattest',['hatte','hattest','warst'],'كان لديك وقت كثير.','Präteritum من haben مع du.']
+  ]}
+};
+
+const coursebookDialogues = {
+  1:[['Nicole','Könnten Sie Ihren Familiennamen bitte buchstabieren?','هل يمكنك تهجئة اسم العائلة من فضلك؟'],['Peter','Müller schreibt man M-Ü-L-L-E-R.','يُكتب مولر هكذا: M-Ü-L-L-E-R.'],['Nicole','Danke, jetzt habe ich den Namen richtig notiert.','شكرًا، دوّنت الاسم الآن بشكل صحيح.']],
+  2:[['Lukas','Könnten Sie Ihre Telefonnummer noch einmal sagen?','هل يمكنك ذكر رقم هاتفك مرة أخرى؟'],['Maria','Natürlich. Ich schreibe ihn auch auf die Karte.','بالتأكيد. سأكتبه أيضًا على البطاقة.'],['Lukas','Prima, dann melde ich mich heute Abend.','رائع، سأتواصل معك هذا المساء.']],
+  3:[['Lena','Wer ist die Frau auf dem Foto?','من السيدة الموجودة في الصورة؟'],['Max','Das ist meine Tante Eva. Sie wohnt in Bonn.','هذه عمتي إيفا. تسكن في بون.'],['Lena','Und der Junge neben ihr ist dein Cousin?','وهل الصبي بجانبها ابن عمك؟']],
+  4:[['Verkäufer','Suchen Sie einen Tisch für die Küche?','هل تبحث عن طاولة للمطبخ؟'],['Kundin','Ja, aber dieser Tisch ist mir zu teuer.','نعم، لكن هذه الطاولة غالية جدًا بالنسبة إليّ.'],['Verkäufer','Der kleinere Tisch dort kostet nur achtzig Euro.','الطاولة الأصغر هناك سعرها ثمانون يورو فقط.']],
+  5:[['Anna','Ist dein Wörterbuch auch in der Schultasche?','هل قاموسك أيضًا في الحقيبة المدرسية؟'],['Ben','Nein, ich habe nur mein Heft und zwei Stifte dabei.','لا، معي فقط كراستي وقلمان.'],['Anna','Dann leihen wir uns das Buch zusammen aus.','إذًا نستعير الكتاب معًا.']],
+  6:[['Kundin','Entschuldigung, wo finde ich den Reis?','عذرًا، أين أجد الأرز؟'],['Verkäufer','Im zweiten Gang, direkt neben dem Öl.','في الممر الثاني، بجانب الزيت مباشرة.'],['Kundin','Danke, dann nehme ich noch eine Packung.','شكرًا، سآخذ عبوة أخرى إذًا.']],
+  7:[['Mieterin','Kann ich zuerst die Küche sehen?','هل يمكنني رؤية المطبخ أولًا؟'],['Vermieter','Natürlich. Sie ist gleich neben dem Wohnzimmer.','بالتأكيد. إنها بجانب غرفة المعيشة مباشرة.'],['Mieterin','Der Balkon gefällt mir besonders gut.','أعجبتني الشرفة على نحو خاص.']],
+  8:[['Mutter','Wann stehst du morgen auf?','متى ستستيقظ غدًا؟'],['Sohn','Um halb sieben. Danach packe ich meine Tasche.','في السادسة والنصف. وبعدها أجهز حقيبتي.'],['Mutter','Dann frühstücken wir gemeinsam.','إذًا سنتناول الفطور معًا.']],
+  9:[['Mira','Nimmst du deine Gitarre zum Ausflug mit?','هل ستأخذ غيتارك في الرحلة؟'],['Omar','Ja, und du bringst dein neues Buch mit.','نعم، وأنت ستحضر كتابك الجديد.'],['Mira','Abgemacht. Wir treffen uns am Sonntag im Park.','اتفقنا. نلتقي يوم الأحد في الحديقة.']],
+  10:[['Touristin','Hält dieser Bus am Museum?','هل تتوقف هذه الحافلة عند المتحف؟'],['Passant','Nein, Sie müssen am Rathaus umsteigen.','لا، يجب أن تغيّر وسيلة النقل عند مبنى البلدية.'],['Touristin','Vielen Dank, dann kaufe ich dort ein Ticket.','شكرًا جزيلًا، سأشتري تذكرة من هناك.']],
+  11:[['Personalchef','Welche Erfahrung haben Sie in diesem Beruf?','ما الخبرة التي لديك في هذه المهنة؟'],['Bewerberin','Ich habe zwei Jahre in einer kleinen Firma gearbeitet.','عملت سنتين في شركة صغيرة.'],['Personalchef','Das passt gut zu unserem Team.','هذا يناسب فريقنا جيدًا.']],
+  12:[['Mona','Hast du schon eine Karte aus Wien geschickt?','هل أرسلت بطاقة من فيينا؟'],['Samir','Ja, meine Eltern bekommen sie nächste Woche.','نعم، سيستلمها والداي الأسبوع المقبل.'],['Mona','Wie schön! Ich wünsche dir noch sonnige Tage.','كم هذا جميل! أتمنى لك أيامًا مشمسة أخرى.']]
+};
+
+const coursebookVocabularySources = {
+  1:[1,2,3],2:[11,2,1],3:[3,1,2],4:[4,7,5],5:[5,4,6],6:[5,4,6],
+  7:[9,7,8],8:[8,9,7],9:[9,7,8],10:[6,9,5],11:[8,11,9],12:[12,9,8]
+};
+const coursebookAdverbs = [
+  ['immer','دائمًا','Ich lerne immer am Abend.'],['oft','غالبًا','Ich lese oft ein Buch.'],['manchmal','أحيانًا','Manchmal spiele ich Fußball.'],['nie','أبدًا','Ich komme nie zu spät.'],['selten','نادرًا','Wir essen selten im Restaurant.'],['häufig','بكثرة','Sie telefoniert häufig mit ihrer Mutter.'],['meistens','في الغالب','Meistens fahre ich mit dem Bus.'],['gewöhnlich','عادةً','Gewöhnlich stehe ich früh auf.'],['täglich','يوميًا','Ich übe täglich Deutsch.'],['heute','اليوم','Heute arbeite ich zu Hause.'],['morgen','غدًا','Morgen besuchen wir unsere Freunde.'],['gestern','أمس','Gestern habe ich lange gelernt.'],['jetzt','الآن','Jetzt brauche ich eine Pause.'],['später','لاحقًا','Wir sprechen später darüber.'],['früh','مبكرًا','Am Sonntag stehe ich früh auf.'],['spät','متأخرًا','Der Zug kommt spät an.'],['danach','بعد ذلك','Danach trinken wir einen Kaffee.'],['zuerst','أولًا','Zuerst kaufe ich die Lebensmittel ein.'],['bald','قريبًا','Der Deutschkurs beginnt bald.'],['sofort','فورًا','Bitte rufen Sie mich sofort an.'],['gern','بكل سرور','Ich höre gern Musik.'],['lieber','بشكل أفضل','Ich trinke lieber Tee.'],['sehr','جدًا','Das Essen schmeckt sehr gut.'],['auch','أيضًا','Meine Schwester spricht auch Deutsch.'],['nur','فقط','Heute habe ich nur eine Stunde Zeit.'],['zusammen','معًا','Wir lernen zusammen für die Prüfung.'],['allein','وحدي','Am Abend koche ich allein.'],['hier','هنا','Hier ist der Bahnhof.'],['dort','هناك','Dort steht der Bus.'],['draußen','في الخارج','Die Kinder spielen draußen.'],['drinnen','في الداخل','Wir warten drinnen.'],['vielleicht','ربما','Vielleicht gehen wir heute ins Kino.'],['leider','للأسف','Leider habe ich heute keine Zeit.'],['natürlich','بالطبع','Natürlich helfe ich dir.'],['fast','تقريبًا','Der Zug ist fast pünktlich.'],['schon','من قبل / بالفعل','Hast du schon gegessen?'],['noch','ما زال / أيضًا','Möchtest du noch einen Tee?'],['wieder','مرة أخرى','Kannst du das bitte wiederholen?'],['links','يسارًا','Gehen Sie hier links.'],['rechts','يمينًا','Biegen Sie an der Ecke rechts ab.']
+];
+
+function coursebookVocabularyExtras(lessonNumber, category){
+  const sources=coursebookVocabularySources[lessonNumber]||[lessonNumber];
+  if(category==='noun'){
+    const rows=sources.flatMap(number=>coursebookLessons[number].nouns.map(([word,plural,mean])=>({type:'noun',word,plural,mean})));
+    if(lessonNumber===6) rows.unshift(...techWords.map(item=>({type:'noun',word:`${item.gender} ${item.word}`,plural:'',mean:item.mean})));
+    if(lessonNumber===2) rows.push(...jobs.flatMap(job=>[
+      {type:'noun',word:`der ${job.m}`,plural:'Berufe',mean:job.mean.split(' / ')[0]},
+      {type:'noun',word:`die ${job.f}`,plural:'Berufe',mean:job.mean.split(' / ')[1]}
+    ]));
+    if(lessonNumber===4) rows.push(...furniture.map(item=>({type:'noun',word:item.word,plural:'',mean:item.mean,sentence:`Das ist ${item.word}.`})));
+    if(lessonNumber===5) rows.push(...objects.map(item=>({type:'noun',word:`${item.gender} ${item.word}`,plural:'',mean:item.mean})));
+    if(lessonNumber===8) rows.push(...days.map(([word,mean])=>({type:'noun',word:`der ${word}`,plural:'',mean})));
+    if(lessonNumber===10) rows.push(...food.map(item=>({type:'noun',word:`${item.gender} ${item.word}`,plural:'',mean:item.mean,sentence:item.sentence})));
+    if(lessonNumber===12) rows.push(...feste.map(item=>({type:'noun',word:item.gender?`${item.gender} ${item.word}`:item.word,plural:'',mean:item.mean})));
+    return [...rows,...nounMaster].map(item=>({...item,type:'noun'}));
+  }
+  if(category==='verb'){
+    const rows=sources.flatMap(number=>coursebookLessons[number].verbs.map(([word,mean,present,participle,aux])=>({type:'verb',word,mean,present:present.trim(),participle:participle.trim(),aux})));
+    rows.push(...verbMaster);
+    if(lessonNumber===7||lessonNumber===9) rows.push(...hobbies.map(item=>({type:'verb',word:item.word,mean:item.mean,sentence:item.sentence})));
+    if(lessonNumber===10) rows.push(...food.map(item=>({type:'verb',word:item.drink?'trinken':'essen',mean:item.drink?'يشرب':'يأكل',sentence:item.sentence})));
+    if(lessonNumber===11) rows.push(...routine.map(item=>({type:'verb',word:item.word,mean:item.mean,sentence:item.sentence})));
+    if(lessonNumber===12) rows.push(...feste.map(item=>({type:'verb',word:'feiern',mean:'يحتفل',sentence:`Wir haben ${item.word} gefeiert.`})));
+    return rows;
+  }
+  if(category==='adj'){
+    const rows=sources.flatMap(number=>coursebookLessons[number].adjectives.map(([word,mean])=>({type:'adj',word,mean})));
+    rows.push(...adjectiveMaster);
+    if(lessonNumber===4) rows.push(...furnitureAdjectives.map(([word,mean])=>({type:'adj',word,mean,sentence:`Der Tisch ist ${word}.`})));
+    if(lessonNumber===10) rows.push(...adjectiveMaster.filter(item=>['frisch','süß','sauer','salzig','warm','kalt','gesund','lecker'].includes(item.word)));
+    return rows;
+  }
+  if(category==='adverb') return coursebookAdverbs.map(([word,mean,sentence])=>({type:'adverb',word,mean,sentence}));
+  return [];
+}
+
+function normalizeCoursebookWord(word){
+  return word.toLocaleLowerCase('de-DE').replace(/^(der|die|das)\s+/,'').trim();
+}
+
+function uniqueCoursebookRows(rows){
+  const seen=new Set();
+  return rows.filter(item=>{
+    const key=normalizeCoursebookWord(item.word);
+    if(seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function coursebookRowsFor(lessonNumber, category){
+  const lesson=coursebookLessons[lessonNumber];
+  if(!lesson) return [];
+  if(category==='adverb'){
+    const existingWords=new Set(['noun','verb','adj'].flatMap(type=>coursebookRowsFor(lessonNumber,type)).map(item=>normalizeCoursebookWord(item.word)));
+    return uniqueCoursebookRows(coursebookVocabularyExtras(lessonNumber,'adverb').filter(item=>!existingWords.has(normalizeCoursebookWord(item.word)))).slice(0,30);
+  }
+  if(category==='noun'||category==='verb'||category==='adj'){
+    const base=category==='noun'?lesson.nouns.map(([word,plural,mean,imageTags])=>({type:'noun',word,plural,mean,imageTags})):
+      category==='verb'?lesson.verbs.map(([word,mean,present,participle,aux,imageTags])=>({type:'verb',word,mean,present:present.trim(),participle:participle.trim(),aux,imageTags})):
+      category==='adj'?lesson.adjectives.map(([word,mean,imageTags])=>({type:'adj',word,mean,imageTags})):[];
+    const rows=uniqueCoursebookRows([...base,...coursebookVocabularyExtras(lessonNumber,category)]).slice(0,30);
+    const verbExamples={'kennenlernen':'Ich lerne neue Leute kennen.','kosten':'Der Tisch kostet fünfzig Euro.','mieten':'Ich miete eine Wohnung.','brauchen':'Ich brauche einen Schlüssel.','ausfüllen':'Ich fülle ein Formular aus.','einladen':'Ich lade meine Freunde ein.','abfahren':'Der Zug fährt um acht Uhr ab.','aufstehen':'Ich stehe früh auf.','fernsehen':'Ich sehe am Abend fern.','einkaufen':'Ich kaufe heute ein.','umziehen':'Ich ziehe morgen um.','einrichten':'Ich richte das Zimmer ein.','gefallen':'Die Wohnung gefällt mir.','liegen':'Das Buch liegt auf dem Tisch.','stehen':'Das Bett steht im Schlafzimmer.','schmecken':'Das Essen schmeckt sehr gut.','fliegen':'Ich fliege nach Berlin.','reisen':'Ich reise im Sommer.','erzählen':'Ich erzähle eine Geschichte.','lieben':'Ich liebe meine Familie.'};
+    const adjectiveExamples={'hell':'Das Zimmer ist hell.','gemütlich':'Das Wohnzimmer ist gemütlich.','hoch':'Die Miete ist hoch.','geräumig':'Die Wohnung ist geräumig.','bunt':'Das Kinderzimmer ist bunt.','möbliert':'Die Wohnung ist möbliert.','nah':'Der Bahnhof ist ganz nah.','weit':'Der Weg ist weit.','zentral':'Das Hotel liegt zentral.','öffentlich':'Das ist ein öffentliches Verkehrsmittel.','direkt':'Der Zug fährt direkt nach Berlin.','sonnig':'Es ist sonnig.','traumhaft':'Der Urlaub ist traumhaft.','entspannt':'Ich bin im Urlaub entspannt.'};
+    return rows.map(item=>{
+      if(item.type==='noun'&&!item.sentence){
+        const pluralOnly=item.plural==='Plural'||/^(die )?(Eltern|Geschwister|Großeltern)$/.test(item.word);
+        item.sentence=`${pluralOnly?'Das sind':'Das ist'} ${item.word}.`;
+      }
+      if(item.type==='verb'&&!item.sentence){
+        const knownExample=verbMaster.find(verb=>verb.word===item.word)?.sentence;
+        item.sentence=knownExample||verbExamples[item.word]||(item.present?`Ich ${item.present}.`:`Ich kann ${item.word}.`);
+      }
+      if(item.type==='adj'&&!item.sentence){
+        const knownExample=adjectiveMaster.find(adjective=>adjective.word===item.word)?.sentence;
+        const furnitureExample=furnitureAdjectives.find(([word])=>word===item.word);
+        item.sentence=knownExample||adjectiveExamples[item.word]||(furnitureExample?`Der Tisch ist ${item.word}.`:`Die Person ist ${item.word}.`);
+      }
+      item.translation=item.translation||item.mean;
+      return item;
+    });
+  }
+  if(category==='dialogue') return coursebookDialogues[lessonNumber].map(([speaker,word,mean])=>({type:'dialogue',speaker,word,mean,sentence:word,translation:mean}));
+  return lesson.phrases.map(([word,mean])=>({type:'phrase',word,mean,sentence:word,translation:mean}));
+}
+
+function coursebookImageUrl(item, lessonNumber, index){
+  const lesson=coursebookLessons[lessonNumber];
+  const offset=item.type==='noun'?0:item.type==='verb'?lesson.nouns.length:lesson.nouns.length+lesson.verbs.length;
+  const imageId=coursebookImageIds[lessonNumber][offset+index];
+  return `https://images.pexels.com/photos/${imageId}/pexels-photo-${imageId}.jpeg?auto=compress&cs=tinysrgb&w=900&q=82`;
+}
+
+function coursebookPluralLabel(form){
+  if(form==='Plural') return 'يُستعمل بصيغة الجمع فقط';
+  if(form==='Singular') return 'اسم مفرد غير معدود غالبًا';
+  if(form==='Plural: -') return 'لا يُستعمل عادةً بصيغة الجمع';
+  return `الجمع: ${form}`;
+}
+
+function buildCoursebookQuiz(lessonNumber){
+  const questions=[];
+  const types=[['noun','استمع إلى الاسم واختر معناه',3],['verb','استمع إلى الفعل واختر معناه',2],['adj','استمع إلى الصفة واختر معناها',2],['adverb','استمع إلى الظرف واختر معناه',2],['phrase','استمع إلى الجملة واختر معناها',4],['dialogue','استمع إلى جملة الحوار واختر معناها',1]];
+  types.forEach(([category,prompt,count])=>{
+    const rows=coursebookRowsFor(lessonNumber,category);
+    const pool=[...new Set(rows.map(item=>item.mean))];
+    if(pool.length<2) return;
+    shuffle(rows).slice(0,count).forEach(item=>questions.push({audio:item.word,prompt,options:pickOptions(item.mean,pool,4),answer:item.mean}));
+  });
+  return questions;
+}
+
+function buildGrammarQuiz(lessonNumber){
+  const lesson=grammarLessons[lessonNumber];
+  const translations=lesson.practice.map(item=>item[4]);
+  return shuffle(lesson.practice.flatMap(([ruleIndex,gap,answer,choices,translation,cue])=>{
+    const rule=lesson.rules[ruleIndex];
+    const sentence=gap.replace('___',answer);
+    const sentenceChoices=choices.map(choice=>gap.replace('___',choice));
+    return [
+      {prompt:`أكمل الجملة: <span class="de">${gap}</span>`,options:choices,answer},
+      {prompt:`استمع إلى المثال واختر الصيغة المناسبة: <span class="de">${gap}</span>`,audio:sentence,options:choices,answer},
+      {prompt:`ما معنى الجملة المسموعة؟`,audio:sentence,options:pickOptions(translation,translations,4),answer:translation},
+      {prompt:`أي قاعدة يوضحها المثال <span class="de">${sentence}</span>؟`,options:lesson.rules.map(item=>item.title),answer:rule.title},
+      {prompt:`${cue} اختر العبارة الصحيحة:`,options:sentenceChoices,answer:sentence}
+    ];
+  }));
+}
+
 function initVocabularyLab(){
-  const tabs=document.getElementById('vocabTabs'), categoryTabs=document.getElementById('vocabCategoryTabs'), grid=document.getElementById('vocabPackGrid'), label=document.getElementById('vocabLessonLabel'), summary=document.getElementById('vocabSummary');
-  if(!tabs||!grid) return;
+  const categoryTabs=document.getElementById('vocabCategoryTabs'), grid=document.getElementById('vocabPackGrid'), label=document.getElementById('vocabLessonLabel'), summary=document.getElementById('vocabSummary'), hint=document.getElementById('vocabInteractionHint');
+  if(!categoryTabs||!grid) return;
   let current=1, category='noun';
-  const categoryNames={noun:'الأسماء',verb:'الأفعال',connector:'أدوات الربط',phrase:'جمل يومية'};
-  function uniqueByWord(rows){return rows.filter((row,index,self)=>self.findIndex(item=>item.word===row.word)===index);}
+  let grammarQuiz={lesson:0,questions:[],answers:[],index:0};
+  const categoryNames={noun:'الأسماء · Nomen',verb:'الأفعال · Verben',adj:'الصفات · Adjektive',adverb:'الظروف · Adverbien',phrase:'الجمل التطبيقية',dialogue:'حوارات',grammar:'شرح القواعد',grammarQuiz:'تمارين القواعد · 50',quiz:'تدريبات'};
   function rowsFor(n){
-    const lessonRows=lessonVocab[n]||[];
-    if(category==='noun') return uniqueByWord([...lessonRows.filter(item=>item.type==='noun'),...nounMaster]).slice(0,20);
-    if(category==='verb') return uniqueByWord([...lessonRows.filter(item=>item.type==='verb'),...verbMaster]).slice(0,20);
-    if(category==='connector') return connectorMaster;
-    return dailyPhraseMaster;
+    if(category==='quiz') return buildCoursebookQuiz(n);
+    if(category==='grammarQuiz') return buildGrammarQuiz(n);
+    if(category==='grammar') return grammarLessons[n].rules;
+    return coursebookRowsFor(n,category);
+  }
+  function renderGrammarQuiz(n, restart=false){
+    if(restart||grammarQuiz.lesson!==n) grammarQuiz={lesson:n,questions:buildGrammarQuiz(n),answers:Array(50).fill(null),index:0};
+    const {questions,answers}=grammarQuiz, score=answers.filter(answer=>answer?.correct).length;
+    if(grammarQuiz.index>=questions.length){
+      grid.innerHTML=`<article class="grammar-question"><div class="result-card"><div class="big-score">${score} / ${questions.length}</div><p>أكملت اختبار قواعد الدرس ${toArabicDigits(n)}.</p><div class="quiz-actions"><button class="btn ghost small" type="button" data-quiz-review>مراجعة الأسئلة</button><button class="btn gold" type="button" data-quiz-restart>إعادة الاختبار</button></div></div></article>`;
+      grid.querySelector('[data-quiz-review]').onclick=()=>{grammarQuiz.index=questions.length-1;renderGrammarQuiz(n);};
+      grid.querySelector('[data-quiz-restart]').onclick=()=>renderGrammarQuiz(n,true);
+      return;
+    }
+    const index=grammarQuiz.index, question=questions[index], answer=answers[index];
+    grid.innerHTML=`<div class="grammar-quiz-head"><span>السؤال ${toArabicDigits(index+1)} من ${toArabicDigits(questions.length)} · الصحيحة ${toArabicDigits(score)}</span><button type="button" data-quiz-restart>إعادة الاختبار</button></div><article class="grammar-question"><div class="progress-track"><div class="progress-fill" style="width:${(index/questions.length)*100}%"></div></div><p>${question.prompt}</p>${question.audio?'<button class="vocab-play" type="button" data-grammar-audio>▶ استمع</button>':''}<div class="course-options">${question.options.map(option=>`<button class="course-option" type="button">${option}</button>`).join('')}</div><div class="course-feedback ${answer?(answer.correct?'good':'bad'):''}" aria-live="polite">${answer?(answer.correct?'إجابة صحيحة!':`الإجابة الصحيحة: ${question.answer}`):''}</div><div class="quiz-actions"><button class="btn ghost small" type="button" data-quiz-prev ${index===0?'disabled':''}>السابق</button><button class="btn small" type="button" data-quiz-next ${answer?'':'disabled'}>${index===questions.length-1?'عرض النتيجة':'التالي'}</button></div></article>`;
+    grid.querySelector('[data-quiz-restart]').onclick=()=>renderGrammarQuiz(n,true);
+    const audioButton=grid.querySelector('[data-grammar-audio]');
+    if(audioButton) audioButton.onclick=()=>speakDE(question.audio);
+    grid.querySelectorAll('.course-option').forEach(button=>{
+      const correct=button.textContent===question.answer;
+      if(answer){button.disabled=true;if(correct)button.classList.add('correct');else if(button.textContent===answer.selected)button.classList.add('wrong');}
+      else button.onclick=()=>{const isCorrect=correct;answers[index]={selected:button.textContent,correct:isCorrect};if(isCorrect){addStar();celebrate();}else playChime(false);renderGrammarQuiz(n);};
+    });
+    grid.querySelector('[data-quiz-prev]').onclick=()=>{if(index>0){grammarQuiz.index--;renderGrammarQuiz(n);}};
+    grid.querySelector('[data-quiz-next]').onclick=()=>{if(answer){grammarQuiz.index++;renderGrammarQuiz(n);}};
   }
   function render(n, nextCategory=category){
     current=n;
+    if(grammarQuiz.lesson!==n) grammarQuiz={lesson:0,questions:[],answers:[],index:0};
     category=nextCategory;
-    tabs.innerHTML=[1,2,3,4,5,6,7,8,9,10,11,12].map(i=>`<button class="vocab-tab ${i===n?'active':''}" type="button" data-vocab-lesson="${i}">الدرس ${toArabicDigits(i)}</button>`).join('');
     categoryTabs.innerHTML=Object.entries(categoryNames).map(([key,name])=>`<button class="vocab-tab ${key===category?'active':''}" type="button" data-vocab-category="${key}">${name}</button>`).join('');
     const words=rowsFor(n);
-    label.textContent=`LEKTION ${n}`; summary.textContent=`${toArabicDigits(words.length)} بطاقات · أسماء مع الجمع وأفعال مع Perfekt`;
-    grid.innerHTML=words.map((item,index)=>{
-      const type=item.type==='noun'?'اسم':item.type==='verb'?'فعل':item.type==='connector'?'أداة ربط':'جملة يومية';
-      const details=item.type==='noun'?(item.plural?`المفرد: ${item.word} · الجمع: ${item.plural}`:'مفرد / غير معدود'):item.type==='verb'?`المضارع: Ich ${item.sentence.split(' ').slice(1,2).join('')}`:'استخدام عملي في الحياة اليومية';
-      const tenseText=item.tenses||`Perfekt: ${item.past} · Futur I: werde ${item.word}`;
-      return `<article class="vocab-card"><img src="${vocabImages[item.image]}" alt="صورة توضيحية لـ ${item.word}" loading="lazy"><div class="vocab-body"><span class="vocab-type">${type}</span><span class="vocab-word">${item.word}</span><span class="vocab-details">${details}</span>${item.type==='verb'?`<span class="vocab-past">${tenseText}</span>`:''}<span class="vocab-meaning">${item.mean}</span><div class="vocab-sentence">${item.sentence}<small>${item.translation}</small></div><button class="vocab-play" type="button" data-vocab-index="${index}">▶ استمع للكلمة والجملة</button></div></article>`;
-    }).join('');
-    tabs.querySelectorAll('.vocab-tab').forEach(button=>button.onclick=()=>render(Number(button.dataset.vocabLesson)));
+    label.textContent=`LEKTION ${n} · ${category==='grammar'||category==='grammarQuiz'?grammarLessons[n].title:coursebookLessons[n].title}`;
+    summary.textContent=category==='grammarQuiz'?`${toArabicDigits(words.length)} سؤالًا · ${categoryNames[category]}`:`${toArabicDigits(words.length)} ${category==='grammar'?'قاعدة':'بطاقة'} · ${categoryNames[category]}`;
+    hint.textContent=category==='grammar'?'شرح وأمثلة لكل قاعدة':category==='grammarQuiz'?'أجب ثم انتقل؛ يمكنك الرجوع ومراجعة إجاباتك':'اضغط على البطاقة للاستماع';
     categoryTabs.querySelectorAll('.vocab-tab').forEach(button=>button.onclick=()=>render(current,button.dataset.vocabCategory));
-    grid.querySelectorAll('.vocab-play').forEach(button=>button.onclick=()=>{const item=words[Number(button.dataset.vocabIndex)];speakDE(`${item.word}. ${item.sentence}`);});
+    if(category==='grammar'){
+      grid.innerHTML=`<div class="grammar-rules">${words.map((rule,index)=>`<article class="grammar-rule"><h3>${toArabicDigits(index+1)}. ${rule.title}</h3><p>${rule.explanation}</p><pre class="grammar-pattern">${rule.pattern}</pre><div class="grammar-examples">${rule.examples.map(([de,ar])=>`<div class="grammar-example"><span class="de">${de}</span><span>${ar}</span><button class="vocab-play" type="button" data-grammar-example="${de}">▶ استمع</button></div>`).join('')}</div></article>`).join('')}</div>`;
+      grid.querySelectorAll('[data-grammar-example]').forEach(button=>button.onclick=()=>speakDE(button.dataset.grammarExample));
+      return;
+    }
+    if(category==='grammarQuiz'){
+      renderGrammarQuiz(n);
+      return;
+    }
+    if(category==='quiz'){
+      grid.innerHTML=words.map((question,index)=>`<article class="course-question" data-course-question="${index}"><div class="vocab-type">تدريب ${toArabicDigits(index+1)}</div><p class="course-question-prompt">${question.prompt}</p><button class="vocab-play" type="button" data-question-audio="${index}">▶ استمع للسؤال</button><div class="course-options">${question.options.map((option,optionIndex)=>`<button class="course-option" type="button" data-option-index="${optionIndex}">${option}</button>`).join('')}</div><div class="course-feedback" aria-live="polite"></div></article>`).join('');
+      grid.querySelectorAll('[data-question-audio]').forEach(button=>button.onclick=()=>speakDE(words[Number(button.dataset.questionAudio)].audio));
+      grid.querySelectorAll('.course-option').forEach(button=>button.onclick=()=>{
+        const card=button.closest('[data-course-question]'), question=words[Number(card.dataset.courseQuestion)];
+        card.querySelectorAll('.course-option').forEach(option=>{option.disabled=true;if(option.textContent===question.answer)option.classList.add('correct');});
+        const correct=button.textContent===question.answer;
+        if(!correct) button.classList.add('wrong');
+        const feedback=card.querySelector('.course-feedback');
+        feedback.textContent=correct?'إجابة صحيحة!':`الإجابة الصحيحة: ${question.answer}`;
+        feedback.classList.toggle('good',correct);feedback.classList.toggle('bad',!correct);
+        if(correct){addStar();celebrate();}else playChime(false);
+      });
+      return;
+    }
+    grid.innerHTML=words.map((item,index)=>{
+      const type=item.type==='noun'?'اسم':item.type==='verb'?'فعل':item.type==='adj'?'صفة':item.type==='adverb'?'ظرف':item.type==='dialogue'?`حوار · ${item.speaker}`:'جملة تطبيقية';
+      const participle=item.type==='verb'?(item.participle||'').replace(/^(hat|ist|habe|bin)\s+/,''):'';
+      const details=item.type==='noun'?coursebookPluralLabel(item.plural):item.type==='verb'?item.present?`Präsens: ich ${item.present} · Perfekt: ich ${item.aux} ${participle}`:'صيغة المصدر · اقرأ المثال واستمع إليه':item.type==='adj'?'صفة أساسية':item.type==='adverb'?'ظرف شائع في سياق الدرس':'تدريب استماع وفهم';
+      const sentence=item.sentence?`<div class="vocab-sentence">${item.sentence}<small>${item.translation||item.mean}</small></div>`:'';
+      return `<article class="vocab-card ${item.type==='dialogue'?'vocab-dialogue-card':''}"><div class="vocab-body"><span class="vocab-type">${type}</span><span class="vocab-word">${item.word}</span><span class="vocab-details">${details}</span><span class="vocab-meaning">${item.mean}</span>${sentence}<button class="vocab-play" type="button" data-vocab-index="${index}">▶ استمع</button></div></article>`;
+    }).join('');
+    grid.querySelectorAll('.vocab-play').forEach(button=>button.onclick=()=>{const item=words[Number(button.dataset.vocabIndex)];speakDE(item.sentence||item.word);});
   }
   render(current); window.vocabLab={setLesson:render};
 }
@@ -2151,7 +2701,7 @@ function initStudyStudio(){
    ========================================================= */
 function shuffle(arr){ return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]); }
 function pickOptions(correct, pool, count){
-  const others = shuffle(pool.filter(x=>x!==correct)).slice(0,count-1);
+  const others = shuffle([...new Set(pool)].filter(x=>x!==correct)).slice(0,count-1);
   return shuffle([correct, ...others]);
 }
 function toArabicDigits(n){
@@ -3246,17 +3796,13 @@ function createQuiz(ns, buildBank){
   function currentScore(){ return questions.filter(q=>q.correct===true).length; }
 
   function restart(){
-    const source = buildBank();
-    const expanded = [];
-    for(let round=0; expanded.length<50; round++){
-      source.forEach((q, sourceIndex)=>{
-        if(expanded.length>=50) return;
-        const copy = Object.assign({}, q, {options:shuffle(q.options.slice()), userAnswer:null, correct:null});
-        if(round>0) copy.prompt = `${q.prompt}<span style="display:block;font-size:11px;opacity:.6;margin-top:6px;">مراجعة إضافية · ${toArabicDigits(round+1)}</span>`;
-        expanded.push(copy);
-      });
-    }
-    questions = shuffle(expanded);
+    const seen = new Set();
+    questions = shuffle(buildBank().filter(q=>{
+      const key = JSON.stringify([q.prompt, q.audio || '', q.answer]);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).map(q=>Object.assign({}, q, {options:shuffle(q.options.slice()), userAnswer:null, correct:null})));
     idx = 0;
     render();
   }
@@ -3849,6 +4395,10 @@ function buildBank5(){
   shuffle(colors).slice(0,5).forEach(([word,hex,mean])=>{
     qs.push({ audio: word, prompt:'استمع إلى اللون — ما معناه؟', options: pickOptions(mean, colorMeans, 4), answer: mean });
   });
+  const adjectiveMeans = adjectiveMaster.map(item=>item.mean);
+  shuffle(adjectiveMaster).slice(0,5).forEach(item=>{
+    qs.push({ audio:item.word, prompt:'استمع إلى الصفة — ما معناها؟', options:pickOptions(item.mean, adjectiveMeans, 4), answer:item.mean });
+  });
   // materials matching
   const matScenarios = [
     ['من أي خامة تُصنع الزجاجة عادة؟', 'Das ist aus Glas.', ['Das ist aus Holz.','Das ist aus Metall.','Das ist aus Plastik.']],
@@ -4034,18 +4584,18 @@ function buildBank12(){
   return shuffle(qs);
 }
 
-const quiz1 = createQuiz('q1', buildBank1);
-const quiz2 = createQuiz('q2', buildBank2);
-const quiz3 = createQuiz('q3', buildBank3);
-const quiz4 = createQuiz('q4', buildBank4);
-const quiz5 = createQuiz('q5', buildBank5);
-const quiz6 = createQuiz('q6', buildBank6);
-const quiz7 = createQuiz('q7', buildBank7);
-const quiz8 = createQuiz('q8', buildBank8);
-const quiz9 = createQuiz('q9', buildBank9);
-const quiz10 = createQuiz('q10', buildBank10);
-const quiz11 = createQuiz('q11', buildBank11);
-const quiz12 = createQuiz('q12', buildBank12);
+const quiz1 = createQuiz('q1', ()=>[...buildBank1(),...buildCoursebookQuiz(1)]);
+const quiz2 = createQuiz('q2', ()=>[...buildBank2(),...buildCoursebookQuiz(2)]);
+const quiz3 = createQuiz('q3', ()=>[...buildBank3(),...buildCoursebookQuiz(3)]);
+const quiz4 = createQuiz('q4', ()=>[...buildBank4(),...buildCoursebookQuiz(4)]);
+const quiz5 = createQuiz('q5', ()=>[...buildBank5(),...buildCoursebookQuiz(5)]);
+const quiz6 = createQuiz('q6', ()=>[...buildBank6(),...buildCoursebookQuiz(6)]);
+const quiz7 = createQuiz('q7', ()=>[...buildBank7(),...buildCoursebookQuiz(7)]);
+const quiz8 = createQuiz('q8', ()=>[...buildBank8(),...buildCoursebookQuiz(8)]);
+const quiz9 = createQuiz('q9', ()=>[...buildBank9(),...buildCoursebookQuiz(9)]);
+const quiz10 = createQuiz('q10', ()=>[...buildBank10(),...buildCoursebookQuiz(10)]);
+const quiz11 = createQuiz('q11', ()=>[...buildBank11(),...buildCoursebookQuiz(11)]);
+const quiz12 = createQuiz('q12', ()=>[...buildBank12(),...buildCoursebookQuiz(12)]);
 quiz1.start();
 quiz2.start();
 quiz3.start();
