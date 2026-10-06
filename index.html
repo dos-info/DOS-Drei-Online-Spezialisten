@@ -38,6 +38,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   html, body { margin:0; padding:0; }
   body { -webkit-font-smoothing:antialiased; }
@@ -274,6 +275,14 @@
   @media (max-width:640px) { .dos-pro-hero { min-height:auto; } .dos-pro-hero-visual { min-height:410px; } .dos-pro-hero-card:before { height:190px; } .dos-pro-footer { grid-template-columns:1fr; gap:22px; } }
   @media (max-width:640px) { .dos-live-section { padding-bottom:55px; } .dos-live-head { display:block; } .dos-live-head p { margin-top:10px; } .dos-live-grid { grid-template-columns:1fr 1fr; } }
   @media (max-width:420px) { .dos-live-grid { grid-template-columns:1fr; } }
+  .dos-pro-form .dos-reg-head { display:flex; align-items:center; gap:12px; padding-bottom:12px; border-bottom:1px solid #e2ddd4; }
+  .dos-pro-form .dos-reg-head img { width:64px; height:46px; object-fit:contain; }
+  .dos-pro-form .dos-reg-head b { display:block; color:#0b1f3a; font-size:16px; }
+  .dos-pro-form .dos-reg-head small { color:#6d7783; font-size:12px; font-weight:600; }
+  .dos-pro-form .dos-reg-sec { display:flex; align-items:center; gap:10px; margin-top:6px; padding:9px 12px; border-inline-start:4px solid #c8283a; border-radius:6px; background:#fff3d5; color:#8a610d; font-size:13px; font-weight:800; }
+  .dos-pro-form .dos-reg-sec img { width:44px; height:32px; object-fit:contain; }
+  .dos-pro-form select { appearance:auto; }
+  @media (max-width:640px) { .dos-pro-form input, .dos-pro-form select { font-size:16px; } }
 </style>
 </head>
 <body>
@@ -955,6 +964,30 @@ const inputStyle = {
 
 /* ------------------------------ Login ------------------------------ */
 
+/* ===== استمارة الانضمام لمجتمع DOS: ثوابت ومساعدات ===== */
+const REG_LEVELS = ["مبتدئ A1", "متقدم A2", "متوسط B1", "عال B2", "محادثة Gespräch"];
+const REG_GOVS = ["Cairo","Giza","Alexandria","Gharbia","Dakahlia","Sharkia","Al Monofiya","Qalubia","Al Behira","Kafr El Sheikh","Damietta","Port Said","Ismailia","Suez","Fayoum","Beni Suef","Minya","Assiut","Sohag","Qena","Luxor","Aswan","Red Sea","New Valley","Matrouh","North Sinai","South Sinai","خارج مصر / Ausland"];
+const REG_TUTORS = ["Herr/ Ahmed Maher", "Herr / Mostafa Mousa"];
+const REG_PACE = ["(ثلاث شهور) عادية", "(شهر ونصف) مكثفة"];
+const REG_MODE = ["أونلاين", "أوفلاين"];
+const REG_PAY = ["Vodafone Cash", "InstaPay", "Fawry Pay Yellow Card", "Etisalat Cash"];
+const FRIEND_SRC = "صديق / توصية";
+const REG_SRC = ["Facebook", "TikTok", "WhatsApp", "Telegram", "Instagram", FRIEND_SRC, "أخرى"];
+const REG_LABELS = { wa: "WhatsApp / رقم الواتساب", nid: "ID Nummer / رقم البطاقة", birth: "Geburtstag / تاريخ الميلاد", goal: "Ziel / الهدف من تعلم الألمانية", telc: "Telc / اختبار", goethe: "Goethe / اختبار", tutor: "Herr / المحاضر الخاص", pace: "نوع الدورة", mode: "أونلاين / أوفلاين", pay: "Zahlungsart / وسيلة الدفع", amount: "Betrag / المبلغ", paydate: "Datum / تاريخ الدفع", src: "كيف عرفت بنا؟", friend: "اسم الصديق (ثلاثي)", submitted_at: "وقت الإرسال" };
+const REG_EXTRA_KEYS = ["wa","nid","birth","goal","telc","goethe","tutor","pace","mode","pay","amount","paydate","src","friend"];
+const BLANK_REG = { name: "", email: "", phone: "", qualification: "", governorate: "", course: "", wa: "", nid: "", birth: "", goal: "", telc: "", goethe: "", tutor: "", pace: "", mode: "", pay: "", amount: "", paydate: "", src: "", friend: "" };
+/* تنسيق التاريخ يوم/شهر/سنة أثناء الكتابة */
+function fmtDMY(v) {
+  const d = String(v || "").replace(/\D/g, "").slice(0, 8);
+  return d.length > 4 ? `${d.slice(0, 2)}/${d.slice(2, 4)}/${d.slice(4)}` : d.length > 2 ? `${d.slice(0, 2)}/${d.slice(2)}` : d;
+}
+function fmtDT(value) {
+  const d = new Date(value);
+  if (isNaN(d)) return "";
+  const p = (n) => String(n).padStart(2, "0");
+  return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
 function PublicLanding({ onLogin }) {
   const [language, setLanguage] = useState("de");
   const [courseType, setCourseType] = useState("standard");
@@ -966,7 +999,7 @@ function PublicLanding({ onLogin }) {
   const [bannerIndex, setBannerIndex] = useState(0);
   const [statValues, setStatValues] = useState([0, 0, 0, 0, 0]);
   const [speaking, setSpeaking] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", phone: "", qualification: "", governorate: "", course: "" });
+  const [form, setForm] = useState(BLANK_REG);
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   const bannerImages = [
     ["https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=1200&q=82", "Berlin entdecken. Deutsch sicher sprechen."],
@@ -1011,7 +1044,7 @@ function PublicLanding({ onLogin }) {
   const copy = {
     de: { navCourses: "Kurse", navMethod: "Lernsystem", navAbout: "Über uns", navContact: "Kontakt", login: "Sign in", eyebrow: "DEUTSCHE SPRACHAKADEMIE", hero: "Starte deine Reise zur deutschen Sprachkompetenz mit echten Online-Experten.", lead: "Interaktive Kurse für alle vier Sprachfertigkeiten, bewährte Lehrwerke und kleine Gruppen für eine konzentrierte Lernerfahrung.", cta: "Platz sichern", secondary: "Passenden Kurs finden", plan: "Dein Weg beginnt auf deinem Niveau", planText: "Strukturiert lernen, regelmäßig prüfen und mit persönlicher Begleitung sicher vorankommen.", stats: ["Lehrkräfte", "aktuelle Lernende", "Unterrichtsstunden", "Absolventen", "Lehrstunden"], servicesTitle: "Mehr als ein Sprachkurs", servicesText: "DOS verbindet Unterricht, persönliche Betreuung und digitale Werkzeuge in einer akademischen Lernumgebung.", services: [["Deutschkurse", "Standard- und Intensivkurse von A1 bis B2 mit klaren Lernzielen."], ["Ausbildung", "Sprachliche Vorbereitung und Orientierung für deinen nächsten Schritt in Deutschland."], ["Arbeit & Reise", "Praktische Deutschprogramme für Studium, Beruf und Alltag."], ["Übersetzung", "Professionelle beglaubigte und fachliche Übersetzungen." ]], methodTitle: "Ein System, das dich weiterbringt", methodText: "Kleine Gruppen, klare Struktur und regelmäßige Prüfungen machen Fortschritt sichtbar.", features: [["Online-Unterricht", "Lerne live von überall mit direktem Kontakt zu deiner Lehrkraft."], ["8–10 Lernende", "Kleine Gruppen fördern aktive Teilnahme und echte Gesprächszeit."], ["3 Stunden", "Jede Einheit verbindet Hören, Sprechen, Lesen und Schreiben."], ["3 Prüfungen", "Regelmäßige Prüfungen zeigen deinen Lernstand innerhalb des Kurses."], ["10 Minuten Pause", "Ein gut getakteter Unterricht hält Konzentration und Energie hoch."], ["Persönlicher Bericht", "Du erhältst regelmäßiges Feedback und eine klare nächste Etappe."]], coursesTitle: "Finde den Kurs, der zu deinem Ziel passt", coursesText: "Transparente Programme mit bewährten Lehrwerken, festen Lernzielen und kleinen Online-Gruppen.", standard: "Standardkurse", intensive: "Intensivkurse", conversation: "DOS Gespräch", registerTitle: "Bereit für deinen nächsten Schritt?", registerText: "Sende uns deine Daten. Unser Team meldet sich mit einer Empfehlung für Niveau, Kurs und Starttermin.", name: "Vollständiger Name", email: "E-Mail-Adresse", phone: "Telefonnummer", qualification: "Bildungsabschluss", governorate: "Wohnort / Gouvernement", course: "Gewünschter Kurs", send: "Anfrage senden", sent: "Vielen Dank. Deine Anfrage wurde vorbereitet und unser Team meldet sich bald.", footer: "Lernen. Verstehen. Umsetzen." },
     en: { navCourses: "Courses", navMethod: "Learning system", navAbout: "About us", navContact: "Contact", login: "Sign in", eyebrow: "GERMAN LANGUAGE ACADEMY", hero: "Start your journey to German fluency with real online teaching experts.", lead: "Interactive courses covering all four skills, proven textbooks and small groups for a focused learning experience.", cta: "Reserve your place", secondary: "Find the right course", plan: "Your path starts at your level", planText: "Learn with structure, assess your progress and move forward with personal guidance.", stats: ["teachers", "active learners", "lessons", "graduates", "teaching hours"], servicesTitle: "More than a language course", servicesText: "DOS combines teaching, personal support and digital tools in one academic learning environment.", services: [["German courses", "Standard and intensive courses from A1 to B2 with clear learning goals."], ["Ausbildung", "Language preparation and orientation for your next step in Germany."], ["Work & travel", "Practical German programs for study, work and everyday life."], ["Translation", "Professional certified and specialist translation services."]], methodTitle: "A system that moves you forward", methodText: "Small groups, clear structure and regular exams make progress visible.", features: [["Online classes", "Learn live from anywhere with direct contact with your teacher."], ["8–10 learners", "Small groups create active participation and real speaking time."], ["3 hours", "Every session connects listening, speaking, reading and writing."], ["3 exams", "Regular exams show your progress during the course."], ["10-minute break", "A well-paced class keeps focus and energy high."], ["Personal report", "Receive regular feedback and a clear next milestone."]], coursesTitle: "Find the course that fits your goal", coursesText: "Transparent programs with trusted textbooks, clear goals and small online groups.", standard: "Standard courses", intensive: "Intensive courses", conversation: "DOS conversation", registerTitle: "Ready for your next step?", registerText: "Send your details. Our team will recommend the right level, course and start date.", name: "Full name", email: "Email address", phone: "Phone number", qualification: "Educational qualification", governorate: "City / governorate", course: "Requested course", send: "Send request", sent: "Thank you. Your request is ready and our team will contact you soon.", footer: "Learn. Understand. Apply." },
-    ar: { navCourses: "الدورات", navMethod: "نظام الدراسة", navAbout: "من نحن", navContact: "تواصل معنا", login: "دخول البوابة", eyebrow: "أكاديمية اللغة الألمانية", hero: "ابدأ رحلتك في احتراف اللغة الألمانية مع خبراء التدريس أونلاين.", lead: "دورات تفاعلية للمهارات الأربع، مناهج معتمدة، ومجموعات صغيرة لتجربة تعليمية أكثر تركيزًا.", cta: "احجز مقعدك الآن", secondary: "اختر الدورة المناسبة", plan: "رحلتك تبدأ من مستواك", planText: "تعلم بخطة واضحة، قِس تقدمك باستمرار، وتقدم بإشراف شخصي.", stats: ["مدرسًا", "طالب حالي", "درسًا", "خريجًا", "ساعة تدريس"], servicesTitle: "أكثر من مجرد دورة لغة", servicesText: "تجمع DOS بين التدريس والمتابعة الشخصية والأدوات الرقمية في بيئة تعليمية أكاديمية.", services: [["دورات الألمانية", "دورات عادية ومكثفة من A1 إلى B2 بأهداف تعليمية واضحة."], ["التدريب المهني", "تأهيل لغوي وإرشاد للخطوة القادمة في ألمانيا."], ["العمل والسفر", "برامج عملية للدراسة والعمل والحياة اليومية."], ["الترجمة", "حلول ترجمة احترافية معتمدة ومتخصصة."]], methodTitle: "نظام دراسي يدفعك للأمام", methodText: "مجموعات صغيرة، هيكل واضح، وامتحانات دورية تجعل تقدمك قابلًا للقياس.", features: [["محاضرات أونلاين", "تعلم مباشرة من أي مكان مع تواصل مستمر مع المحاضر."], ["8–10 طلاب", "مجموعات محدودة تضمن المشاركة ووقتًا أكبر للمحادثة."], ["3 ساعات", "كل محاضرة تجمع الاستماع والتحدث والقراءة والكتابة."], ["3 امتحانات", "امتحانات دورية لمتابعة مستواك داخل الدورة."], ["استراحة 10 دقائق", "تنظيم جيد يحافظ على التركيز والطاقة."], ["تقرير فردي", "ملاحظات دورية وخطوة تالية واضحة لكل طالب."]], coursesTitle: "اختر الدورة المناسبة لهدفك", coursesText: "برامج واضحة بمناهج قوية وأهداف محددة ومجموعات أونلاين صغيرة.", standard: "الدورات العادية", intensive: "الدورات المكثفة", conversation: "برنامج المحادثة", registerTitle: "مستعد للخطوة التالية؟", registerText: "أرسل بياناتك وسيرشح لك فريقنا المستوى والدورة وموعد البداية المناسب.", name: "الاسم بالكامل", email: "البريد الإلكتروني", phone: "رقم الهاتف", qualification: "المؤهل الدراسي", governorate: "المحافظة", course: "الدورة المطلوبة", send: "إرسال الطلب", sent: "شكرًا لك. تم تجهيز طلبك وسيتواصل معك فريقنا قريبًا.", footer: "تعلّم. افهم. طبّق." },
+    ar: { navCourses: "الدورات", navMethod: "نظام الدراسة", navAbout: "من نحن", navContact: "تواصل معنا", login: "دخول البوابة", eyebrow: "أكاديمية اللغة الألمانية", hero: "ابدأ رحلتك في احتراف اللغة الألمانية مع خبراء التدريس أونلاين.", lead: "دورات تفاعلية للمهارات الأربع، مناهج معتمدة، ومجموعات صغيرة لتجربة تعليمية أكثر تركيزًا.", cta: "تسجيل طالب جديد", secondary: "اختر الدورة المناسبة", plan: "رحلتك تبدأ من مستواك", planText: "تعلم بخطة واضحة، قِس تقدمك باستمرار، وتقدم بإشراف شخصي.", stats: ["مدرسًا", "طالب حالي", "درسًا", "خريجًا", "ساعة تدريس"], servicesTitle: "أكثر من مجرد دورة لغة", servicesText: "تجمع DOS بين التدريس والمتابعة الشخصية والأدوات الرقمية في بيئة تعليمية أكاديمية.", services: [["دورات الألمانية", "دورات عادية ومكثفة من A1 إلى B2 بأهداف تعليمية واضحة."], ["التدريب المهني", "تأهيل لغوي وإرشاد للخطوة القادمة في ألمانيا."], ["العمل والسفر", "برامج عملية للدراسة والعمل والحياة اليومية."], ["الترجمة", "حلول ترجمة احترافية معتمدة ومتخصصة."]], methodTitle: "نظام دراسي يدفعك للأمام", methodText: "مجموعات صغيرة، هيكل واضح، وامتحانات دورية تجعل تقدمك قابلًا للقياس.", features: [["محاضرات أونلاين", "تعلم مباشرة من أي مكان مع تواصل مستمر مع المحاضر."], ["8–10 طلاب", "مجموعات محدودة تضمن المشاركة ووقتًا أكبر للمحادثة."], ["3 ساعات", "كل محاضرة تجمع الاستماع والتحدث والقراءة والكتابة."], ["3 امتحانات", "امتحانات دورية لمتابعة مستواك داخل الدورة."], ["استراحة 10 دقائق", "تنظيم جيد يحافظ على التركيز والطاقة."], ["تقرير فردي", "ملاحظات دورية وخطوة تالية واضحة لكل طالب."]], coursesTitle: "اختر الدورة المناسبة لهدفك", coursesText: "برامج واضحة بمناهج قوية وأهداف محددة ومجموعات أونلاين صغيرة.", standard: "الدورات العادية", intensive: "الدورات المكثفة", conversation: "برنامج المحادثة", registerTitle: "مستعد للخطوة التالية؟", registerText: "أرسل بياناتك وسيرشح لك فريقنا المستوى والدورة وموعد البداية المناسب.", name: "الاسم بالكامل", email: "البريد الإلكتروني", phone: "رقم الهاتف", qualification: "المؤهل الدراسي", governorate: "المحافظة", course: "الدورة المطلوبة", send: "إرسال الطلب", sent: "شكرًا لك. تم تجهيز طلبك وسيتواصل معك فريقنا قريبًا.", footer: "تعلّم. افهم. طبّق." },
     fr: { navCourses: "Cours", navMethod: "Méthode", navAbout: "À propos", navContact: "Contact", login: "Connexion", eyebrow: "ACADÉMIE D'ALLEMAND", hero: "Commencez votre parcours vers la maîtrise de l'allemand avec de vrais experts en ligne.", lead: "Des cours interactifs pour les quatre compétences, des méthodes éprouvées et de petits groupes.", cta: "Réserver ma place", secondary: "Trouver mon cours", plan: "Votre parcours commence à votre niveau", planText: "Apprenez avec structure, mesurez vos progrès et avancez avec un accompagnement personnalisé.", stats: ["enseignants", "apprenants", "leçons", "diplômés", "heures"], servicesTitle: "Plus qu'un cours de langue", servicesText: "DOS réunit enseignement, accompagnement et outils numériques dans un environnement académique.", services: [["Cours d'allemand", "Cours standard et intensifs de A1 à B2 avec des objectifs clairs."], ["Ausbildung", "Préparation linguistique et orientation pour votre projet en Allemagne."], ["Travail & voyage", "Programmes pratiques pour les études, le travail et la vie quotidienne."], ["Traduction", "Services de traduction professionnels et certifiés."]], methodTitle: "Un système qui vous fait progresser", methodText: "Petits groupes, structure claire et examens réguliers rendent les progrès visibles.", features: [["Cours en ligne", "Apprenez en direct avec un contact régulier avec votre enseignant."], ["8–10 apprenants", "De petits groupes favorisent la participation active."], ["3 heures", "Chaque séance travaille les quatre compétences."], ["3 examens", "Des évaluations régulières suivent votre niveau."], ["Pause de 10 minutes", "Un rythme équilibré maintient la concentration."], ["Bilan personnel", "Un retour régulier et une prochaine étape claire."]], coursesTitle: "Trouvez le cours adapté à votre objectif", coursesText: "Des programmes transparents, des méthodes reconnues et de petits groupes en ligne.", standard: "Cours standard", intensive: "Cours intensifs", conversation: "Conversation DOS", registerTitle: "Prêt pour la prochaine étape ?", registerText: "Envoyez vos coordonnées. Notre équipe vous recommandera le bon niveau et la bonne date.", name: "Nom complet", email: "Adresse e-mail", phone: "Téléphone", qualification: "Formation", governorate: "Ville / gouvernorat", course: "Cours souhaité", send: "Envoyer la demande", sent: "Merci. Notre équipe vous contactera bientôt.", footer: "Apprendre. Comprendre. Mettre en pratique." }
   }[language];
   const courses = courseType === "standard" ? [["A1", "A1.1 + A1.2", "Netzwerk neu", "4.500 EGP", "Grundlagen, Alltag und erste Gespräche."], ["A2", "A2.1 + A2.2", "Netzwerk neu", "5.500 EGP", "Sicherer kommunizieren und Situationen meistern."], ["B1", "B1.1 + B1.2", "Netzwerk neu / Menschen", "6.500 EGP", "Selbstständig sprechen, schreiben und verstehen."], ["B2", "B2.1 + B2.2", "Aspekte neu", "7.500 EGP", "Komplexe Themen und professionelle Kommunikation."]] : courseType === "intensive" ? [["A1.1", "Intensiv", "Netzwerk neu", "3.500 EGP", "4 Wochen · 9 Einheiten · 27 Stunden"], ["A1.2", "Intensiv", "Netzwerk neu", "3.500 EGP", "4 Wochen · 9 Einheiten · 27 Stunden"], ["A2.1 / A2.2", "Intensiv", "Netzwerk neu", "4.000 EGP", "6 Wochen · 9 Einheiten · 27 Stunden"], ["B1.1 / B1.2", "Intensiv", "Netzwerk neu", "4.500 EGP", "6 Wochen · 9 Einheiten · 27 Stunden"], ["B2.1 / B2.2", "Intensiv", "Aspekte neu", "5.000 EGP", "12 Einheiten · 36 Stunden"]] : [["DOS", "Gespräch", "Native speakers aus Deutschland und Österreich", "3.500 EGP", "10 Einheiten · 30 Stunden · 1 Termin pro Woche"]];
@@ -1028,6 +1061,20 @@ function PublicLanding({ onLogin }) {
     }
     setSubmitting(true);
     setSubmitted(false);
+    const dmy = /^\d{2}\/\d{2}\/\d{4}$/;
+    if ((form.birth && !dmy.test(form.birth)) || (form.paydate && !dmy.test(form.paydate))) {
+      setSubmitted("اكتب التاريخ بصيغة يوم/شهر/سنة، مثال: 25/03/2005");
+      setSubmitting(false);
+      return;
+    }
+    if (form.src === FRIEND_SRC && form.friend.trim().split(/\s+/).filter(Boolean).length < 3) {
+      setSubmitted("من فضلك اكتب اسم الصديق ثلاثيًا (الاسم + اسم الأب + اسم الجد).");
+      setSubmitting(false);
+      return;
+    }
+    const extra = {};
+    REG_EXTRA_KEYS.forEach((key) => { const value = String(form[key] || "").trim(); if (value && (key !== "friend" || form.src === FRIEND_SRC)) extra[key] = value; });
+    extra.submitted_at = fmtDT(new Date());
     const application = {
       full_name: form.name.trim(),
       email: form.email.trim(),
@@ -1035,15 +1082,22 @@ function PublicLanding({ onLogin }) {
       qualification: form.qualification.trim(),
       governorate: form.governorate.trim(),
       course: form.course,
+      extra,
     };
-    const { error } = await supabaseClient.from("landing_applications").insert(application);
+    let { error } = await supabaseClient.from("landing_applications").insert(application);
+    if (error && /extra/i.test(error.message)) {
+      /* عمود extra غير موجود بعد في Supabase: نحفظ كل البيانات نصًا داخل خانة المؤهل حتى لا يضيع شيء */
+      const { extra: extraData, ...base } = application;
+      base.qualification = [base.qualification, ...Object.entries(extraData).map(([k, v]) => `${REG_LABELS[k] || k}: ${v}`)].filter(Boolean).join(" | ");
+      ({ error } = await supabaseClient.from("landing_applications").insert(base));
+    }
     if (error) {
       setSubmitted(error.message.toLowerCase().includes("duplicate") || error.message.toLowerCase().includes("unique") ? "تم تسجيل هذا البريد من قبل. سيتواصل معك فريق DOS قريبًا." : `تعذر إرسال الطلب: ${error.message}`);
       setSubmitting(false);
       return;
     }
     const { error: emailError } = await supabaseClient.functions.invoke("send-landing-application-email", { body: application });
-    setForm({ name: "", email: "", phone: "", qualification: "", governorate: "", course: "" });
+    setForm(BLANK_REG);
     setRegistrationLocked(true);
     try { window.localStorage.setItem("dos-landing-registration-sent", "1"); } catch (storageError) {}
     setSubmitted(emailError ? "تم استلام طلبك بنجاح. سيتواصل معك فريق DOS قريبًا." : "تم تأكيد طلبك بنجاح. أرسلنا لك رسالة ترحيب وملخص بياناتك على بريدك الإلكتروني.");
@@ -1064,7 +1118,31 @@ function PublicLanding({ onLogin }) {
         <section className="dos-pro-section" id="about"><div className="dos-pro-section-head"><h2>{copy.servicesTitle}</h2><p>{copy.servicesText}</p></div><div className="dos-pro-service-grid">{copy.services.map(([title, text], index) => <article className="dos-pro-service" key={title}><div className="icon">0{index + 1}</div><h3>{title}</h3><p>{text}</p></article>)}</div></section>
         <section className="dos-pro-section dos-pro-section-alt" id="method"><div className="dos-pro-section-inner"><div className="dos-pro-section-head"><h2>{copy.methodTitle}</h2><p>{copy.methodText}</p></div><div className="dos-pro-method"><div className="dos-pro-method-intro"><h3>{systemTitle}</h3><p>{copy.methodText} {systemDetail}</p></div><div className="dos-pro-feature-list">{copy.features.map(([title, text]) => <div className="dos-pro-feature" key={title}><b>{title}</b><span>{text}</span></div>)}</div></div></div></section>
         <section className="dos-pro-section" id="courses"><div className="dos-pro-section-head"><h2>{copy.coursesTitle}</h2><p>{copy.coursesText}</p></div><div className="dos-pro-course-tabs"><button type="button" className={`dos-pro-course-tab ${courseType === "standard" ? "active" : ""}`} onClick={() => setCourseType("standard")}>{copy.standard}</button><button type="button" className={`dos-pro-course-tab ${courseType === "intensive" ? "active" : ""}`} onClick={() => setCourseType("intensive")}>{copy.intensive}</button><button type="button" className={`dos-pro-course-tab ${courseType === "conversation" ? "active" : ""}`} onClick={() => setCourseType("conversation")}>{copy.conversation}</button></div><div className="dos-pro-course-grid">{courses.map(([level, title, book, price, details], index) => <article className="dos-pro-course" key={`${level}-${title}`}><div className="dos-pro-card-photo" style={{ backgroundImage: `linear-gradient(180deg,rgba(11,31,58,.04),rgba(11,31,58,.5)),url("${bannerImages[index % bannerImages.length][0]}")` }} /><div className="course-level">{level}</div><h3>{title}</h3><p>{details}</p><ul><li>{book}</li><li>{courseMeta[0]}</li><li>{courseMeta[1]}</li></ul><div className="price"><span>{price}</span><button type="button" className="reserve-course" onClick={() => { const selectedCourse = courseType === "conversation" ? "DOS Gespräch" : `${level.split(" ")[0]} ${courseType === "intensive" ? "Intensiv" : "Standard"}`; updateField("course", selectedCourse); scrollTo("register"); }}>احجز الآن</button></div></article>)}</div></section>
-        <section className="dos-pro-section dos-pro-section-alt" id="register"><div className="dos-pro-section-inner"><div className="dos-pro-register"><div className="dos-pro-register-copy"><div className="dos-pro-eyebrow">DOS ACADEMY</div><h2>{copy.registerTitle}</h2><p>{copy.registerText}</p><div className="dos-pro-contact-strip"><a href="https://wa.me/message/UCIZZX5KGTQDL1" target="_blank" rel="noreferrer"><span className="dos-pro-icon">◉</span> WhatsApp</a><a href="mailto:info@dos-eg.com"><span className="dos-pro-icon">✉</span> E-Mail</a><a href="tel:+201553002897"><span className="dos-pro-icon">☎</span> خدمة العملاء</a></div></div><form className="dos-pro-form" onSubmit={submitRegistration}>{submitted && <div className="dos-pro-success">{submitted}</div>}{registrationLocked ? <div className="dos-pro-success">تم استلام تسجيلك. لا يمكن إرسال طلب ثانٍ من هذا المتصفح.</div> : <><label>{copy.name}<input required placeholder="مثال: أحمد محمد" value={form.name} onChange={(event) => updateField("name", event.target.value)} /></label><label>{copy.email}<input required type="email" placeholder="name@example.com" value={form.email} onChange={(event) => updateField("email", event.target.value)} /></label><label>{copy.phone}<input required type="tel" placeholder="مثال: 01012345678" value={form.phone} onChange={(event) => updateField("phone", event.target.value)} /></label><label>{copy.qualification}<input placeholder="مثال: طالب جامعي / خريج" value={form.qualification} onChange={(event) => updateField("qualification", event.target.value)} /></label><label>{copy.governorate}<input placeholder="مثال: القاهرة" value={form.governorate} onChange={(event) => updateField("governorate", event.target.value)} /></label><label>{copy.course}<select required value={form.course} onChange={(event) => updateField("course", event.target.value)}><option value="">اختر المستوى والدورة</option><option>A1 Standard</option><option>A2 Standard</option><option>B1 Standard</option><option>B2 Standard</option><option>A1 Intensiv</option><option>A2 Intensiv</option><option>B1 Intensiv</option><option>B2 Intensiv</option><option>DOS Gespräch</option></select></label><button type="submit" disabled={submitting} className="dos-pro-btn dos-pro-btn-primary">{submitting ? "جارٍ إرسال الطلب..." : copy.send}</button></>}</form></div></div></section>
+        <section className="dos-pro-section dos-pro-section-alt" id="register"><div className="dos-pro-section-inner"><div className="dos-pro-register"><div className="dos-pro-register-copy"><div className="dos-pro-eyebrow">DOS ACADEMY</div><h2>{copy.registerTitle}</h2><p>{copy.registerText}</p><div className="dos-pro-contact-strip"><a href="https://wa.me/message/UCIZZX5KGTQDL1" target="_blank" rel="noreferrer"><span className="dos-pro-icon">◉</span> WhatsApp</a><a href="mailto:info@dos-eg.com"><span className="dos-pro-icon">✉</span> E-Mail</a><a href="tel:+201553002897"><span className="dos-pro-icon">☎</span> خدمة العملاء</a></div></div><form className="dos-pro-form" onSubmit={submitRegistration}>{submitted && <div className="dos-pro-success">{submitted}</div>}{registrationLocked ? <div className="dos-pro-success">تم استلام تسجيلك. لا يمكن إرسال طلب ثانٍ من هذا المتصفح.</div> : <><div className="full dos-reg-head"><img src="./dos-wave-logo.svg" alt="DOS" /><div><b>استمارة الانضمام لمجتمع DOS</b><small>الحقول التي بجانبها * إلزامية</small></div></div>
+<label>{copy.name} *<input required placeholder="مثال: أحمد محمد علي" value={form.name} onChange={(event) => updateField("name", event.target.value)} /></label>
+<label>{copy.email} *<input required type="email" dir="ltr" placeholder="name@example.com" value={form.email} onChange={(event) => updateField("email", event.target.value)} /></label>
+<label>{copy.phone} *<input required dir="ltr" type="tel" placeholder="مثال: 01012345678" value={form.phone} onChange={(event) => updateField("phone", event.target.value)} /></label>
+<label>WhatsApp / رقم الواتساب<input  dir="ltr" type="tel" placeholder="لو مختلف عن رقم الهاتف" value={form.wa} onChange={(event) => updateField("wa", event.target.value)} /></label>
+<label>ID Nummer / رقم البطاقة<input  dir="ltr" type="text" placeholder="الرقم القومي" value={form.nid} onChange={(event) => updateField("nid", event.target.value)} /></label>
+<label>Geburtstag / تاريخ الميلاد<input dir="ltr" inputMode="numeric" maxLength={10} placeholder="يوم/شهر/سنة  DD/MM/YYYY" value={form.birth} onChange={(event) => updateField("birth", fmtDMY(event.target.value))} /></label>
+<label>{copy.governorate} *<select required value={form.governorate} onChange={(event) => updateField("governorate", event.target.value)}><option value="">—</option>{REG_GOVS.map((x) => <option key={x}>{x}</option>)}</select></label>
+<label>{copy.qualification}<input type="text" placeholder="مثال: طالب جامعي / خريج" value={form.qualification} onChange={(event) => updateField("qualification", event.target.value)} /></label>
+<label className="full">Ziel / الهدف من تعلم الألمانية<input type="text" placeholder="مثال: السفر / العمل / الدراسة" value={form.goal} onChange={(event) => updateField("goal", event.target.value)} /></label>
+<div className="full dos-reg-sec">الدورة المطلوبة · Kurs</div>
+<label>{copy.course} *<select required value={form.course} onChange={(event) => updateField("course", event.target.value)}><option value="">اختر المستوى والدورة</option><option>A1 Standard</option><option>A2 Standard</option><option>B1 Standard</option><option>B2 Standard</option><option>A1 Intensiv</option><option>A2 Intensiv</option><option>B1 Intensiv</option><option>B2 Intensiv</option><option>DOS Gespräch</option></select></label>
+<label>Telc / اختبار Telc<select value={form.telc} onChange={(event) => updateField("telc", event.target.value)}><option value="">—</option>{REG_LEVELS.map((x) => <option key={x}>{x}</option>)}</select></label>
+<label>Goethe / اختبار Goethe<select value={form.goethe} onChange={(event) => updateField("goethe", event.target.value)}><option value="">—</option>{REG_LEVELS.map((x) => <option key={x}>{x}</option>)}</select></label>
+<label>Herr / المحاضر الخاص<select value={form.tutor} onChange={(event) => updateField("tutor", event.target.value)}><option value="">—</option>{REG_TUTORS.map((x) => <option key={x}>{x}</option>)}</select></label>
+<label>نوع الدورة<select value={form.pace} onChange={(event) => updateField("pace", event.target.value)}><option value="">—</option>{REG_PACE.map((x) => <option key={x}>{x}</option>)}</select></label>
+<label>أونلاين / أوفلاين<select value={form.mode} onChange={(event) => updateField("mode", event.target.value)}><option value="">—</option>{REG_MODE.map((x) => <option key={x}>{x}</option>)}</select></label>
+<div className="full dos-reg-sec">الدفع (اختياري) · Zahlung</div>
+<label>Zahlungsart / وسيلة الدفع<select value={form.pay} onChange={(event) => updateField("pay", event.target.value)}><option value="">—</option>{REG_PAY.map((x) => <option key={x}>{x}</option>)}</select></label>
+<label>Betrag / المبلغ (EGP)<input  dir="ltr" type="text" placeholder="مثال: 3000" value={form.amount} onChange={(event) => updateField("amount", event.target.value)} /></label>
+<label>Datum / تاريخ الدفع<input dir="ltr" inputMode="numeric" maxLength={10} placeholder="يوم/شهر/سنة  DD/MM/YYYY" value={form.paydate} onChange={(event) => updateField("paydate", fmtDMY(event.target.value))} /></label>
+<div className="full dos-reg-sec"><img src="./dos-wave-logo.svg" alt="DOS" />كيف عرفت بنا؟</div>
+<label className="full">كيف عرفت بنا؟<select value={form.src} onChange={(event) => updateField("src", event.target.value)}><option value="">—</option>{REG_SRC.map((x) => <option key={x}>{x}</option>)}</select></label>
+{form.src === FRIEND_SRC && <label className="full">اسم الصديق ثلاثي * (الاسم + اسم الأب + اسم الجد)<input required placeholder="مثال: محمد أحمد علي" value={form.friend} onChange={(event) => updateField("friend", event.target.value)} /></label>}
+<button type="submit" disabled={submitting} className="dos-pro-btn dos-pro-btn-primary">{submitting ? "جارٍ إرسال الطلب..." : copy.send}</button></>}</form></div></div></section>
       </main>
       <footer className="dos-pro-footer">
         <div><strong>DOS — Drei Online Spezialisten</strong><span>{copy.footer}</span><span>© {new Date().getFullYear()} DOS Academy</span></div>
@@ -1758,26 +1836,157 @@ function AnimatedNumber({ value, duration = 1200, suffix = "", formatter = (n) =
   return <>{formatter(display)}{suffix}</>;
 }
 
-function LandingApplicationsPage({ applications, onUpdate, canManage, onBack }) {
+const APP_STATUS = {
+  pending: ["جديد — Neu", "#FFF7E0", "#8A610D"],
+  contacted: ["تم التواصل — Kontaktiert", "#E6F0FB", "#1F5AA6"],
+  approved: ["مقبول — Genehmigt", "#E8F4EC", "#166534"],
+  rejected: ["مرفوض — Abgelehnt", "#FBE8E9", "#B3262E"],
+};
+const APP_BASE_KEYS = ["full_name", "email", "phone", "qualification", "governorate", "course"];
+const APP_GROUPS = [
+  ["البيانات الشخصية — Persönliche Daten", [["full_name", "الاسم"], ["email", "البريد الإلكتروني"], ["phone", "الهاتف"], ["wa", "واتساب"], ["nid", "رقم البطاقة"], ["birth", "تاريخ الميلاد"], ["governorate", "المحافظة"], ["qualification", "المؤهل الدراسي"], ["goal", "الهدف من التعلم"]]],
+  ["الدورة المطلوبة — Kurs", [["course", "الدورة"], ["telc", "اختبار Telc"], ["goethe", "اختبار Goethe"], ["tutor", "المحاضر الخاص"], ["pace", "نوع الدورة"], ["mode", "أونلاين / أوفلاين"]]],
+  ["الدفع — Zahlung", [["pay", "وسيلة الدفع"], ["amount", "المبلغ (EGP)"], ["paydate", "تاريخ الدفع"]]],
+  ["المصدر — Quelle", [["src", "كيف عرف بنا"], ["friend", "اسم الصديق"]]],
+];
+function appValue(app, key) {
+  return APP_BASE_KEYS.includes(key) ? app[key] : (app.extra || {})[key];
+}
+function exportApplicationsExcel(applications) {
+  const cols = [["تاريخ الطلب", (a) => fmtDT(a.created_at)]].concat(APP_GROUPS.flatMap(([, fields]) => fields.map(([key, label]) => [label, (a) => appValue(a, key) || ""]))).concat([["الحالة", (a) => (APP_STATUS[a.status] || [a.status || ""])[0]], ["ملاحظة الإدارة", (a) => a.admin_note || ""]]);
+  const rows = applications.map((a, i) => { const row = { "م": i + 1 }; cols.forEach(([label, get]) => { row[label] = String(get(a) ?? ""); }); return row; });
+  const name = `DOS_Kursbuchungen_${new Date().toISOString().slice(0, 10)}`;
+  if (window.XLSX) {
+    const ws = window.XLSX.utils.json_to_sheet(rows);
+    ws["!cols"] = Object.keys(rows[0] || { "م": 1 }).map((key) => ({ wch: key === "م" ? 5 : key.includes("البريد") || key.includes("الهدف") || key.includes("ملاحظة") ? 32 : 20 }));
+    if (ws["!ref"]) ws["!autofilter"] = { ref: ws["!ref"] };
+    const wb = window.XLSX.utils.book_new();
+    wb.Workbook = { Views: [{ RTL: true }] };
+    window.XLSX.utils.book_append_sheet(wb, ws, "Kursbuchungen");
+    window.XLSX.writeFile(wb, `${name}.xlsx`);
+    return;
+  }
+  const q = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const header = Object.keys(rows[0] || {});
+  const csv = "\uFEFF" + [header.map(q).join(",")].concat(rows.map((r) => header.map((h) => q(r[h])).join(","))).join("\r\n");
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  link.download = `${name}.csv`;
+  link.click();
+}
+const COURSE_OPTIONS = ["A1 Standard", "A2 Standard", "B1 Standard", "B2 Standard", "A1 Intensiv", "A2 Intensiv", "B1 Intensiv", "B2 Intensiv", "DOS Gespräch"];
+const APP_OPTIONS = { governorate: REG_GOVS, course: COURSE_OPTIONS, telc: REG_LEVELS, goethe: REG_LEVELS, tutor: REG_TUTORS, pace: REG_PACE, mode: REG_MODE, pay: REG_PAY, src: REG_SRC };
+const APP_LTR_KEYS = ["email", "phone", "wa", "nid", "amount", "birth", "paydate"];
+function LandingApplicationsPage({ applications, onUpdate, onDelete, canManage, canAddStudent, onAddStudent, onBack }) {
+  const [openId, setOpenId] = useState(null);
+  const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [editId, setEditId] = useState(null);
+  const [draft, setDraft] = useState({});
+  const [busy, setBusy] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const allKeys = APP_GROUPS.flatMap(([, fields]) => fields.map(([key]) => key));
+  function startEdit(application) {
+    setDraft(Object.fromEntries(allKeys.map((key) => [key, String(appValue(application, key) || "")])));
+    setEditId(application.id);
+  }
+  async function saveEdit(application) {
+    const dmy = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (!String(draft.full_name || "").trim()) { alert("الاسم مطلوب."); return; }
+    if ((draft.birth && !dmy.test(draft.birth)) || (draft.paydate && !dmy.test(draft.paydate))) { alert("اكتب التاريخ بصيغة يوم/شهر/سنة، مثال: 25/03/2005"); return; }
+    if (draft.src === FRIEND_SRC && String(draft.friend || "").trim().split(/\s+/).filter(Boolean).length < 3) { alert("اسم الصديق يجب أن يكون ثلاثيًا."); return; }
+    const changes = {};
+    APP_BASE_KEYS.forEach((key) => { changes[key] = String(draft[key] || "").trim(); });
+    changes.course = changes.course || application.course;
+    if ("extra" in application) {
+      const extra = { ...(application.extra || {}) };
+      allKeys.filter((key) => !APP_BASE_KEYS.includes(key)).forEach((key) => {
+        const value = String(draft[key] || "").trim();
+        if (value && (key !== "friend" || draft.src === FRIEND_SRC)) extra[key] = value; else delete extra[key];
+      });
+      changes.extra = extra;
+    }
+    setBusy(true);
+    const ok = await onUpdate(application.id, changes);
+    setBusy(false);
+    if (ok) setEditId(null); else alert("تعذّر حفظ التعديل. تأكد من الصلاحيات ومن الاتصال بالإنترنت.");
+  }
+  const q = query.trim().toLowerCase();
+  const shown = applications.filter((a) => (statusFilter === "all" || a.status === statusFilter) && (!q || [a.full_name, a.email, a.phone, a.governorate, a.course, a.extra?.wa, a.extra?.nid].join(" ").toLowerCase().includes(q)));
+  const countOf = (status) => applications.filter((a) => a.status === status).length;
+  const waLink = (a) => `https://wa.me/${String(a.extra?.wa || a.phone || "").replace(/\D/g, "").replace(/^0(?=1)/, "20")}`;
   return (
     <div className="max-w-6xl mx-auto px-5 md:px-8 py-8">
       <button type="button" onClick={onBack} className="flex items-center gap-1.5 text-sm font-semibold mb-5" style={{ color: COLORS.navy }}><Icon.back /> رجوع إلى لوحة الإدارة — Zurück</button>
       <div className="rounded-2xl border p-5" style={{ borderColor: COLORS.border, backgroundColor: COLORS.panel }}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
           <div><h1 className="text-xl md:text-2xl font-semibold" style={{ color: COLORS.ink, fontFamily: F_DISPLAY }}>طلبات حجز الدورات — Kursbuchungen</h1><p className="text-xs mt-1" style={{ color: COLORS.subtle }}>بيانات التسجيل لا تظهر إلا للمستخدمين المصرّح لهم.</p></div>
-          <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: "#FFF7E0", color: "#8A610D" }}>{applications.filter((item) => item.status === "pending").length} طلب جديد</span>
+          <button type="button" disabled={applications.length === 0} onClick={() => exportApplicationsExcel(applications)} className="rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:opacity-40" style={{ backgroundColor: "#166534" }}>تصدير Excel — كل الطلبات ({applications.length})</button>
         </div>
-        {applications.length === 0 ? <p className="text-sm" style={{ color: COLORS.subtle }}>لا توجد طلبات حجز حتى الآن.</p> : <div className="space-y-3">{applications.map((application) => (
-          <article key={application.id} className="rounded-xl border p-4" style={{ borderColor: COLORS.border, backgroundColor: "#fff" }}>
-            <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-3">
-              <div><h2 className="text-sm font-semibold" style={{ color: COLORS.ink }}>{application.full_name}</h2><p className="text-xs mt-1" style={{ color: COLORS.subtle }}>{application.email} · {application.phone}</p><p className="text-xs mt-1" style={{ color: COLORS.subtle }}>{application.qualification || "—"} · {application.governorate || "—"}</p></div>
-              <div className="flex flex-wrap items-center gap-2"><span className="rounded-full px-2.5 py-1 text-xs font-semibold" style={{ backgroundColor: "#FBE8E9", color: COLORS.red }}>{application.course}</span>{canManage && <select className="rounded-lg border px-2 py-1 text-xs" style={{ borderColor: COLORS.border }} value={application.status} onChange={(event) => onUpdate(application.id, { status: event.target.value })}><option value="pending">جديد — Neu</option><option value="contacted">تم التواصل — Kontaktiert</option><option value="approved">مقبول — Genehmigt</option><option value="rejected">مرفوض — Abgelehnt</option></select>}</div>
-            </div>
-            <p className="text-[11px] mt-3" style={{ color: COLORS.subtle }}>{new Date(application.created_at).toLocaleString("ar-EG")}</p>
-            {canManage && <div className="flex flex-col sm:flex-row gap-2 mt-3"><input className={inputCls} style={inputStyle} defaultValue={application.admin_note || ""} placeholder="ملاحظة للمتابعة" onBlur={(event) => onUpdate(application.id, { admin_note: event.target.value })} /><a className="inline-flex items-center justify-center rounded-lg px-3 py-2 text-xs font-semibold" style={{ backgroundColor: "#E8F4EC", color: "#166534" }} href={`mailto:${application.email}?subject=طلب حجز DOS&body=مرحباً ${application.full_name}،%0D%0Aنتواصل معك بخصوص ${application.course}.`}>مراسلة الطالب</a></div>}
-          </article>
-        ))}</div>}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5">
+          {[["all", "كل الطلبات", applications.length, COLORS.navy], ...Object.entries(APP_STATUS).map(([key, v]) => [key, v[0], countOf(key), v[2]])].map(([key, label, count, color]) => (
+            <button type="button" key={key} onClick={() => setStatusFilter(key)} className="rounded-xl border p-3 text-start" style={{ borderColor: statusFilter === key ? color : COLORS.border, backgroundColor: "#fff", borderWidth: statusFilter === key ? 2 : 1 }}>
+              <div className="text-2xl font-bold" style={{ color }}>{count}</div><div className="text-[11px] font-semibold" style={{ color: COLORS.subtle }}>{label}</div>
+            </button>
+          ))}
+        </div>
+        <input className={`${inputCls} mb-4`} style={inputStyle} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="بحث بالاسم أو الهاتف أو البريد أو المحافظة أو رقم البطاقة…" />
+        {applications.length === 0 ? <p className="text-sm" style={{ color: COLORS.subtle }}>لا توجد طلبات حجز حتى الآن.</p> : shown.length === 0 ? <p className="text-sm" style={{ color: COLORS.subtle }}>لا توجد نتائج مطابقة.</p> : <div className="space-y-3">{shown.map((application) => {
+          const open = openId === application.id;
+          const [statusLabel, statusBg, statusFg] = APP_STATUS[application.status] || [application.status || "—", "#eee", "#555"];
+          const added = String(application.admin_note || "").includes("تمت إضافته كطالب");
+          return (
+            <article key={application.id} className="rounded-xl border overflow-hidden" style={{ borderColor: open ? COLORS.navy : COLORS.border, backgroundColor: "#fff" }}>
+              <button type="button" aria-expanded={open} onClick={() => setOpenId(open ? null : application.id)} className="w-full flex flex-wrap items-center gap-3 p-4 text-start">
+                <span className="flex items-center justify-center rounded-full text-sm font-bold text-white shrink-0" style={{ width: 38, height: 38, backgroundColor: COLORS.navy }}>{String(application.full_name || "?").trim().charAt(0).toUpperCase()}</span>
+                <span className="flex-1 min-w-[160px]"><span className="block text-sm font-semibold" style={{ color: COLORS.ink }}>{application.full_name}</span><span className="block text-xs" style={{ color: COLORS.subtle }}>{application.phone} · {application.governorate || "—"}</span></span>
+                <span className="rounded-full px-2.5 py-1 text-xs font-semibold" style={{ backgroundColor: "#FBE8E9", color: COLORS.red }}>{application.course}</span>
+                <span className="rounded-full px-2.5 py-1 text-xs font-semibold" style={{ backgroundColor: statusBg, color: statusFg }}>{statusLabel}</span>
+                {added && <span className="rounded-full px-2.5 py-1 text-xs font-semibold" style={{ backgroundColor: "#E8F4EC", color: "#166534" }}>طالب مضاف ✓</span>}
+                <span className="text-[11px]" style={{ color: COLORS.subtle }}>{fmtDT(application.created_at)}</span>
+                <span aria-hidden="true" style={{ color: COLORS.subtle, display: "inline-block", transform: open ? "rotate(180deg)" : "none", transition: "transform .2s" }}>▾</span>
+              </button>
+              {open && <div className="border-t p-4" style={{ borderColor: COLORS.border, backgroundColor: "#FAFBFC" }}>
+{editId === application.id ? (
+                  <div className="rounded-lg border p-3 bg-white" style={{ borderColor: COLORS.navy }}>
+                    <h3 className="text-xs font-bold mb-3" style={{ color: COLORS.navy }}>تعديل بيانات الطلب — Anfrage bearbeiten</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">{APP_GROUPS.flatMap(([, fields]) => fields).filter(([key]) => key !== "friend" || draft.src === FRIEND_SRC).map(([key, label]) => {
+                      const options = APP_OPTIONS[key];
+                      const current = draft[key] || "";
+                      const setValue = (value) => setDraft((prev) => ({ ...prev, [key]: key === "birth" || key === "paydate" ? fmtDMY(value) : value }));
+                      return <label key={key} className="flex flex-col gap-1 text-[11px] font-semibold" style={{ color: COLORS.subtle }}>{label}{options
+                        ? <select className={inputCls} style={inputStyle} value={current} onChange={(event) => setValue(event.target.value)}><option value="">—</option>{(current && !options.includes(current) ? [current, ...options] : options).map((option) => <option key={option} value={option}>{option}</option>)}</select>
+                        : <input className={inputCls} style={inputStyle} dir={APP_LTR_KEYS.includes(key) ? "ltr" : undefined} placeholder={key === "birth" || key === "paydate" ? "يوم/شهر/سنة" : ""} value={current} onChange={(event) => setValue(event.target.value)} />}</label>;
+                    })}</div>
+                    <div className="flex gap-2 mt-4">
+                      <button type="button" disabled={busy} onClick={() => saveEdit(application)} className="rounded-lg px-4 py-2 text-xs font-semibold text-white disabled:opacity-50" style={{ backgroundColor: "#166534" }}>{busy ? "جارٍ الحفظ…" : "حفظ التعديلات"}</button>
+                      <button type="button" disabled={busy} onClick={() => setEditId(null)} className="rounded-lg border px-4 py-2 text-xs font-semibold" style={{ borderColor: COLORS.border, color: COLORS.subtle }}>إلغاء</button>
+                    </div>
+                  </div>
+                ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">{APP_GROUPS.map(([title, fields]) => {
+                  const filled = fields.filter(([key]) => appValue(application, key));
+                  if (!filled.length) return null;
+                  return <section key={title} className="rounded-lg border p-3 bg-white" style={{ borderColor: COLORS.border }}><h3 className="text-xs font-bold mb-2" style={{ color: COLORS.navy }}>{title}</h3><dl className="space-y-1">{filled.map(([key, label]) => <div key={key} className="flex flex-wrap gap-x-2 text-xs"><dt style={{ color: COLORS.subtle }}>{label}:</dt><dd className="font-semibold break-words" style={{ color: COLORS.ink }}>{String(appValue(application, key))}</dd></div>)}</dl></section>;
+                })}</div>
+                )}
+                {canManage && <div className="flex flex-col md:flex-row gap-2 mt-4">
+                  <select className="rounded-lg border px-2 py-2 text-xs" style={{ borderColor: COLORS.border }} value={application.status} onChange={(event) => onUpdate(application.id, { status: event.target.value })}>{Object.entries(APP_STATUS).map(([key, v]) => <option key={key} value={key}>{v[0]}</option>)}</select>
+                  <input className={inputCls} style={inputStyle} defaultValue={application.admin_note || ""} placeholder="ملاحظة للمتابعة" onBlur={(event) => onUpdate(application.id, { admin_note: event.target.value })} />
+                </div>}
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {canAddStudent && !added && <button type="button" onClick={() => onAddStudent(application)} className="rounded-lg px-4 py-2 text-xs font-semibold text-white" style={{ backgroundColor: COLORS.navy }}>＋ إضافة كطالب جديد للأكاديمية</button>}
+                  <a className="inline-flex items-center rounded-lg px-3 py-2 text-xs font-semibold" style={{ backgroundColor: "#E8F4EC", color: "#166534" }} target="_blank" rel="noreferrer" href={waLink(application)}>واتساب</a>
+                  <a className="inline-flex items-center rounded-lg px-3 py-2 text-xs font-semibold" style={{ backgroundColor: "#E6F0FB", color: "#1F5AA6" }} href={`mailto:${application.email}?subject=طلب حجز DOS&body=مرحباً ${application.full_name}،%0D%0Aنتواصل معك بخصوص ${application.course}.`}>مراسلة بالبريد</a>
+                  {canManage && editId !== application.id && <button type="button" onClick={() => startEdit(application)} className="rounded-lg border px-3 py-2 text-xs font-semibold" style={{ borderColor: COLORS.navy, color: COLORS.navy }}>تعديل بيانات الطلب</button>}
+                  {canManage && <button type="button" onClick={() => setDeleteTarget(application)} className="rounded-lg px-3 py-2 text-xs font-semibold text-white" style={{ backgroundColor: COLORS.red }}>حذف الطلب</button>}
+                </div>
+              </div>}
+            </article>
+          );
+        })}</div>}
       </div>
+      {deleteTarget && <ConfirmDialog title="تأكيد حذف الطلب" message={`سيتم حذف طلب ${deleteTarget.full_name} نهائيًا ولا يمكن التراجع عن هذا الإجراء.`} onClose={() => setDeleteTarget(null)} onConfirm={async () => { const target = deleteTarget; setDeleteTarget(null); const ok = await onDelete(target.id); if (ok && openId === target.id) setOpenId(null); }} />}
     </div>
   );
 }
@@ -1785,7 +1994,7 @@ function LandingApplicationsPage({ applications, onUpdate, canManage, onBack }) 
 function AdminDashboard({
   students, instructors, adminAccounts, activityLog, profile,
   requests, refreshStudents, refreshInstructors, refreshAdmins, refreshLog, onUpdateRequest, onDeleteRequest,
-  landingApplications, onUpdateLandingApplication, addLog, onLogout, workSessions, onSaveWorkSession, onUpdateWorkSession, studySessions, onUpdateStudySession, libraryBooks, refreshLibrary, onUpdateLibraryBook, onUpdateAccount,
+  landingApplications, onUpdateLandingApplication, onDeleteLandingApplication, addLog, onLogout, workSessions, onSaveWorkSession, onUpdateWorkSession, studySessions, onUpdateStudySession, libraryBooks, refreshLibrary, onUpdateLibraryBook, onUpdateAccount,
 }) {
   const [query, setQuery] = useState("");
   const [modal, setModal] = useState(null); // { mode: 'new'|'edit', data }
@@ -2087,6 +2296,25 @@ function AdminDashboard({
     });
   }
 
+  function addApplicationAsStudent(application) {
+    const base = blankStudent(students);
+    const levelMatch = String(application.course || "").match(/\b(A1|A2|B1|B2|C1)\b/);
+    try { window.localStorage.removeItem(LS_PREFIX + "studentFormDraft_new"); } catch (e) {}
+    setModal({
+      mode: "new",
+      fromApplicationId: application.id,
+      data: {
+        ...base,
+        name: application.full_name || "",
+        nameAr: /[\u0600-\u06FF]/.test(application.full_name || "") ? application.full_name : "",
+        contactEmail: application.email || "",
+        phone: application.phone || "",
+        level: levelMatch ? levelMatch[1] : base.level,
+        educationLevel: application.qualification || "",
+      },
+    });
+  }
+
   async function saveStudent(form, originalId) {
     if (!isAdmin) {
       setErrorMsg("لا تملك صلاحية تعديل بيانات الطلاب. يجب أن يمنحك الأدمن الإذن أولاً.");
@@ -2195,6 +2423,10 @@ function AdminDashboard({
       try {
         window.localStorage.removeItem(LS_PREFIX + `studentFormDraft_${isNewStudent ? "new" : form.profileId || form.id}`);
       } catch (e) {}
+      if (isNewStudent && modal?.fromApplicationId) {
+        const previousNote = (landingApplications || []).find((item) => item.id === modal.fromApplicationId)?.admin_note;
+        try { await onUpdateLandingApplication(modal.fromApplicationId, { status: "approved", admin_note: [previousNote, `تمت إضافته كطالب: ${form.id}`].filter(Boolean).join(" — ") }); } catch (e) {}
+      }
       setModal(null);
       setErrorMsg("SUCCESS: تم حفظ بيانات الطالب وتحديثها بنجاح.");
       if (isNewStudent) {
@@ -2213,9 +2445,17 @@ function AdminDashboard({
   }
 
   async function confirmDelete() {
+    const target = deleteTarget;
     try {
-      await callManageUsers({ action: "delete_user", profile_id: deleteTarget.profileId, username: deleteTarget.id });
+      await callManageUsers({ action: "delete_user", profile_id: target.profileId, username: target.id });
       await refreshStudents();
+      try { await addLog("حذف طالب", `${target.name || target.id} (${target.id})`); } catch (logError) {}
+      if (selectedStudent && selectedStudent.id === target.id) {
+        setSelectedStudent(null);
+        setAdminView("students");
+        window.location.hash = "students";
+      }
+      setErrorMsg("SUCCESS: تم حذف الطالب بنجاح.");
     } catch (e) {
       setErrorMsg(e.message || "تعذّر حذف الطالب.");
     } finally {
@@ -2468,7 +2708,7 @@ function AdminDashboard({
         <InvoicePage invoiceHtml={invoiceHtml} onUpload={handleInvoiceUpload} onBack={() => goTo("dashboard")} />
       )}
       {adminView === "requests" && <RequestsPage requests={requests} onUpdate={onUpdateRequest} onDelete={onDeleteRequest} readOnly={profile.role === "accountant"} onBack={() => goTo("dashboard")} />}
-      {adminView === "applications" && (isAdmin || employeeHasPermission(profile, "view_landing_applications")) && <LandingApplicationsPage applications={landingApplications} onUpdate={onUpdateLandingApplication} canManage={isAdmin || employeeHasPermission(profile, "manage_landing_applications")} onBack={() => goTo("dashboard")} />}
+      {adminView === "applications" && (isAdmin || employeeHasPermission(profile, "view_landing_applications")) && <LandingApplicationsPage applications={landingApplications} onUpdate={onUpdateLandingApplication} canManage={isAdmin || employeeHasPermission(profile, "manage_landing_applications")} onDelete={onDeleteLandingApplication} canAddStudent={isAdmin} onAddStudent={addApplicationAsStudent} onBack={() => goTo("dashboard")} />}
       {adminView === "accounts" && isAdmin && (
         <AdminAccountsPage
           adminAccounts={adminAccounts}
@@ -2525,6 +2765,7 @@ function AdminDashboard({
       {adminView === "student" && selectedStudent && (
         <StudentDetailsPage
           student={selectedStudent}
+          onDelete={isAdmin ? () => setDeleteTarget(selectedStudent) : null}
           onBack={() => goTo("dashboard")}
           onEdit={() => { setAdminView("dashboard"); window.location.hash = "dashboard"; setModal({ mode: "edit", data: JSON.parse(JSON.stringify(selectedStudent)) }); }}
         />
@@ -3470,7 +3711,7 @@ function StatCard({ label, sub, value, accent, action }) {
   );
 }
 
-function StudentDetailsPage({ student, onBack, onEdit }) {
+function StudentDetailsPage({ student, onBack, onEdit, onDelete }) {
   const finance = computeStudentFinance(student);
   return (
     <div className="max-w-4xl mx-auto px-5 md:px-8 py-8">
@@ -3483,7 +3724,7 @@ function StudentDetailsPage({ student, onBack, onEdit }) {
             <h2 className="text-xl font-semibold" style={{ color: COLORS.ink, fontFamily: F_DISPLAY }}>بيانات الطالب — Studentendaten</h2>
             <p className="text-sm mt-1" style={{ color: COLORS.subtle, fontFamily: F_BODY }}>{student.name || student.id}</p>
           </div>
-          <button onClick={onEdit} className="px-4 py-2 rounded-lg text-sm font-semibold" style={{ backgroundColor: COLORS.navy, color: "#fff", fontFamily: F_BODY }}><Icon.edit /> تعديل البيانات</button>
+          <div className="flex flex-wrap gap-2"><button onClick={onEdit} className="px-4 py-2 rounded-lg text-sm font-semibold" style={{ backgroundColor: COLORS.navy, color: "#fff", fontFamily: F_BODY }}><Icon.edit /> تعديل البيانات</button>{onDelete && <button onClick={onDelete} className="px-4 py-2 rounded-lg text-sm font-semibold" style={{ backgroundColor: COLORS.red, color: "#fff", fontFamily: F_BODY }}><Icon.trash /> حذف الطالب</button>}</div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
@@ -5403,7 +5644,18 @@ function App() {
   async function updateLandingApplication(id, changes) {
     if (!profile || !(profile.role === "admin" || employeeHasPermission(profile, "manage_landing_applications"))) return;
     const { error } = await supabaseClient.from("landing_applications").update({ ...changes, updated_at: new Date().toISOString() }).eq("id", id);
-    if (!error) await refreshLandingApplications();
+    if (error) { console.error(error); return false; }
+    await refreshLandingApplications();
+    return true;
+  }
+
+  async function deleteLandingApplication(id) {
+    if (!profile || !(profile.role === "admin" || employeeHasPermission(profile, "manage_landing_applications"))) return false;
+    const { data, error } = await supabaseClient.from("landing_applications").delete().eq("id", id).select();
+    if (error) { alert(`تعذّر حذف الطلب: ${error.message}`); return false; }
+    if (!data || data.length === 0) { alert("لم يُحذف الطلب: لا توجد سياسة حذف (DELETE policy) على جدول landing_applications في Supabase. نفّذ أمر SQL الخاص بالحذف ثم أعد المحاولة."); return false; }
+    await refreshLandingApplications();
+    return true;
   }
 
   async function submitStudentRequest(form) {
@@ -5749,6 +6001,7 @@ function App() {
           onDeleteRequest={deleteStudentRequest}
           landingApplications={landingApplications}
           onUpdateLandingApplication={updateLandingApplication}
+          onDeleteLandingApplication={deleteLandingApplication}
           onLogout={requestLogout}
           workSessions={workSessions}
           onSaveWorkSession={saveWorkSession}
