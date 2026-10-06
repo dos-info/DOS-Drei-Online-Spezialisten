@@ -41,8 +41,9 @@
 <style>
   html, body { margin:0; padding:0; }
   body { -webkit-font-smoothing:antialiased; }
-  .pwa-install-button { position:fixed; right:18px; bottom:18px; z-index:1000; display:none; align-items:center; gap:8px; border:0; border-radius:999px; padding:11px 16px; color:#fff; background:#0B1F3A; box-shadow:0 8px 24px rgba(11,31,58,.3); font:600 14px/1.2 Arial,sans-serif; cursor:pointer; }
-  .pwa-install-button:hover { background:#163d6d; }
+  .pwa-install-button { position:fixed; right:18px; bottom:18px; z-index:1000; display:none; align-items:center; gap:10px; border:0; border-radius:999px; padding:11px 16px 11px 12px; color:#fff; background:linear-gradient(135deg, #0B1F3A, #1B3764); box-shadow:0 12px 26px rgba(11,31,58,.28); font:700 13px/1.2 Cairo, Arial, sans-serif; cursor:pointer; }
+  .pwa-install-button:hover { background:linear-gradient(135deg, #102d56, #1f446f); }
+  .pwa-install-button img { width:22px; height:22px; object-fit:contain; display:block; border-radius:8px; }
 
   .dos-public-page { min-height:100vh; color:#17202b; background:#fbfaf7; font-family:Cairo, Arial, sans-serif; }
   .dos-public-nav { position:sticky; top:0; z-index:20; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:16px clamp(20px, 5vw, 72px); background:rgba(255,255,255,.88); border-bottom:1px solid #e8e5df; backdrop-filter:blur(14px); }
@@ -446,9 +447,46 @@ const INSTRUCTOR_PAGES = [
   { value: "library", label: "المكتبة — Bibliothek" },
   { value: "dictionaries", label: "القواميس — Wörterbücher" },
   { value: "recorded-lectures", label: "المحاضرات المسجلة — Aufzeichnungen" },
+  { value: "assignments", label: "واجبات الطلاب — Hausaufgaben" },
   { value: "requests", label: "الطلبات — Anfragen" },
   { value: "logout", label: "تسجيل الخروج — Abmelden" },
 ];
+
+const ASSIGNMENT_STORAGE_KEY = "dos_student_assignments_v1";
+
+function readStudentAssignments() {
+  try {
+    const raw = window.localStorage.getItem(ASSIGNMENT_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function writeStudentAssignments(items) {
+  try {
+    window.localStorage.setItem(ASSIGNMENT_STORAGE_KEY, JSON.stringify(items));
+  } catch (error) {
+    // ignore storage failures for client-only uploads
+  }
+}
+
+function readAssignmentFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve({
+      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      name: file.name,
+      type: file.type || "application/octet-stream",
+      size: file.size,
+      dataUrl: String(reader.result || ""),
+    });
+    reader.onerror = () => reject(new Error("تعذر قراءة الملف."));
+    reader.readAsDataURL(file);
+  });
+}
 
 function mapLibraryRow(row) {
   return { id: row.id, level: row.level, libraryType: row.library_type || "digital", category: row.category, title: row.title, url: row.url, storagePath: row.storage_path || "", visible: row.visible !== false, studentDownloadEnabled: row.student_download_enabled !== false, instructorProfileId: row.instructor_profile_id };
@@ -4824,11 +4862,11 @@ function StudentStudyPanel({ student, sessions, onSaveSession }) {
   </InfoCard>;
 }
 
-function StudentPortal({ student, attendance, libraryBooks, recordedLectures, refreshRecordedLectures, recordedLecturesError, requests, studySessions, onSaveStudySession, onSubmitRequest, onDeleteRequest, onLogout }) {
+function StudentPortal({ student, attendance, libraryBooks, recordedLectures, refreshRecordedLectures, recordedLecturesError, requests, studySessions, onSaveStudySession, onSubmitRequest, onDeleteRequest, instructors = [], onLogout }) {
   const [dir, setDir] = useState("rtl");
   const studentPageKey = `studentPortalPage_${student.profileId || student.id}`;
   const savedStudentPage = loadLS(studentPageKey, "home");
-  const pageFromHash = ({ "student-home": "home", "student-library": "library", "student-recorded": "recorded", "student-payment": "payment", "student-requests": "requests" })[window.location.hash.replace("#", "")];
+  const pageFromHash = ({ "student-home": "home", "student-library": "library", "student-recorded": "recorded", "student-assignments": "assignments", "student-payment": "payment", "student-requests": "requests" })[window.location.hash.replace("#", "")];
   const [studentPage, setStudentPage] = useState(pageFromHash || savedStudentPage || "home");
   const [studentUpdateCount, setStudentUpdateCount] = useState(0);
   const requestSnapshotRef = useRef(null);
@@ -4873,6 +4911,7 @@ function StudentPortal({ student, attendance, libraryBooks, recordedLectures, re
               const action = e.target.value;
               if (action === "home") setStudentPage("home");
               if (action === "recorded") setStudentPage("recorded");
+              if (action === "assignments") setStudentPage("assignments");
               if (action === "library") setStudentPage("library");
               if (action === "payment") setStudentPage("payment");
               if (action === "requests") setStudentPage("requests");
@@ -4883,6 +4922,7 @@ function StudentPortal({ student, attendance, libraryBooks, recordedLectures, re
             <option value="" disabled>القائمة — Menü</option>
             <option value="home">الرئيسية — Startseite</option>
             <option value="recorded">المحاضرات المسجلة وملحقاتها — Aufzeichnungen</option>
+            <option value="assignments">رفع الواجب — Hausaufgaben einreichen</option>
             <option value="library">المكتبة الإلكترونية — Digitale Bibliothek</option>
             <option value="payment">طرق الدفع — Zahlungsmethoden</option>
             <option value="requests">الطلبات — Anfragen</option>
@@ -4896,6 +4936,7 @@ function StudentPortal({ student, attendance, libraryBooks, recordedLectures, re
         {studentPage !== "home" && <button type="button" onClick={() => setStudentPage("home")} className="flex items-center gap-1.5 text-sm font-semibold mb-5" style={{ color: COLORS.navy }}><Icon.back /> العودة للرئيسية — Zurück</button>}
         {studentPage === "library" && <ElectronicLibraryPage student={student} books={libraryBooks} request={requests.find((item) => item.request_type === "library_payment")} onSubmitPayment={onSubmitRequest} />}
         {studentPage === "recorded" && <RecordedLecturesStudentPage student={student} lectures={recordedLectures} onRefresh={refreshRecordedLectures} loadError={recordedLecturesError} />}
+        {studentPage === "assignments" && <StudentAssignmentsPage student={student} instructors={instructors} />}
         {studentPage === "payment" && <PaymentMethodsCard />}
         {studentPage === "requests" && <StudentRequests student={student} requests={requests} onSubmit={onSubmitRequest} onDelete={onDeleteRequest} />}
         {studentPage === "home" && <>
@@ -4907,25 +4948,6 @@ function StudentPortal({ student, attendance, libraryBooks, recordedLectures, re
             مرحباً بك في لوحة تحكم الطالب الخاصة بك
           </p>
         </div>
-
-        {(() => {
-          const groupKey = recordedGroupKey(student.groupName);
-          const recordedCount = (recordedLectures || []).filter((item) => item.visible && groupKey && recordedGroupKey(item.groupName) === groupKey).length;
-          return (
-            <button type="button" onClick={() => setStudentPage("recorded")} className="mb-4 flex w-full items-center justify-between gap-4 rounded-2xl p-4 text-right transition hover:opacity-95" style={{ background: `linear-gradient(115deg, ${COLORS.navyDeep}, ${COLORS.navyMid})`, color: "#fff" }}>
-              <span className="flex items-center gap-3">
-                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl" style={{ backgroundColor: "rgba(227,168,37,.16)", color: COLORS.gold }}>
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
-                </span>
-                <span>
-                  <span className="block text-sm font-semibold" style={{ fontFamily: F_AR }}>المحاضرات المسجلة وملحقاتها</span>
-                  <span className="block text-xs" style={{ color: "#C6D0DE", fontFamily: F_AR }}>{recordedCount > 0 ? `${recordedCount} محاضرة متاحة لجروبك ${student.groupName || ""}` : `سيتم عرض محاضرات جروبك ${student.groupName || ""} هنا`}</span>
-                </span>
-              </span>
-              <span className="text-xs font-semibold" style={{ color: COLORS.gold }}>فتح ←</span>
-            </button>
-          );
-        })()}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <WalletCard student={student} />
@@ -5259,6 +5281,7 @@ function InstructorPortal({ profile, instructor, students, attendance, libraryBo
         {instructorPage === "work-hours" && <EmployeeWorkPage profile={profile} employees={[]} sessions={workSessions || []} onSaveSession={onSaveWorkSession} onUpdateSession={onUpdateWorkSession} />}
         {instructorPage === "library" && <LibraryPage books={libraryBooks} initialLevel={students[0]?.level} editable onAdd={addLibraryBook} onUpdate={onUpdateLibrary} onDelete={async (id) => { await supabaseClient.from("course_library").delete().eq("id", id); await refreshLibrary(); }} />}
         {instructorPage === "recorded-lectures" && <RecordedLecturesManager lectures={recordedLectures} profile={profile} canManageAll={false} onChanged={refreshRecordedLectures} loadError={recordedLecturesError} groups={recordedGroupsFrom(students)} />}
+        {instructorPage === "assignments" && <InstructorAssignmentsPage students={myStudents.length ? myStudents : students} assignments={readStudentAssignments()} />}
         {instructorPage === "dictionaries" && <LibraryPage books={libraryBooks} initialLevel={students[0]?.level} editable dictionariesOnly onAdd={async (book) => { await supabaseClient.from("course_library").insert({ level: book.level, category: "dictionary", title: book.title.trim(), url: book.url.trim(), visible: true, instructor_profile_id: profile.id }); await refreshLibrary(); }} onUpdate={onUpdateLibrary} onDelete={async (id) => { await supabaseClient.from("course_library").delete().eq("id", id); await refreshLibrary(); }} />}
         {instructorPage === "other" && <InfoCard labelAr="أخرى" labelDe="Weitere"><p className="text-sm" style={{ color: COLORS.ink }}>يمكن استخدام هذه الصفحة لإضافة ملاحظات أو أدوات خاصة بالأكاديمية.</p></InfoCard>}
         {instructorPage === "home" && <InstructorHomePage instructor={instructor} students={students} attendance={attendance} />}
@@ -5625,6 +5648,223 @@ function RecordedSetupNotice({ staff, detail }) {
         ? <>لم يتم تفعيل جداول المحاضرات المسجلة في Supabase بعد. افتح <b>SQL Editor</b> وشغّل ملف <b dir="ltr">supabase_recorded_lectures.sql</b> ثم حدّث الصفحة.</>
         : <>خدمة المحاضرات المسجلة قيد التجهيز حاليًا. حاول مرة أخرى لاحقًا.</>}
       {staff && detail && <span className="mt-1 block text-[11px]" dir="ltr" style={{ color: "#9A7A2B" }}>{detail}</span>}
+    </div>
+  );
+}
+
+function StudentAssignmentsPage({ student, instructors = [] }) {
+  const defaultInstructor = student.instructorName || (instructors || []).find((item) => item?.name || item?.full_name)?.name || "";
+  const [form, setForm] = useState({ title: "", description: "", instructor: defaultInstructor, files: [] });
+  const [message, setMessage] = useState("");
+  const [assignments, setAssignments] = useState(() => readStudentAssignments().filter((item) => item.studentProfileId === (student.profileId || student.id)));
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    setAssignments(readStudentAssignments().filter((item) => item.studentProfileId === (student.profileId || student.id)));
+  }, [student.profileId, student.id]);
+
+  const instructorOptions = [...new Set([defaultInstructor, ...((instructors || []).map((item) => item?.name || item?.full_name || item?.nameAr || "").filter(Boolean))].filter(Boolean))];
+
+  async function handleFiles(event) {
+    const selected = Array.from(event.target.files || []);
+    if (!selected.length) return;
+    try {
+      setBusy(true);
+      const mapped = await Promise.all(selected.map(async (file) => {
+        if (file.size > 25 * 1024 * 1024) throw new Error(`حجم الملف كبير جدًا: ${file.name}`);
+        return readAssignmentFile(file);
+      }));
+      setForm((current) => ({ ...current, files: [...current.files, ...mapped] }));
+      setMessage("");
+    } catch (error) {
+      setMessage(error.message || "تعذر قراءة الملفات المحددة.");
+    } finally {
+      setBusy(false);
+      event.target.value = "";
+    }
+  }
+
+  function removeFile(fileId) {
+    setForm((current) => ({ ...current, files: current.files.filter((file) => file.id !== fileId) }));
+  }
+
+  function submitAssignment() {
+    if (!form.title.trim()) return setMessage("يرجى إدخال عنوان الواجب.");
+    if (!form.description.trim()) return setMessage("يرجى كتابة وصف الواجب أو المطلوب منه.");
+    if (!form.instructor.trim()) return setMessage("يرجى اختيار المحاضر المسؤول.");
+
+    const next = {
+      id: `assignment-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      studentProfileId: student.profileId || student.id,
+      studentName: student.name,
+      title: form.title.trim(),
+      description: form.description.trim(),
+      instructor: form.instructor.trim(),
+      createdAt: new Date().toISOString(),
+      files: form.files,
+      status: "submitted",
+    };
+
+    const all = [next, ...readStudentAssignments().filter((item) => item.studentProfileId !== (student.profileId || student.id))];
+    writeStudentAssignments(all);
+    setAssignments([next, ...assignments]);
+    setForm({ title: "", description: "", instructor: defaultInstructor, files: [] });
+    setMessage("تم رفع الواجب بنجاح وظهر في سجل الواجبات الخاص بك.");
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="rounded-2xl border p-5" style={{ borderColor: COLORS.border, backgroundColor: COLORS.panel }}>
+        <div className="mb-4">
+          <p className="text-xs uppercase tracking-[0.18em]" style={{ color: COLORS.navy, fontFamily: F_BODY }}>DOS · HOMEWORK</p>
+          <h2 className="mt-2 text-2xl font-semibold" style={{ color: COLORS.ink, fontFamily: F_AR }}>رفع الواجب</h2>
+        </div>
+
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          <div className="md:col-span-2">
+            <label className="mb-1 block text-sm font-semibold" style={{ color: COLORS.ink, fontFamily: F_AR }}>عنوان الواجب</label>
+            <input className={inputCls} style={inputStyle} value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} placeholder="مثال: واجب الأسبوع الأول — Aufgabe 1" />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="mb-1 block text-sm font-semibold" style={{ color: COLORS.ink, fontFamily: F_AR }}>المحاضر المسؤول</label>
+            <select className={inputCls} style={inputStyle} value={form.instructor} onChange={(event) => setForm({ ...form, instructor: event.target.value })}>
+              <option value="">اختر المحاضر</option>
+              {instructorOptions.map((item) => <option key={item} value={item}>{item}</option>)}
+            </select>
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="mb-1 block text-sm font-semibold" style={{ color: COLORS.ink, fontFamily: F_AR }}>وصف الواجب</label>
+            <textarea rows={4} className={inputCls} style={inputStyle} value={form.description} onChange={(event) => setForm({ ...form, description: event.target.value })} placeholder="اكتب المطلوب من الواجب، التعليمات، أو أي ملاحظات إضافية..." />
+          </div>
+
+          <div className="md:col-span-2 rounded-xl border border-dashed p-3" style={{ borderColor: COLORS.navy, backgroundColor: "#F9FAFD" }}>
+            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 text-center text-sm" style={{ color: COLORS.navy, fontFamily: F_AR }}>
+              <input type="file" multiple accept="image/*,video/*,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.zip" className="hidden" onChange={handleFiles} />
+              <span className="inline-flex items-center justify-center rounded-full px-3 py-1.5 text-xs font-semibold" style={{ backgroundColor: COLORS.navy, color: "#fff" }}>+ أرفق صور / فيديو / PDF / ملفات</span>
+              <span style={{ color: COLORS.subtle }}>يمكن رفع الصور والفيديوهات والملفات PDF والمستندات.</span>
+            </label>
+            {form.files.length > 0 && (
+              <div className="mt-3 grid gap-2">
+                {form.files.map((file) => (
+                  <div key={file.id} className="flex items-center justify-between rounded-lg border px-3 py-2 text-sm" style={{ borderColor: COLORS.border, backgroundColor: "#fff" }}>
+                    <span className="truncate" dir="ltr" style={{ color: COLORS.ink }}>{file.name}</span>
+                    <button type="button" onClick={() => removeFile(file.id)} className="text-xs font-semibold" style={{ color: COLORS.red }}>حذف</button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <button type="button" disabled={busy} onClick={submitAssignment} className="rounded-lg px-4 py-2.5 text-sm font-semibold disabled:opacity-60" style={{ backgroundColor: COLORS.navy, color: "#fff" }}>
+            {busy ? "جارٍ الإرفاق..." : "إرسال الواجب"}
+          </button>
+          <span className="text-xs" style={{ color: COLORS.subtle, fontFamily: F_AR }}>{form.files.length} مرفق</span>
+        </div>
+
+        {message && <p className="mt-4 rounded-lg px-3 py-2 text-sm" style={{ backgroundColor: message.includes("نجاح") ? "#EAF6EC" : "#FBE7E9", color: message.includes("نجاح") ? "#1E7A38" : COLORS.red }}>{message}</p>}
+      </div>
+
+      <div className="rounded-2xl border p-5" style={{ borderColor: COLORS.border, backgroundColor: COLORS.panel }}>
+        <h3 className="mb-3 text-lg font-semibold" style={{ color: COLORS.ink, fontFamily: F_AR }}>سجل واجباتي</h3>
+        {assignments.length === 0 ? (
+          <p className="text-sm" style={{ color: COLORS.subtle, fontFamily: F_AR }}>لا توجد واجبات مرفوعة بعد.</p>
+        ) : (
+          <div className="space-y-3">
+            {assignments.map((item) => (
+              <div key={item.id} className="rounded-xl border p-4" style={{ borderColor: COLORS.border, backgroundColor: "#fff" }}>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <p className="text-base font-semibold" style={{ color: COLORS.ink, fontFamily: F_AR }}>{item.title}</p>
+                    <p className="text-xs" style={{ color: COLORS.subtle }}>{new Date(item.createdAt).toLocaleString("ar-EG")}</p>
+                  </div>
+                  <span className="rounded-full px-2.5 py-1 text-[10px] font-semibold" style={{ backgroundColor: "#EAF6EC", color: "#1E7A38" }}>{item.status === "submitted" ? "تم الإرسال" : item.status}</span>
+                </div>
+                <p className="mt-2 text-sm leading-7" style={{ color: COLORS.ink, fontFamily: F_AR }}>{item.description}</p>
+                <p className="mt-2 text-xs" style={{ color: COLORS.subtle, fontFamily: F_AR }}>المحاضر: <b>{item.instructor}</b></p>
+                {item.files && item.files.length > 0 && (
+                  <div className="mt-3 grid gap-2">
+                    {item.files.map((file) => (
+                      <div key={`${item.id}-${file.id}`} className="rounded-lg border px-3 py-2" style={{ borderColor: COLORS.border }}>
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="truncate text-sm" dir="ltr" style={{ color: COLORS.ink, maxWidth: "75%" }}>{file.name}</span>
+                          {file.dataUrl ? (
+                            <a href={file.dataUrl} download={file.name} className="text-xs font-semibold" style={{ color: COLORS.navy }}>تنزيل</a>
+                          ) : <span className="text-xs" style={{ color: COLORS.subtle }}>ملف</span>}
+                        </div>
+                        {file.type?.startsWith("image/") && <img src={file.dataUrl} alt={file.name} className="mt-2 max-h-40 w-full rounded-lg object-cover" />}
+                        {file.type?.startsWith("video/") && <video src={file.dataUrl} controls className="mt-2 max-h-40 w-full rounded-lg" />}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function InstructorAssignmentsPage({ students, assignments = [] }) {
+  const [selectedStudentId, setSelectedStudentId] = useState((students || [])[0]?.profileId || "");
+  const items = assignments.filter((item) => item.studentProfileId === selectedStudentId);
+
+  useEffect(() => {
+    if (!selectedStudentId && (students || []).length) setSelectedStudentId(students[0].profileId);
+  }, [students, selectedStudentId]);
+
+  return (
+    <div className="space-y-4">
+      <div className="rounded-2xl border p-5" style={{ borderColor: COLORS.border, backgroundColor: COLORS.panel }}>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs uppercase tracking-[0.18em]" style={{ color: COLORS.navy, fontFamily: F_BODY }}>DOS · ASSIGNMENTS</p>
+            <h2 className="mt-2 text-2xl font-semibold" style={{ color: COLORS.ink, fontFamily: F_AR }}>إدارة واجبات الطلاب</h2>
+          </div>
+          <select className={inputCls} style={{ ...inputStyle, maxWidth: 280 }} value={selectedStudentId} onChange={(event) => setSelectedStudentId(event.target.value)}>
+            {(students || []).map((student) => <option key={student.profileId || student.id} value={student.profileId || student.id}>{student.name} — {student.groupName || "—"}</option>)}
+          </select>
+        </div>
+      </div>
+
+      {items.length === 0 ? (
+        <div className="rounded-2xl border p-8 text-center text-sm" style={{ borderColor: COLORS.border, backgroundColor: COLORS.panel, color: COLORS.subtle, fontFamily: F_AR }}>لا توجد واجبات مرفوعة لهذا الطالب حتى الآن.</div>
+      ) : (
+        <div className="space-y-3">
+          {items.map((item) => (
+            <div key={item.id} className="rounded-2xl border p-4" style={{ borderColor: COLORS.border, backgroundColor: COLORS.panel }}>
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <p className="text-lg font-semibold" style={{ color: COLORS.ink, fontFamily: F_AR }}>{item.title}</p>
+                  <p className="text-xs" style={{ color: COLORS.subtle }}>{new Date(item.createdAt).toLocaleString("ar-EG")}</p>
+                </div>
+                <span className="rounded-full px-2.5 py-1 text-[10px] font-semibold" style={{ backgroundColor: "#EAF6EC", color: "#1E7A38" }}>{item.status}</span>
+              </div>
+              <p className="mt-3 whitespace-pre-line text-sm leading-7" style={{ color: COLORS.ink, fontFamily: F_AR }}>{item.description}</p>
+              <p className="mt-2 text-xs" style={{ color: COLORS.subtle, fontFamily: F_AR }}>المحاضر: <b>{item.instructor}</b></p>
+              {item.files?.length > 0 && (
+                <div className="mt-3 grid gap-2">
+                  {item.files.map((file) => (
+                    <div key={`${item.id}-${file.id}`} className="rounded-lg border px-3 py-2" style={{ borderColor: COLORS.border, backgroundColor: "#fff" }}>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="truncate text-sm" dir="ltr" style={{ color: COLORS.ink, maxWidth: "75%" }}>{file.name}</span>
+                        <a href={file.dataUrl} download={file.name} className="text-xs font-semibold" style={{ color: COLORS.navy }}>تنزيل</a>
+                      </div>
+                      {file.type?.startsWith("image/") && <img src={file.dataUrl} alt={file.name} className="mt-2 max-h-40 w-full rounded-lg object-cover" />}
+                      {file.type?.startsWith("video/") && <video src={file.dataUrl} controls className="mt-2 max-h-40 w-full rounded-lg" />}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -6599,7 +6839,7 @@ function App() {
       )}
 
       {session && profile && profile.role === "student" && myRecord && (
-        <StudentPortal student={myRecord} attendance={attendance} libraryBooks={libraryBooks} recordedLectures={recordedLectures} refreshRecordedLectures={refreshRecordedLectures} recordedLecturesError={recordedLecturesError} requests={requests} studySessions={studySessions.filter((item) => item.studentProfileId === myRecord.profileId)} onSaveStudySession={saveStudySession} onSubmitRequest={submitStudentRequest} onDeleteRequest={deleteStudentRequest} onLogout={requestLogout} />
+        <StudentPortal student={myRecord} attendance={attendance} libraryBooks={libraryBooks} recordedLectures={recordedLectures} refreshRecordedLectures={refreshRecordedLectures} recordedLecturesError={recordedLecturesError} requests={requests} studySessions={studySessions.filter((item) => item.studentProfileId === myRecord.profileId)} instructors={instructors} onSaveStudySession={saveStudySession} onSubmitRequest={submitStudentRequest} onDeleteRequest={deleteStudentRequest} onLogout={requestLogout} />
       )}
       {showLogoutConfirm && <ConfirmActionModal title="تأكيد تسجيل الخروج" message="هل تريد تسجيل الخروج من النظام الآن؟" confirmLabel="تسجيل الخروج" onConfirm={() => { setShowLogoutConfirm(false); handleLogout(); }} onClose={() => setShowLogoutConfirm(false)} />}
     </div>
@@ -6611,7 +6851,17 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 
 if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+    navigator.serviceWorker.register("./service-worker.js").then((registration) => {
+      registration.update().catch(() => {});
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        window.location.reload();
+      });
+      navigator.serviceWorker.addEventListener("message", (event) => {
+        if (event.data && event.data.type === "APP_UPDATED") {
+          window.location.reload();
+        }
+      });
+    }).catch(() => {});
   });
 }
 
@@ -6622,8 +6872,8 @@ window.addEventListener("beforeinstallprompt", (event) => {
   const installButton = document.createElement("button");
   installButton.className = "pwa-install-button";
   installButton.type = "button";
-  installButton.textContent = "تثبيت تطبيق DOS";
   installButton.setAttribute("aria-label", "تثبيت DOS Web كتطبيق على الهاتف");
+  installButton.innerHTML = '<img src="./dos-app-icon.svg" alt="DOS icon" /><span>تثبيت تطبيق DOS</span>';
   installButton.style.display = "flex";
   installButton.addEventListener("click", async () => {
     if (!deferredInstallPrompt) return;

@@ -1,6 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#0b1f3a"/>
-  <path d="M64 350V162h122c68 0 111 35 111 94s-43 94-111 94H64Zm74-58h46c26 0 43-12 43-36s-17-36-43-36h-46v72Z" fill="#fff"/>
-  <path d="M286 197c20-25 49-39 84-39 48 0 82 23 82 58 0 31-26 49-67 49h-40c-14 0-22 6-22 17 0 12 10 19 27 19h92l-32 49h-73c-56 0-91-26-91-66 0-38 32-61 85-61h39c14 0 23-5 23-15 0-11-11-18-28-18h-60l-19-31Z" fill="#e2a824"/>
-  <path d="M290 282c-19 20-38 29-59 29-25 0-46-13-57-31l-44 47c23 29 59 46 104 46 28 0 53-7 73-20-18-13-28-35-28-61 0-4 0-7 1-10l10 0Z" fill="#db2b32"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">DOS app icon</title>
+  <desc id="desc">Transparent app icon with black, red and gold wave marks.</desc>
+  <defs>
+    <linearGradient id="dosBlack" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111111"/>
+      <stop offset="1" stop-color="#2c2c2c"/>
+    </linearGradient>
+    <linearGradient id="dosRed" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff3d30"/>
+      <stop offset="1" stop-color="#d91d1d"/>
+    </linearGradient>
+    <linearGradient id="dosGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffd658"/>
+      <stop offset="1" stop-color="#f0ab00"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <path d="M54 326c44-58 94-82 158-74 43 6 66 31 111 37 53 8 101-3 154-41-22 49-67 88-120 92-52 4-93-23-136-29-53-7-103 4-167 15Z" fill="url(#dosBlack)"/>
+    <path d="M81 194c52-76 117-94 181-79 46 11 77 42 124 51 53 11 109 0 162-42-25 63-81 106-144 109-62 3-106-28-154-37-51-9-110 2-169 14Z" fill="url(#dosRed)"/>
+    <path d="M107 94c48-56 105-74 170-60 46 10 74 36 118 48 57 15 112 1 162-42-27 59-81 105-143 110-65 6-112-21-158-31-48-10-104 0-149 15Z" fill="url(#dosGold)"/>
+  </g>
 </svg>
