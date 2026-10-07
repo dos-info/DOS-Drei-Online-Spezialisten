@@ -442,7 +442,6 @@ const INSTRUCTOR_PAGES = [
   { value: "dictionaries", label: "القواميس — Wörterbücher" },
   { value: "recorded-lectures", label: "المحاضرات المسجلة — Aufzeichnungen" },
   { value: "chat", label: "المحادثات — Chat" },
-  { value: "photo", label: "الصورة الشخصية — Profilbild" },
   { value: "homework", label: "الواجبات المرفوعة — Hausaufgaben" },
   { value: "requests", label: "الطلبات — Anfragen" },
   { value: "logout", label: "تسجيل الخروج — Abmelden" },
@@ -2008,7 +2007,7 @@ function AdminDashboard({
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [saving, setSaving] = useState(false);
   const [invoiceHtml, setInvoiceHtml] = useState(() => loadLS("invoiceHtml", null)); // uploaded invoice template (HTML string)
-  const VALID_VIEWS = ["dashboard", "requests", "applications", "study-report", "financial", "invoice", "accounts", "work-hours", "library", "recorded-lectures", "homework", "chat", "photo", "instructors", "log", "student", "students", "add-student"];
+  const VALID_VIEWS = ["dashboard", "requests", "applications", "study-report", "financial", "invoice", "accounts", "work-hours", "library", "recorded-lectures", "homework", "chat", "instructors", "log", "student", "students", "add-student"];
   const isAdministrationRole = ["admin", "accountant", "staff"].includes(profile?.role);
   const isAccountantRestricted = profile?.role === "accountant";
   const isAdmin = profile?.role === "admin";
@@ -2678,7 +2677,6 @@ function AdminDashboard({
                 {employeeHasPermission(profile, "view_work_hours") && <MenuItem icon={<Icon.history />} label="ساعات العمل والحالات — Arbeitszeit" color="#0F766E" onClick={() => goTo("work-hours")} />}
                 {employeeHasPermission(profile, "manage_library") && <MenuItem icon={<Icon.list />} label="المكتبة — Bibliothek" color="#B45309" onClick={() => goTo("library")} />}
                 {employeeHasPermission(profile, "manage_recorded_lectures") && <MenuItem icon={<Icon.eye />} label="المحاضرات المسجلة — Aufzeichnungen" color="#C8283A" onClick={() => goTo("recorded-lectures")} />}
-                {isAdmin && <MenuItem icon={<Icon.eye />} label="الصورة الشخصية — Profilbild" color="#B8892B" onClick={() => goTo("photo")} />}
                 {isAdmin && <MenuItem icon={<Icon.eye />} label="المحادثات — Chat" color="#1F5AA6" onClick={() => goTo("chat")} />}
                 {(isAdmin || employeeHasPermission(profile, "manage_recorded_lectures")) && <MenuItem icon={<Icon.list />} label="الواجبات المرفوعة — Hausaufgaben" color="#7C3AED" onClick={() => goTo("homework")} />}
 
@@ -2730,10 +2728,9 @@ function AdminDashboard({
         />
       )}
       {adminView === "work-hours" && <EmployeeWorkPage profile={profile} employees={adminAccounts} sessions={workSessions} onSaveSession={onSaveWorkSession} onUpdateSession={onUpdateWorkSession} />}
-      {adminView === "photo" && isAdmin && <ProfilePhotoPage profileId={profile.id} name={profile.name_ar || profile.full_name || "الإدارة"} />}
       {adminView === "chat" && isAdmin && <ChatPage role="admin" profile={profile} displayName={profile.name_ar || profile.full_name || "الإدارة"} students={students} />}
       {isAdmin && <ChatNotifier profile={profile} />}
-      {isAdmin && <CallCenter profile={profile} role="admin" displayName={profile.name_ar || profile.full_name || "الإدارة"} speechName={profile.full_name || profile.name} />}
+      {isAdmin && <CallCenter profile={profile} role="admin" displayName={profile.name_ar || profile.full_name || "الإدارة"} />}
       {adminView === "homework" && (isAdmin || employeeHasPermission(profile, "manage_recorded_lectures")) && <HomeworkManager profile={profile} isAdmin />}
       {adminView === "recorded-lectures" && employeeHasPermission(profile, "manage_recorded_lectures") && <RecordedLecturesManager lectures={recordedLectures} profile={profile} canManageAll onChanged={refreshRecordedLectures} loadError={recordedLecturesError} groups={recordedGroupsFrom(students)} />}
       {adminView === "library" && isAdmin && <LibraryPage books={libraryBooks} initialLevel="A1" editable onAdd={addAdminLibraryBook} onUpdate={onUpdateLibraryBook} onDelete={async (id) => { const { error } = await supabaseClient.from("course_library").delete().eq("id", id); if (error) throw new Error(error.message); await refreshLibrary(); }} />}
@@ -4834,7 +4831,7 @@ function StudentPortal({ student, attendance, libraryBooks, recordedLectures, re
   const [dir, setDir] = useState("rtl");
   const studentPageKey = `studentPortalPage_${student.profileId || student.id}`;
   const savedStudentPage = loadLS(studentPageKey, "home");
-  const pageFromHash = ({ "student-home": "home", "student-library": "library", "student-recorded": "recorded", "student-homework": "homework", "student-chat": "chat", "student-photo": "photo", "student-payment": "payment", "student-requests": "requests" })[window.location.hash.replace("#", "")];
+  const pageFromHash = ({ "student-home": "home", "student-library": "library", "student-recorded": "recorded", "student-homework": "homework", "student-chat": "chat", "student-payment": "payment", "student-requests": "requests" })[window.location.hash.replace("#", "")];
   const [studentPage, setStudentPage] = useState(pageFromHash || savedStudentPage || "home");
   const [studentUpdateCount, setStudentUpdateCount] = useState(0);
   const requestSnapshotRef = useRef(null);
@@ -4881,7 +4878,6 @@ function StudentPortal({ student, attendance, libraryBooks, recordedLectures, re
               if (action === "recorded") setStudentPage("recorded");
               if (action === "homework") setStudentPage("homework");
               if (action === "chat") setStudentPage("chat");
-              if (action === "photo") setStudentPage("photo");
               if (action === "library") setStudentPage("library");
               if (action === "payment") setStudentPage("payment");
               if (action === "requests") setStudentPage("requests");
@@ -4893,7 +4889,6 @@ function StudentPortal({ student, attendance, libraryBooks, recordedLectures, re
             <option value="home">الرئيسية — Startseite</option>
             <option value="recorded">المحاضرات المسجلة وملحقاتها — Aufzeichnungen</option>
             <option value="chat">المحادثات — Chat</option>
-            <option value="photo">الصورة الشخصية — Profilbild</option>
             <option value="homework">رفع الواجب — Hausaufgaben</option>
             <option value="library">المكتبة الإلكترونية — Digitale Bibliothek</option>
             <option value="payment">طرق الدفع — Zahlungsmethoden</option>
@@ -4909,10 +4904,9 @@ function StudentPortal({ student, attendance, libraryBooks, recordedLectures, re
         {studentPage === "library" && <ElectronicLibraryPage student={student} books={libraryBooks} request={requests.find((item) => item.request_type === "library_payment")} onSubmitPayment={onSubmitRequest} />}
         {studentPage === "recorded" && <RecordedLecturesStudentPage student={student} lectures={recordedLectures} onRefresh={refreshRecordedLectures} loadError={recordedLecturesError} />}
         {studentPage === "homework" && <HomeworkStudentPage student={student} />}
-        {studentPage === "photo" && <ProfilePhotoPage profileId={student.profileId} name={student.nameAr || student.name} />}
         {studentPage === "chat" && <ChatPage role="student" profile={{ id: student.profileId }} displayName={student.nameAr || student.name} student={student} students={[student]} />}
         <ChatNotifier profile={{ id: student.profileId }} />
-        <CallCenter profile={{ id: student.profileId }} role="student" displayName={student.nameAr || student.name} speechName={student.name} />
+        <CallCenter profile={{ id: student.profileId }} role="student" displayName={student.nameAr || student.name} />
         {studentPage === "payment" && <PaymentMethodsCard />}
         {studentPage === "requests" && <StudentRequests student={student} requests={requests} onSubmit={onSubmitRequest} onDelete={onDeleteRequest} />}
         {studentPage === "home" && <>
@@ -5258,10 +5252,9 @@ function InstructorPortal({ profile, instructor, students, attendance, libraryBo
         {instructorPage === "library" && <LibraryPage books={libraryBooks} initialLevel={students[0]?.level} editable onAdd={addLibraryBook} onUpdate={onUpdateLibrary} onDelete={async (id) => { await supabaseClient.from("course_library").delete().eq("id", id); await refreshLibrary(); }} />}
         {instructorPage === "recorded-lectures" && <RecordedLecturesManager lectures={recordedLectures} profile={profile} canManageAll={false} onChanged={refreshRecordedLectures} loadError={recordedLecturesError} groups={recordedGroupsFrom(students)} />}
         {instructorPage === "homework" && <HomeworkManager profile={profile} isAdmin={false} />}
-        {instructorPage === "photo" && <ProfilePhotoPage profileId={profile.id} name={profile.name_ar || profile.full_name || "المحاضر"} />}
         {instructorPage === "chat" && <ChatPage role="instructor" profile={profile} displayName={profile.name_ar || profile.full_name} students={students} />}
         <ChatNotifier profile={profile} />
-        <CallCenter profile={profile} role="instructor" displayName={profile.name_ar || profile.full_name} speechName={profile.full_name || profile.name} />
+        <CallCenter profile={profile} role="instructor" displayName={profile.name_ar || profile.full_name} />
         {instructorPage === "dictionaries" && <LibraryPage books={libraryBooks} initialLevel={students[0]?.level} editable dictionariesOnly onAdd={async (book) => { await supabaseClient.from("course_library").insert({ level: book.level, category: "dictionary", title: book.title.trim(), url: book.url.trim(), visible: true, instructor_profile_id: profile.id }); await refreshLibrary(); }} onUpdate={onUpdateLibrary} onDelete={async (id) => { await supabaseClient.from("course_library").delete().eq("id", id); await refreshLibrary(); }} />}
         {instructorPage === "other" && <InfoCard labelAr="أخرى" labelDe="Weitere"><p className="text-sm" style={{ color: COLORS.ink }}>يمكن استخدام هذه الصفحة لإضافة ملاحظات أو أدوات خاصة بالأكاديمية.</p></InfoCard>}
         {instructorPage === "home" && <InstructorHomePage instructor={instructor} students={students} attendance={attendance} />}
@@ -6414,187 +6407,6 @@ function HomeworkManager({ profile, isAdmin }) {
 
 
 /* ====================================================================== */
-/*  الصورة الشخصية — Profilbild                                            */
-/* ====================================================================== */
-const AVATAR_BUCKET = "avatars";
-
-const avatarStore = {
-  map: new Map(),
-  pending: new Set(),
-  listeners: new Set(),
-  timer: null,
-  subscribe(fn) { this.listeners.add(fn); return () => this.listeners.delete(fn); },
-  notify() { this.listeners.forEach((fn) => fn()); },
-  request(id) {
-    if (!id || this.map.has(id) || this.pending.has(id)) return;
-    this.pending.add(id);
-    clearTimeout(this.timer);
-    this.timer = setTimeout(() => this.flush(), 60);
-  },
-  async flush() {
-    const ids = [...this.pending];
-    this.pending.clear();
-    if (!ids.length) return;
-    try {
-      const { data } = await supabaseClient.from("profile_avatars").select("profile_id,path").in("profile_id", ids);
-      const rows = data || [];
-      const urls = {};
-      if (rows.length) {
-        const signed = await supabaseClient.storage.from(AVATAR_BUCKET).createSignedUrls(rows.map((row) => row.path), 3600);
-        (signed.data || []).forEach((item) => { if (item.signedUrl) urls[item.path] = item.signedUrl; });
-      }
-      ids.forEach((id) => {
-        const row = rows.find((item) => item.profile_id === id);
-        this.map.set(id, row && urls[row.path] ? urls[row.path] : "");
-      });
-    } catch (e) {
-      ids.forEach((id) => this.map.set(id, ""));
-    }
-    this.notify();
-  },
-  refresh(id) { if (!id) return; this.map.delete(id); this.pending.add(id); this.flush(); },
-};
-
-function useAvatarUrl(id) {
-  const [, setVersion] = useState(0);
-  useEffect(() => {
-    if (!id) return undefined;
-    avatarStore.request(id);
-    return avatarStore.subscribe(() => setVersion((n) => n + 1));
-  }, [id]);
-  return id ? avatarStore.map.get(id) || "" : "";
-}
-
-function Avatar({ id, name, size = 40, style }) {
-  const url = useAvatarUrl(id);
-  const retried = useRef(false);
-  const initial = String(name || "؟").trim().charAt(0) || "؟";
-  return (
-    <span className="relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full font-bold" style={{ width: size, height: size, fontSize: Math.round(size * 0.4), background: url ? "#E3E8F0" : `linear-gradient(160deg, ${COLORS.navy}, ${COLORS.navyMid})`, color: "#fff", fontFamily: F_AR, ...style }}>
-      {url
-        ? <img src={url} alt="" draggable={false} style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={() => { if (!retried.current) { retried.current = true; avatarStore.refresh(id); } }} />
-        : initial}
-    </span>
-  );
-}
-
-function avatarProcessImage(file, size) {
-  return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = () => {
-      try {
-        const side = Math.min(img.width, img.height);
-        const sx = (img.width - side) / 2;
-        const sy = (img.height - side) / 2;
-        const canvas = document.createElement("canvas");
-        canvas.width = size; canvas.height = size;
-        const ctx = canvas.getContext("2d");
-        ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, size, size);
-        ctx.drawImage(img, sx, sy, side, side, 0, 0, size, size);
-        canvas.toBlob((blob) => { URL.revokeObjectURL(url); if (blob) resolve(blob); else reject(new Error("تعذر معالجة الصورة.")); }, "image/jpeg", 0.88);
-      } catch (e) { URL.revokeObjectURL(url); reject(e); }
-    };
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("الملف ليس صورة صالحة.")); };
-    img.src = url;
-  });
-}
-
-function ProfilePhotoPage({ profileId, name }) {
-  const currentUrl = useAvatarUrl(profileId);
-  const [preview, setPreview] = useState(null);   // { blob, url }
-  const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState({ type: "", text: "" });
-  const [inputKey, setInputKey] = useState(0);
-  const [confirmRemove, setConfirmRemove] = useState(false);
-
-  useEffect(() => () => { if (preview?.url) URL.revokeObjectURL(preview.url); }, [preview]);
-
-  async function pick(event) {
-    const file = (event.target.files || [])[0];
-    event.target.value = "";
-    if (!file) return;
-    if (!String(file.type).startsWith("image/")) { setMessage({ type: "err", text: "اختر ملف صورة (JPG / PNG / WebP)." }); return; }
-    if (file.size > 15 * 1024 * 1024) { setMessage({ type: "err", text: "حجم الصورة كبير (الحد الأقصى 15 ميجابايت)." }); return; }
-    try {
-      const blob = await avatarProcessImage(file, 384);
-      setPreview({ blob, url: URL.createObjectURL(blob) });
-      setMessage({ type: "", text: "" });
-    } catch (error) { setMessage({ type: "err", text: error.message }); }
-  }
-
-  async function save() {
-    if (!preview || busy) return;
-    setBusy(true); setMessage({ type: "", text: "" });
-    try {
-      const { data: existing } = await supabaseClient.from("profile_avatars").select("path").eq("profile_id", profileId).maybeSingle();
-      const path = `${profileId}/avatar-${Date.now()}.jpg`;
-      const { error: upErr } = await supabaseClient.storage.from(AVATAR_BUCKET).upload(path, preview.blob, { contentType: "image/jpeg", cacheControl: "3600", upsert: false });
-      if (upErr) throw new Error(upErr.message);
-      const { error: rowErr } = await supabaseClient.from("profile_avatars").upsert({ profile_id: profileId, path, updated_at: new Date().toISOString() });
-      if (rowErr) { await supabaseClient.storage.from(AVATAR_BUCKET).remove([path]); throw new Error(rowErr.message); }
-      if (existing?.path) await supabaseClient.storage.from(AVATAR_BUCKET).remove([existing.path]);
-      avatarStore.refresh(profileId);
-      setPreview(null); setInputKey((n) => n + 1);
-      setMessage({ type: "ok", text: "تم تحديث الصورة الشخصية ✓" });
-    } catch (error) {
-      setMessage({ type: "err", text: `تعذر حفظ الصورة: ${error.message} — تأكد من تشغيل ملف supabase_avatars.sql` });
-    }
-    setBusy(false);
-  }
-
-  async function removeAvatar() {
-    setBusy(true);
-    try {
-      const { data: existing } = await supabaseClient.from("profile_avatars").select("path").eq("profile_id", profileId).maybeSingle();
-      if (existing?.path) await supabaseClient.storage.from(AVATAR_BUCKET).remove([existing.path]);
-      await supabaseClient.from("profile_avatars").delete().eq("profile_id", profileId);
-      avatarStore.refresh(profileId);
-      setMessage({ type: "ok", text: "تم حذف الصورة الشخصية." });
-    } catch (error) { setMessage({ type: "err", text: error.message }); }
-    setBusy(false);
-  }
-
-  return (
-    <div className="space-y-4">
-      <div className="relative overflow-hidden rounded-2xl p-6" style={{ background: `linear-gradient(115deg, ${COLORS.navyDeep}, ${COLORS.navyMid})`, color: "#fff" }}>
-        <p className="text-xs uppercase tracking-widest" style={{ color: COLORS.gold }}>DOS ACADEMY · PROFILBILD</p>
-        <h1 className="mt-2 text-2xl font-semibold" style={{ fontFamily: F_AR }}>الصورة الشخصية</h1>
-        <p className="mt-1 text-sm" style={{ color: "#C6D0DE", fontFamily: F_AR }}>تظهر صورتك في المحادثات وشاشة المكالمات.</p>
-        <div className="absolute -left-8 -bottom-20 h-48 w-48 rounded-full border-[18px] opacity-25" style={{ borderColor: COLORS.gold }} />
-      </div>
-
-      <div className="rounded-2xl border p-6 text-center" style={{ borderColor: COLORS.border, backgroundColor: COLORS.panel }}>
-        <div className="mx-auto" style={{ width: 150, height: 150 }}>
-          {preview
-            ? <img src={preview.url} alt="" className="h-full w-full rounded-full object-cover" style={{ border: `3px solid ${COLORS.gold}` }} />
-            : <Avatar id={profileId} name={name} size={150} style={{ border: `3px solid ${COLORS.gold}` }} />}
-        </div>
-        <p className="mt-3 text-sm font-semibold" style={{ color: COLORS.ink, fontFamily: F_AR }}>{name}</p>
-        {preview && <p className="mt-1 text-xs" style={{ color: COLORS.subtle, fontFamily: F_AR }}>معاينة — لم يتم الحفظ بعد</p>}
-
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-          <label className="cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold" style={{ backgroundColor: COLORS.navy, color: "#fff", fontFamily: F_AR }}>
-            <input key={inputKey} type="file" accept="image/*" className="hidden" onChange={pick} disabled={busy} />
-            {currentUrl || preview ? "تغيير الصورة" : "اختيار صورة"}
-          </label>
-          {preview && <button type="button" onClick={save} disabled={busy} className="rounded-lg px-4 py-2 text-sm font-semibold disabled:opacity-60" style={{ backgroundColor: COLORS.red, color: "#fff", fontFamily: F_AR }}>{busy ? "جاري الحفظ..." : "حفظ"}</button>}
-          {preview && <button type="button" onClick={() => setPreview(null)} disabled={busy} className="rounded-lg border px-4 py-2 text-sm font-semibold" style={{ borderColor: COLORS.border, color: COLORS.navy, fontFamily: F_AR }}>إلغاء</button>}
-          {!preview && currentUrl && <button type="button" onClick={() => setConfirmRemove(true)} disabled={busy} className="rounded-lg border px-4 py-2 text-sm font-semibold" style={{ borderColor: "#F3C4CA", color: COLORS.red, fontFamily: F_AR }}>حذف الصورة</button>}
-        </div>
-        <p className="mt-3 text-[11px]" style={{ color: COLORS.subtle, fontFamily: F_AR }}>يتم قص الصورة تلقائيًا بشكل مربع من المنتصف.</p>
-        {message.text && <p className="mt-3 rounded-lg px-3 py-2 text-xs leading-6" style={{ backgroundColor: message.type === "ok" ? "#EAF6EC" : "#FBE7E9", color: message.type === "ok" ? "#1E7A38" : COLORS.red, fontFamily: F_AR }}>{message.text}</p>}
-      </div>
-
-      {confirmRemove && (
-        <ConfirmActionModal title="حذف الصورة الشخصية" message="سيتم حذف صورتك الشخصية. هل تريد المتابعة؟" confirmLabel="حذف" onClose={() => setConfirmRemove(false)} onConfirm={() => { setConfirmRemove(false); removeAvatar(); }} />
-      )}
-    </div>
-  );
-}
-
-
-/* ====================================================================== */
 /*  المحادثات — Chat (جماعي لكل جروب + فردي مع المحاضر) + صوت إشعار        */
 /* ====================================================================== */
 const CHAT_MAX_LEN = 1000;
@@ -6746,7 +6558,7 @@ function ChatPage({ role, profile, displayName, student, students }) {
     const list = [];
     if (role === "student" && student) {
       if (student.groupName) list.push({ type: "group", groupName: student.groupName, title: `جروب ${student.groupName}`, sub: "محادثة جماعية مع المحاضر وزملائك" });
-      if (student.instructorId) list.push({ type: "direct", studentProfileId: student.profileId, title: "المحاضر المسؤول", sub: "محادثة خاصة بينك وبين المحاضر", avatarId: student.instructorId, latin: "" });
+      if (student.instructorId) list.push({ type: "direct", studentProfileId: student.profileId, title: "المحاضر المسؤول", sub: "محادثة خاصة بينك وبين المحاضر" });
     } else {
       const seen = new Set();
       (students || []).forEach((item) => {
@@ -6758,7 +6570,7 @@ function ChatPage({ role, profile, displayName, student, students }) {
       (students || []).forEach((item) => {
         if (!item.profileId) return;
         if (!isAdmin && !item.instructorId) return;
-        list.push({ type: "direct", studentProfileId: item.profileId, avatarId: item.profileId, latin: item.name || "", title: item.nameAr || item.name || item.id, sub: item.groupName ? `فردي — ${item.groupName}` : "محادثة فردية" });
+        list.push({ type: "direct", studentProfileId: item.profileId, title: item.nameAr || item.name || item.id, sub: item.groupName ? `فردي — ${item.groupName}` : "محادثة فردية" });
       });
     }
     list.forEach((room) => { room.key = chatRoomKey(room); });
@@ -6977,7 +6789,7 @@ function ChatPage({ role, profile, displayName, student, students }) {
   function startCall(video) {
     const target = callTarget();
     if (!target) return;
-    window.dispatchEvent(new CustomEvent("dos-call-start", { detail: { ...target, toSpeech: active.latin || "", video: !!video, studentProfileId: active.studentProfileId } }));
+    window.dispatchEvent(new CustomEvent("dos-call-start", { detail: { ...target, video: !!video, studentProfileId: active.studentProfileId } }));
   }
 
   const needle = search.trim().toLowerCase();
@@ -7027,7 +6839,7 @@ function ChatPage({ role, profile, displayName, student, students }) {
               const isActive = room.key === activeKey;
               return (
                 <button key={room.key} type="button" onClick={() => { setActiveKey(room.key); setMobileOpen(true); }} className="flex w-full items-center gap-3 px-3 py-3 text-right" style={{ backgroundColor: isActive ? "#EAF0F8" : "transparent", borderBottom: `1px solid ${COLORS.border}` }}>
-                  {room.type === "group" ? <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold" style={{ background: `linear-gradient(160deg, ${COLORS.gold}, #D9A93F)`, color: "#fff" }}>👥</span> : <Avatar id={room.avatarId} name={room.title} size={40} />}
+                  <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold" style={{ background: room.type === "group" ? `linear-gradient(160deg, ${COLORS.gold}, #D9A93F)` : `linear-gradient(160deg, ${COLORS.navy}, ${COLORS.navyMid})`, color: "#fff", fontFamily: F_AR }}>{room.type === "group" ? "👥" : String(room.title).trim().charAt(0)}</span>
                   <span className="min-w-0 flex-1">
                     <span className="flex items-center justify-between gap-2">
                       <span className="truncate text-sm font-semibold" style={{ color: COLORS.ink, fontFamily: F_AR }}>{room.title}</span>
@@ -7052,7 +6864,6 @@ function ChatPage({ role, profile, displayName, student, students }) {
             <>
               <header className="flex items-center gap-2 border-b px-3 py-3" style={{ borderColor: COLORS.border }}>
                 <button type="button" onClick={() => setMobileOpen(false)} className="rounded-lg border px-2.5 py-1 text-xs font-semibold md:hidden" style={{ borderColor: COLORS.border, color: COLORS.navy, fontFamily: F_AR }}>← رجوع</button>
-                {active.type === "direct" && <Avatar id={active.avatarId} name={active.title} size={38} />}
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold" style={{ color: COLORS.ink, fontFamily: F_AR }}>{active.title}</p>
                   <p className="truncate text-[11px]" style={{ color: COLORS.subtle, fontFamily: F_AR }}>{active.sub}{locked ? " — 🔒 مقفلة" : ""}</p>
@@ -7080,8 +6891,7 @@ function ChatPage({ role, profile, displayName, student, students }) {
                       {message.kind === "call" ? (
                         <div className="my-2 text-center"><span className="inline-block rounded-full px-3 py-1 text-xs" style={{ backgroundColor: "#E3E8F0", color: COLORS.navy, fontFamily: F_AR }}>{message.body} · {chatTime(message.created_at)}</span></div>
                       ) : (
-                      <div className={`group mb-2 flex items-end gap-2 ${mine ? "justify-start" : "justify-end"}`}>
-                        {mine && <Avatar id={message.sender_profile_id} name={message.sender_name} size={30} />}
+                      <div className={`group mb-2 flex ${mine ? "justify-start" : "justify-end"}`}>
                         <div className="max-w-[82%] rounded-2xl px-3 py-2" style={{ backgroundColor: mine ? COLORS.navy : "#fff", color: mine ? "#fff" : COLORS.ink, border: mine ? "none" : `1px solid ${COLORS.border}`, borderTopRightRadius: mine ? 16 : 4, borderTopLeftRadius: mine ? 4 : 16 }}>
                           {!mine && (
                             <p className="mb-0.5 flex items-center gap-1.5 text-[11px] font-bold" style={{ color: meta.color, fontFamily: F_AR }}>
@@ -7095,7 +6905,6 @@ function ChatPage({ role, profile, displayName, student, students }) {
                             {canDelete(message) && <button type="button" onClick={() => setConfirm({ kind: "message", message })} className="opacity-60 hover:opacity-100" style={{ color: mine ? "#FFB4BC" : COLORS.red, fontFamily: F_AR }}>حذف</button>}
                           </p>
                         </div>
-                        {!mine && <Avatar id={message.sender_profile_id} name={message.sender_name} size={30} />}
                       </div>
                       )}
                     </React.Fragment>
@@ -7218,16 +7027,12 @@ function startRinger(kind) {
     pulse();
     timer = setInterval(pulse, 4000);
   }
-  const base = master.gain.value;
-  const stop = () => {
+  return () => {
     clearInterval(timer);
     try { if (navigator.vibrate) navigator.vibrate(0); } catch (e) {}
     try { master.gain.setTargetAtTime(0, ctx.currentTime, 0.04); } catch (e) {}
     setTimeout(() => { try { comp.disconnect(); master.disconnect(); } catch (e) {} }, 500);
   };
-  /* خفض صوت الرنة مؤقتًا أثناء النطق ليكون واضحًا */
-  stop.duck = (on) => { try { master.gain.setTargetAtTime(on ? base * 0.12 : base, ctx.currentTime, 0.06); } catch (e) {} };
-  return stop;
 }
 function playCallChime(kind) {
   const ctx = chatGetCtx();
@@ -7237,121 +7042,6 @@ function playCallChime(kind) {
   if (kind === "connected") { callBell(ctx, master, 880, 0, 0.25, 0.3); callBell(ctx, master, 1318, 0.14, 0.4, 0.3); }
   else { callBell(ctx, master, 659, 0, 0.25, 0.3); callBell(ctx, master, 494, 0.16, 0.25, 0.3); callBell(ctx, master, 392, 0.32, 0.45, 0.3); }
   setTimeout(() => { try { master.disconnect(); } catch (e) {} }, 1200);
-}
-
-/* ---------- النطق بالألمانية لاسم المتصل ---------- */
-const CALL_NAME_RAW = {
-  "محمد": "Mohamed", "أحمد": "Ahmed", "احمد": "Ahmed", "محمود": "Mahmud", "مصطفى": "Mustafa", "مصطفي": "Mustafa",
-  "إبراهيم": "Ibrahim", "ابراهيم": "Ibrahim", "إسماعيل": "Ismail", "اسماعيل": "Ismail", "عمر": "Omar", "عثمان": "Osman",
-  "علي": "Ali", "عمرو": "Amr", "يوسف": "Jussuf", "خالد": "Chaled", "حسن": "Hassan", "حسين": "Hussein", "كريم": "Karim",
-  "طارق": "Tarek", "ياسر": "Jasser", "زياد": "Sijad", "بلال": "Bilal", "هشام": "Hischam", "وليد": "Walid", "سامي": "Sami",
-  "سعيد": "Said", "رامي": "Rami", "ماجد": "Madschid", "ماهر": "Maher", "نادر": "Nader", "هاني": "Hani", "هيثم": "Haitham",
-  "أيمن": "Aiman", "ايمن": "Aiman", "فادي": "Fadi", "مروان": "Marwan", "مجدي": "Magdi", "جمال": "Gamal", "عادل": "Adel",
-  "أمير": "Amir", "امير": "Amir", "أسامة": "Usama", "اسامة": "Usama", "صلاح": "Salah", "سيف": "Seif", "آدم": "Adam", "ادم": "Adam",
-  "عبد": "Abdel", "عبدال": "Abdel", "الرحمن": "Rachman", "الله": "Allah", "العزيز": "Asis", "الرحيم": "Rachim", "الكريم": "Karim",
-  "العظيم": "Asim", "السلام": "Salam", "الفتاح": "Fattah", "الحميد": "Hamid", "الناصر": "Nasser", "الباسط": "Basit", "المنعم": "Munim",
-  "سارة": "Sara", "ساره": "Sara", "مريم": "Mariam", "فاطمة": "Fatma", "فاطمه": "Fatma", "نور": "Nur", "منى": "Mona", "مني": "Mona",
-  "هبة": "Heba", "هبه": "Heba", "دينا": "Dina", "ندى": "Nada", "ندي": "Nada", "رنا": "Rana", "ريم": "Rim", "سلمى": "Salma", "سلمي": "Salma",
-  "إيمان": "Iman", "ايمان": "Iman", "أسماء": "Asmaa", "اسماء": "Asmaa", "آية": "Aja", "اية": "Aja", "ايه": "Aja", "رحمة": "Rahma", "رحمه": "Rahma",
-  "شيماء": "Schaimaa", "هند": "Hind", "ليلى": "Leila", "ليلي": "Leila", "أمل": "Amal", "امل": "Amal", "ملك": "Malak", "جميلة": "Gamila",
-  "سمر": "Samar", "يسرا": "Jusra", "ياسمين": "Jasmin", "هدى": "Huda", "هدي": "Huda", "هاجر": "Hadscher", "إسراء": "Isra", "اسراء": "Isra",
-  "رضوى": "Radwa", "نهى": "Noha", "نهي": "Noha", "نجلاء": "Naglaa", "داليا": "Dalia", "رشا": "Rascha", "وفاء": "Wafaa", "أمينة": "Amina",
-  "امينه": "Amina", "عائشة": "Aischa", "عائشه": "Aischa", "زينب": "Seinab", "خديجة": "Chadidscha", "خديجه": "Chadidscha", "سمية": "Sumaja",
-  "شهد": "Schahd", "جنة": "Janna", "جنه": "Janna", "لينا": "Lina", "ليلة": "Laila", "الشريف": "Scherif", "السيد": "Sajjid", "الدين": "Din",
-  "المحاضر": "Dozent", "عبدالله": "Abdullah", "عبدالرحمن": "Abdelrachman", "عبدالعزيز": "Abdelasis", "عبدالرحيم": "Abdelrachim", "عبدالكريم": "Abdelkarim", "عبدالمنعم": "Abdelmunim", "عبدالناصر": "Abdelnasser", "عبدالفتاح": "Abdelfattah", "عبدالحميد": "Abdelhamid", "عبدالسلام": "Abdelsalam", "عبدالعظيم": "Abdelasim", "عبدالباسط": "Abdelbasit", "نورهان": "Nurhan", "هنادي": "Hanadi", "ريهام": "Reham", "آلاء": "Alaa", "الاء": "Alaa", "حبيبة": "Habiba", "مي": "Mai", "منة": "Menna", "ميار": "Mijar", "روان": "Rawan", "تقى": "Taqa", "فرح": "Farah",
-};
-function callNormalizeArabic(text) {
-  return String(text || "").replace(/[\u064B-\u065F\u0670\u0640]/g, "").replace(/[إأآٱ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/ؤ/g, "و").replace(/ئ/g, "ي").trim();
-}
-const CALL_NAME_DICT = (() => { const out = {}; Object.keys(CALL_NAME_RAW).forEach((key) => { out[callNormalizeArabic(key)] = CALL_NAME_RAW[key]; }); return out; })();
-const CALL_LETTERS = { "ب": "b", "ت": "t", "ث": "ss", "ج": "g", "ح": "h", "خ": "ch", "د": "d", "ذ": "s", "ر": "r", "ز": "s", "س": "ss", "ش": "sch", "ص": "ss", "ض": "d", "ط": "t", "ظ": "s", "ع": "a", "غ": "gh", "ف": "f", "ق": "k", "ك": "k", "ل": "l", "م": "m", "ن": "n", "ه": "h", "ء": "" };
-
-function callTranslitWord(word) {
-  let out = "";
-  const isVowelEnd = () => /[aeiou]$/.test(out);
-  const chars = Array.from(word);
-  chars.forEach((ch, index) => {
-    if (ch === "ا") { out += isVowelEnd() ? "" : "a"; return; }
-    if (ch === "و") { out += out && !isVowelEnd() ? "u" : "w"; return; }
-    if (ch === "ي") { out += out && !isVowelEnd() ? "i" : "j"; return; }
-    const letter = CALL_LETTERS[ch];
-    if (letter === undefined) { if (/[A-Za-z]/.test(ch)) out += ch; return; }
-    if (out && !isVowelEnd() && letter && index > 0) out += "a";
-    out += (letter === "ss" && index === 0) ? "s" : letter;
-  });
-  return out.charAt(0).toUpperCase() + out.slice(1);
-}
-function callArabicToGerman(text) {
-  const words = callNormalizeArabic(text).split(/\s+/).filter(Boolean);
-  const out = [];
-  for (let i = 0; i < words.length; i += 1) {
-    const word = words[i];
-    if (word === "عبد" && words[i + 1] && !CALL_NAME_DICT[`عبد${words[i + 1]}`]) { out.push("Abdel"); continue; }
-    out.push(CALL_NAME_DICT[word] || (/[A-Za-zÄÖÜäöüß]/.test(word) ? word : callTranslitWord(word)));
-  }
-  return out.join(" ").trim();
-}
-function callSpokenName(payload) {
-  const latin = String(payload?.speech || "").trim();
-  if (/[A-Za-zÄÖÜäöüß]/.test(latin)) return latin;
-  return callArabicToGerman(payload?.name || "");
-}
-
-function callVoiceEnabled() { try { return localStorage.getItem("dos_call_voice") !== "off"; } catch (e) { return true; } }
-function callSetVoiceEnabled(on) { try { localStorage.setItem("dos_call_voice", on ? "on" : "off"); } catch (e) {} }
-
-function callPickGermanVoice() {
-  try {
-    const voices = (window.speechSynthesis && speechSynthesis.getVoices()) || [];
-    const german = voices.filter((voice) => /^de([-_]|$)/i.test(voice.lang));
-    if (!german.length) return null;
-    const score = (voice) => (/natural|online|neural|premium|enhanced/i.test(voice.name) ? 5 : 0) + (/google/i.test(voice.name) ? 3 : 0) + (/de[-_]DE/i.test(voice.lang) ? 2 : 0) + (/anna|katja|hedda|petra|marlene|vicki/i.test(voice.name) ? 1 : 0);
-    return german.sort((a, b) => score(b) - score(a))[0];
-  } catch (e) { return null; }
-}
-
-/* parts: [{ text, rate, pause }] — كلمات بطيئة وواضحة، والاسم أبطأ */
-function callSpeakGerman(parts, handlers = {}) {
-  if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) return () => {};
-  let cancelled = false;
-  let index = 0;
-  try { speechSynthesis.cancel(); } catch (e) {}
-  const voice = callPickGermanVoice();
-  const next = () => {
-    if (cancelled) return;
-    if (index >= parts.length) { if (handlers.onEnd) handlers.onEnd(); return; }
-    const part = parts[index]; index += 1;
-    const utterance = new SpeechSynthesisUtterance(part.text);
-    utterance.lang = "de-DE";
-    if (voice) utterance.voice = voice;
-    utterance.rate = part.rate || 0.88;
-    utterance.pitch = 1; utterance.volume = 1;
-    utterance.onend = () => setTimeout(next, part.pause == null ? 200 : part.pause);
-    utterance.onerror = () => setTimeout(next, 60);
-    try { speechSynthesis.speak(utterance); } catch (e) { setTimeout(next, 60); }
-  };
-  if (handlers.onStart) handlers.onStart();
-  next();
-  return () => {
-    if (cancelled) return;
-    cancelled = true;
-    try { speechSynthesis.cancel(); } catch (e) {}
-    if (handlers.onEnd) handlers.onEnd();
-  };
-}
-function callIncomingPhrase(name, video) {
-  return [
-    { text: video ? "Eingehender Videoanruf von" : "Eingehender Anruf von", rate: 0.86, pause: 320 },
-    { text: name || "einem Teilnehmer", rate: 0.7, pause: 380 },
-    { text: "Bitte nehmen Sie den Anruf an.", rate: 0.86, pause: 0 },
-  ];
-}
-function callOutgoingPhrase(name) {
-  return [
-    { text: name ? "Anruf an" : "Anruf an den Dozenten.", rate: 0.86, pause: 300 },
-    ...(name ? [{ text: name, rate: 0.7, pause: 350 }] : []),
-    { text: "Die Verbindung wird hergestellt.", rate: 0.86, pause: 0 },
-  ];
 }
 
 function chatPickRecMime() {
@@ -7481,65 +7171,34 @@ function ChatErrorNotice({ detail }) {
   );
 }
 
-/* ---------- مركز المكالمات: صوت + فيديو + مشاركة شاشة + تسجيل ---------- */
-/* المكالمة لا تُغلق إلا بالزر الأحمر. لو خرج أحد الطرفين من الموقع تبقى مفتوحة عند الآخر وتُستأنف عند عودته. */
-const CALL_STORE_TTL = 12 * 3600 * 1000;
-function callStoreKey(id) { return `dos_active_call_${id}`; }
-function callStoreLoad(id) {
-  try {
-    const data = JSON.parse(localStorage.getItem(callStoreKey(id)) || "null");
-    if (data && data.id && Date.now() - (data.savedAt || 0) < CALL_STORE_TTL) return data;
-  } catch (e) {}
-  return null;
-}
-function callStoreSave(id, data) { try { localStorage.setItem(callStoreKey(id), JSON.stringify({ ...data, savedAt: Date.now() })); } catch (e) {} }
-function callStoreClear(id) { try { localStorage.removeItem(callStoreKey(id)); } catch (e) {} }
-
-function CallCenter({ profile, role, displayName, speechName }) {
+/* ---------- مركز المكالمات: صوت + فيديو + تسجيل (يعمل في كل صفحات البوابة) ---------- */
+function CallCenter({ profile, role, displayName }) {
   const [ui, setUi] = useState({ phase: "idle" });
   const [seconds, setSeconds] = useState(0);
   const [muted, setMuted] = useState(false);
   const [camOn, setCamOn] = useState(false);
   const [remoteCam, setRemoteCam] = useState(false);
-  const [screenOn, setScreenOn] = useState(false);
-  const [remoteScreen, setRemoteScreen] = useState(false);
   const [recOn, setRecOn] = useState(false);
   const [recSeconds, setRecSeconds] = useState(0);
   const [remoteRec, setRemoteRec] = useState(false);
-  const [reconnecting, setReconnecting] = useState(false);
-  const [minimized, setMinimized] = useState(false);
-  const [resume, setResume] = useState(null);
-  const [voiceOn, setVoiceOn] = useState(callVoiceEnabled());
   const [, setTick] = useState(0);
   const callRef = useRef(null);
   const ringerRef = useRef(null);
-  const sayStopRef = useRef(null);
   const audioRef = useRef(null);
   const timersRef = useRef({});
   const meRef = useRef({});
   const apiRef = useRef({});
-  meRef.current = { id: profile?.id, name: displayName || "—", role, speech: speechName || "" };
+  meRef.current = { id: profile?.id, name: displayName || "—", role };
 
   async function sendSignal(toId, callId, kind, payload) {
     const { error } = await supabaseClient.from("call_signals").insert({ from_id: meRef.current.id, to_id: toId, call_id: callId, kind, payload: payload || {} });
     return !error;
   }
   function stopRinger() { if (ringerRef.current) { ringerRef.current(); ringerRef.current = null; } }
-  function stopSay() {
-    clearTimeout(timersRef.current.say);
-    if (sayStopRef.current) { const stop = sayStopRef.current; sayStopRef.current = null; stop(); }
-  }
-  function say(parts, after) {
-    stopSay();
-    if (!callVoiceEnabled()) { if (after) timersRef.current.say = setTimeout(after, 6000); return; }
-    sayStopRef.current = callSpeakGerman(parts, {
-      onStart: () => { if (ringerRef.current && ringerRef.current.duck) ringerRef.current.duck(true); },
-      onEnd: () => { if (ringerRef.current && ringerRef.current.duck) ringerRef.current.duck(false); if (after) timersRef.current.say = setTimeout(after, 6500); },
-    });
-  }
   function ctlSend(call, message) {
     try { if (call?.ctl && call.ctl.readyState === "open") call.ctl.send(JSON.stringify(message)); } catch (e) {}
   }
+
   async function postMessage(call, fields) {
     return supabaseClient.from("chat_messages").insert({
       room_type: "direct", group_name: null, student_profile_id: call.studentProfileId,
@@ -7551,11 +7210,12 @@ function CallCenter({ profile, role, displayName, speechName }) {
     await postMessage(call, { kind: "call", body, media_duration: duration || null });
   }
 
-  /* ---------- تسجيل المكالمة (للمتصل) ---------- */
+  /* ---------- تسجيل المكالمة (للمتصل فقط) ---------- */
   function startCallRecording() {
     const call = callRef.current;
-    if (!call || call.direction !== "out" || call.rec || !call.pc) return;
+    if (!call || call.direction !== "out" || call.rec || !call.connectedAt) return;
     if (!window.MediaRecorder) { alert("المتصفح لا يدعم تسجيل المكالمات."); return; }
+    if (!call.ctl || call.ctl.readyState !== "open") { alert("انتظر لحظة حتى يكتمل الاتصال ثم أعد المحاولة."); return; }
     const ctx = chatGetCtx();
     if (!ctx) return;
     const dest = ctx.createMediaStreamDestination();
@@ -7603,98 +7263,50 @@ function CallCenter({ profile, role, displayName, speechName }) {
     if (error) { await supabaseClient.storage.from(CHAT_VOICE_BUCKET).remove([path]); alert(`تعذر حفظ تسجيل المكالمة: ${error.message}`); }
   }
 
-  function clearCallTimers() {
-    ["ring", "tick", "drop", "restart", "rejoin", "say"].forEach((key) => { clearTimeout(timersRef.current[key]); clearInterval(timersRef.current[key]); timersRef.current[key] = null; });
-  }
-  function releaseMedia(call) {
-    try { if (call.ctl) call.ctl.close(); } catch (e) {}
-    try { if (call.pc) call.pc.close(); } catch (e) {}
-    if (call.stream) call.stream.getTracks().forEach((track) => track.stop());
-    if (call.camTrack) call.camTrack.stop();
-    if (call.screenTrack) call.screenTrack.stop();
-    if (audioRef.current) audioRef.current.srcObject = null;
-  }
-
-  /* إنهاء نهائي — يحدث فقط بالزر الأحمر (أو برفض/إلغاء/عدم رد قبل بدء المكالمة، أو إنهاء الطرف الآخر) */
   function finish(note, opts = {}) {
     const call = callRef.current;
     if (!call) return;
     stopCallRecording(call);
     callRef.current = null;
-    stopRinger(); stopSay(); clearCallTimers();
-    releaseMedia(call);
-    callStoreClear(meRef.current.id);
+    stopRinger();
+    clearTimeout(timersRef.current.ring); clearInterval(timersRef.current.tick); clearTimeout(timersRef.current.drop);
+    try { if (call.ctl) call.ctl.close(); } catch (e) {}
+    try { if (call.pc) call.pc.close(); } catch (e) {}
+    if (call.stream) call.stream.getTracks().forEach((track) => track.stop());
+    if (call.camTrack) call.camTrack.stop();
+    if (audioRef.current) audioRef.current.srcObject = null;
     if (opts.notify) sendSignal(call.peerId, call.id, opts.notify, {});
     const duration = call.connectedAt ? Math.round((Date.now() - call.connectedAt) / 1000) : 0;
     if (call.direction === "out" && call.studentProfileId && (opts.log || duration > 0)) logCall(call, duration > 0 ? "done" : opts.log, duration);
-    supabaseClient.from("call_signals").delete().eq("call_id", call.id).eq("to_id", meRef.current.id).then(() => {}, () => {});
-    supabaseClient.from("call_signals").delete().eq("call_id", call.id).eq("from_id", meRef.current.id).neq("kind", "hangup").then(() => {}, () => {});
+    supabaseClient.from("call_signals").delete().eq("call_id", call.id).then(() => {}, () => {});
     if (call.connectedAt || call.state === "calling") playCallChime("end");
-    setMuted(false); setSeconds(0); setCamOn(false); setRemoteCam(false); setScreenOn(false); setRemoteScreen(false);
-    setRecOn(false); setRemoteRec(false); setReconnecting(false); setMinimized(false);
-    setUi({ phase: "ended", peerName: call.peerName, peerId: call.peerId, note });
+    setMuted(false); setSeconds(0); setCamOn(false); setRemoteCam(false); setRecOn(false); setRemoteRec(false);
+    setUi({ phase: "ended", peerName: call.peerName, note });
     setTimeout(() => setUi((current) => current.phase === "ended" ? { phase: "idle" } : current), 2600);
-  }
-  /* تعليق محلي (خروج من البوابة / تسجيل خروج): لا نُنهي المكالمة ولا نخبر الطرف الآخر — تُستأنف عند العودة */
-  function suspendCall() {
-    const call = callRef.current;
-    if (!call) return;
-    if (!call.connectedAt) { finish("", { notify: call.state === "calling" ? "cancel" : call.direction === "in" ? "reject" : "cancel" }); return; }
-    callRef.current = null;
-    stopCallRecording(call);
-    stopRinger(); stopSay(); clearCallTimers();
-    releaseMedia(call);
   }
 
   function markConnected(call) {
-    if (callRef.current !== call) return;
-    stopRinger(); stopSay();
-    clearTimeout(timersRef.current.ring); clearTimeout(timersRef.current.drop); clearInterval(timersRef.current.restart); clearInterval(timersRef.current.rejoin);
-    timersRef.current.restart = null; timersRef.current.rejoin = null;
-    setReconnecting(false);
-    if (!call.connectedAt) { call.connectedAt = Date.now(); playCallChime("connected"); }
-    call.state = "active"; call.rejoining = false;
-    setUi((current) => ({ ...current, phase: "active", peerName: call.peerName, peerId: call.peerId }));
-    if (!timersRef.current.tick) timersRef.current.tick = setInterval(() => setSeconds(Math.floor((Date.now() - call.connectedAt) / 1000)), 500);
-    callStoreSave(meRef.current.id, { id: call.id, peerId: call.peerId, peerName: call.peerName, peerRole: call.peerRole, direction: call.direction, studentProfileId: call.studentProfileId, connectedAt: call.connectedAt, hadVideo: !!call.hadVideo });
-  }
-
-  function findRemoteScreen(call) {
-    if (!call || !call.pc) return null;
-    const mainTracks = call.remoteStream ? call.remoteStream.getTracks() : [];
-    const tracks = call.pc.getReceivers().map((receiver) => receiver.track).filter((track) => track && track.kind === "video" && track.readyState === "live");
-    const track = tracks.find((item) => call.remoteScreenId && call.trackStream && call.trackStream[item.id] === call.remoteScreenId) || tracks.find((item) => !mainTracks.includes(item));
-    if (!track) return null;
-    if (call.remoteScreenStream && call.remoteScreenStream.getVideoTracks()[0] === track) return call.remoteScreenStream;
-    call.remoteScreenStream = new MediaStream([track]);
-    return call.remoteScreenStream;
+    if (callRef.current !== call || call.connectedAt) return;
+    stopRinger();
+    clearTimeout(timersRef.current.ring); clearTimeout(timersRef.current.drop);
+    call.state = "active"; call.connectedAt = Date.now();
+    playCallChime("connected");
+    setUi((current) => ({ ...current, phase: "active", peerName: call.peerName }));
+    timersRef.current.tick = setInterval(() => setSeconds(Math.floor((Date.now() - call.connectedAt) / 1000)), 500);
   }
 
   function setupCtl(call, channel) {
     call.ctl = channel;
-    channel.onopen = () => {
-      ctlSend(call, { t: "cam", on: !!call.camOn });
-      if (call.screenTrack && call.screenStream) ctlSend(call, { t: "screen", on: true, id: call.screenStream.id });
-      if (call.rec) ctlSend(call, { t: "rec", on: true });
-    };
+    channel.onopen = () => { ctlSend(call, { t: "cam", on: !!call.camOn }); if (call.rec) ctlSend(call, { t: "rec", on: true }); };
     channel.onmessage = (event) => {
       let msg = null;
       try { msg = JSON.parse(event.data); } catch (e) { return; }
       if (callRef.current !== call || !msg) return;
       if (msg.t === "cam") setRemoteCam(!!msg.on);
-      if (msg.t === "rec") setRemoteRec(!!msg.on);
-      if (msg.t === "screen") {
-        call.remoteScreenId = msg.on ? msg.id : null;
-        setRemoteScreen(!!msg.on);
-        if (msg.on) { let tries = 0; const retry = () => { setTick((n) => n + 1); tries += 1; if (tries < 8 && callRef.current === call && !findRemoteScreen(call)) setTimeout(retry, 500); }; retry(); }
-      }
+      if (msg.t === "rec") { setRemoteRec(!!msg.on); if (msg.on) playCallChime("connected"); }
     };
   }
 
-  async function flushIce(call) {
-    const list = call.pendingIce; call.pendingIce = [];
-    for (const candidate of list) { try { await call.pc.addIceCandidate(candidate); } catch (e) {} }
-  }
   async function onRemoteDescription(call, desc) {
     const pc = call.pc;
     const isOffer = desc.type === "offer";
@@ -7709,29 +7321,21 @@ function CallCenter({ profile, role, displayName, speechName }) {
       call.negotiationEnabled = true;
     }
   }
-
-  function startRestartLoop(call, pc) {
-    if (timersRef.current.restart) return;
-    timersRef.current.restart = setInterval(() => {
-      if (callRef.current !== call || call.pc !== pc || pc.connectionState === "connected") { clearInterval(timersRef.current.restart); timersRef.current.restart = null; return; }
-      try { pc.restartIce(); } catch (e) {}
-    }, 6000);
+  async function flushIce(call) {
+    const list = call.pendingIce; call.pendingIce = [];
+    for (const candidate of list) { try { await call.pc.addIceCandidate(candidate); } catch (e) {} }
   }
 
   function createPeer(call) {
-    if (call.pc) { try { call.pc.close(); } catch (e) {} }
-    if (call.ctl) { try { call.ctl.close(); } catch (e) {} call.ctl = null; }
     const pc = new RTCPeerConnection({ iceServers: CHAT_ICE_SERVERS });
-    call.pc = pc; call.pcCreatedAt = Date.now();
-    call.polite = !call.offerer;
-    call.negotiationEnabled = !!call.offerer;
-    call.makingOffer = false; call.ignoreOffer = false; call.pendingIce = []; call.videoSender = null; call.screenSender = null; call.trackStream = {};
+    call.pc = pc;
+    call.polite = call.direction === "in";
+    call.negotiationEnabled = call.direction === "out";
+    call.makingOffer = false; call.ignoreOffer = false;
     call.stream.getTracks().forEach((track) => { const sender = pc.addTrack(track, call.stream); if (track.kind === "video") call.videoSender = sender; });
-    if (call.camTrack && !call.stream.getTracks().includes(call.camTrack)) call.videoSender = pc.addTrack(call.camTrack, call.stream);
-    if (call.screenTrack && call.screenStream) call.screenSender = pc.addTrack(call.screenTrack, call.screenStream);
-    if (call.offerer) setupCtl(call, pc.createDataChannel("ctl")); else pc.ondatachannel = (event) => setupCtl(call, event.channel);
+    if (call.direction === "out") setupCtl(call, pc.createDataChannel("ctl")); else pc.ondatachannel = (event) => setupCtl(call, event.channel);
     pc.onnegotiationneeded = async () => {
-      if (!call.negotiationEnabled || callRef.current !== call || call.pc !== pc) return;
+      if (!call.negotiationEnabled || callRef.current !== call) return;
       try {
         call.makingOffer = true;
         await pc.setLocalDescription();
@@ -7740,24 +7344,18 @@ function CallCenter({ profile, role, displayName, speechName }) {
     };
     pc.onicecandidate = (event) => { if (event.candidate) sendSignal(call.peerId, call.id, "ice", event.candidate.toJSON()); };
     pc.ontrack = (event) => {
-      const stream = event.streams[0] || new MediaStream([event.track]);
-      call.trackStream[event.track.id] = stream.id;
-      if (event.track.kind === "audio") {
-        call.remoteStream = stream;
-        if (audioRef.current) { audioRef.current.srcObject = stream; audioRef.current.play().catch(() => {}); }
-      } else if (!call.remoteStream) call.remoteStream = stream;
+      call.remoteStream = event.streams[0] || new MediaStream([event.track]);
+      if (audioRef.current) { audioRef.current.srcObject = call.remoteStream; audioRef.current.play().catch(() => {}); }
       if (event.track.kind === "video") call.hadVideo = true;
       setTick((n) => n + 1);
     };
     pc.onconnectionstatechange = () => {
-      if (callRef.current !== call || call.pc !== pc) return;
-      const state = pc.connectionState;
-      if (state === "connected") markConnected(call);
-      else if (state === "disconnected" || state === "failed") {
+      if (callRef.current !== call) return;
+      if (pc.connectionState === "connected") markConnected(call);
+      else if (pc.connectionState === "failed") finish("تعذر الاتصال — قد تحتاج الشبكة إلى خادم TURN", { notify: "hangup", log: "missed" });
+      else if (pc.connectionState === "disconnected") {
         clearTimeout(timersRef.current.drop);
-        timersRef.current.drop = setTimeout(() => {
-          if (callRef.current === call && call.pc === pc && pc.connectionState !== "connected") { setReconnecting(true); startRestartLoop(call, pc); }
-        }, state === "failed" ? 0 : 3000);
+        timersRef.current.drop = setTimeout(() => { if (callRef.current === call && pc.connectionState !== "connected") finish("انقطع الاتصال", { notify: "hangup", log: "missed" }); }, 9000);
       }
     };
     return pc;
@@ -7784,29 +7382,27 @@ function CallCenter({ profile, role, displayName, speechName }) {
     if (track) call.hadVideo = true;
     setCamOn(!!track);
   }
-  function resetCallFlags() { setMuted(false); setSeconds(0); setRemoteCam(false); setScreenOn(false); setRemoteScreen(false); setRemoteRec(false); setReconnecting(false); setMinimized(false); }
 
   async function startCall(detail) {
     if (callRef.current || !detail?.toId) return;
     chatGetCtx();
     const stream = await getMedia(!!detail.video);
     if (!stream) return;
-    const call = { id: chatUuid(), peerId: detail.toId, peerName: detail.toName || "—", direction: "out", offerer: true, state: "calling", stream, pc: null, pendingIce: [], studentProfileId: detail.studentProfileId, connectedAt: 0, hadVideo: false };
+    const call = { id: chatUuid(), peerId: detail.toId, peerName: detail.toName || "—", direction: "out", state: "calling", stream, pc: null, pendingIce: [], studentProfileId: detail.studentProfileId, connectedAt: 0, hadVideo: false };
     callRef.current = call;
     adoptCamera(call);
-    resetCallFlags();
-    setUi({ phase: "calling", peerName: call.peerName, peerId: call.peerId, direction: "out", wantVideo: call.camOn });
-    const ok = await sendSignal(call.peerId, call.id, "invite", { name: meRef.current.name, role: meRef.current.role, speech: meRef.current.speech, video: call.camOn });
+    setMuted(false); setSeconds(0); setRemoteCam(false); setRemoteRec(false);
+    setUi({ phase: "calling", peerName: call.peerName, direction: "out", wantVideo: call.camOn });
+    const ok = await sendSignal(call.peerId, call.id, "invite", { name: meRef.current.name, role: meRef.current.role, video: call.camOn });
     if (!ok) { finish("تعذر بدء المكالمة — تأكد من تشغيل ملف supabase_chat_voice_calls.sql"); return; }
     ringerRef.current = startRinger("ringback");
-    say(callOutgoingPhrase(detail.toSpeech || ""));
     timersRef.current.ring = setTimeout(() => { if (callRef.current === call && call.state === "calling") finish("لا يوجد رد", { notify: "cancel", log: "missed" }); }, 45000);
   }
 
   async function acceptCall(withVideo) {
     const call = callRef.current;
     if (!call || call.state !== "ringing") return;
-    stopRinger(); stopSay(); clearTimeout(timersRef.current.ring);
+    stopRinger(); clearTimeout(timersRef.current.ring);
     const stream = await getMedia(!!withVideo);
     if (!stream) { finish("تعذر الوصول للميكروفون", { notify: "reject" }); return; }
     if (callRef.current !== call) { stream.getTracks().forEach((track) => track.stop()); return; }
@@ -7818,7 +7414,7 @@ function CallCenter({ profile, role, displayName, speechName }) {
     if (call.pendingOffer) { const offer = call.pendingOffer; call.pendingOffer = null; await onRemoteDescription(call, offer); }
   }
   function rejectCall() { finish("تم رفض المكالمة", { notify: "reject" }); }
-  function hangUp() { /* الزر الأحمر: الإنهاء الوحيد للمكالمة الجارية */
+  function hangUp() {
     const call = callRef.current;
     if (!call) return;
     finish("انتهت المكالمة", { notify: call.state === "calling" ? "cancel" : "hangup", log: "missed" });
@@ -7853,128 +7449,43 @@ function CallCenter({ profile, role, displayName, speechName }) {
     setCamOn(true); ctlSend(call, { t: "cam", on: true });
   }
 
-  /* ---------- مشاركة الشاشة ---------- */
-  function stopScreenShare(call) {
-    if (!call || !call.screenTrack) return;
-    const track = call.screenTrack;
-    call.screenTrack = null;
-    try { track.stop(); } catch (e) {}
-    try { if (call.pc && call.screenSender) call.pc.removeTrack(call.screenSender); } catch (e) {}
-    call.screenSender = null; call.screenStream = null;
-    setScreenOn(false); ctlSend(call, { t: "screen", on: false });
-  }
-  async function toggleScreenShare() {
-    const call = callRef.current;
-    if (!call || !call.pc) return;
-    if (call.screenTrack) { stopScreenShare(call); return; }
-    if (!navigator.mediaDevices?.getDisplayMedia) { alert("مشاركة الشاشة غير مدعومة على هذا الجهاز أو المتصفح (تعمل على الكمبيوتر بمتصفحات كروم وإيدج وفايرفوكس وسفاري)."); return; }
-    let stream;
-    try { stream = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: { ideal: 15, max: 30 } }, audio: false }); }
-    catch (e) { return; }
-    if (callRef.current !== call) { stream.getTracks().forEach((track) => track.stop()); return; }
-    const track = stream.getVideoTracks()[0];
-    call.screenStream = stream; call.screenTrack = track;
-    try { call.screenSender = call.pc.addTrack(track, stream); } catch (e) { track.stop(); call.screenTrack = null; call.screenStream = null; return; }
-    track.onended = () => stopScreenShare(call);
-    setScreenOn(true); ctlSend(call, { t: "screen", on: true, id: stream.id });
-  }
-
-  /* ---------- العودة للمكالمة بعد الخروج من الموقع ---------- */
-  function sendRejoin(call) { sendSignal(call.peerId, call.id, "invite", { rejoin: true, name: meRef.current.name, role: meRef.current.role, speech: meRef.current.speech }); }
-  async function resumeCall() {
-    const stored = resume;
-    if (!stored || callRef.current) return;
-    chatGetCtx();
-    const stream = await getMedia(false);
-    if (!stream) return;
-    const call = { id: stored.id, peerId: stored.peerId, peerName: stored.peerName, peerRole: stored.peerRole, direction: stored.direction, offerer: false, state: "connecting", rejoining: true, stream, pc: null, pendingIce: [], studentProfileId: stored.studentProfileId, connectedAt: stored.connectedAt || 0, hadVideo: !!stored.hadVideo };
-    callRef.current = call;
-    setResume(null);
-    adoptCamera(call);
-    resetCallFlags();
-    setReconnecting(true);
-    setSeconds(call.connectedAt ? Math.floor((Date.now() - call.connectedAt) / 1000) : 0);
-    setUi({ phase: "connecting", peerName: call.peerName, peerId: call.peerId, peerRole: call.peerRole, direction: call.direction, note: "جاري العودة للمكالمة…" });
-    createPeer(call);
-    sendRejoin(call);
-    timersRef.current.rejoin = setInterval(() => {
-      if (callRef.current !== call || (call.pc && call.pc.connectionState === "connected")) { clearInterval(timersRef.current.rejoin); timersRef.current.rejoin = null; return; }
-      sendRejoin(call);
-    }, 8000);
-  }
-  async function endStoredCall() {
-    const stored = resume;
-    setResume(null);
-    if (!stored) return;
-    callStoreClear(meRef.current.id);
-    await sendSignal(stored.peerId, stored.id, "hangup", {});
-    supabaseClient.from("call_signals").delete().eq("call_id", stored.id).eq("to_id", meRef.current.id).then(() => {}, () => {});
-  }
-  function onRejoinRequest(call, sig) {
-    const myId = String(meRef.current.id);
-    let iAmOfferer = true;
-    if (call.rejoining && call.pc && call.pc.connectionState !== "connected") iAmOfferer = myId < String(call.peerId);
-    if (!iAmOfferer) return;
-    if (call.pc && call.offerer && Date.now() - (call.pcCreatedAt || 0) < 5000) return;
-    call.offerer = true; call.rejoining = false;
-    setReconnecting(true);
-    createPeer(call);
-  }
-
   async function handleSignal(sig) {
     if (!sig) return;
     const call = callRef.current;
     if (sig.kind === "invite") {
-      if (sig.payload?.rejoin) {
-        if (call && call.id === sig.call_id) onRejoinRequest(call, sig);
-        else if (!call) {
-          const stored = callStoreLoad(meRef.current.id);
-          if (stored && stored.id === sig.call_id) { setResume((current) => { if (!current) playCallChime("connected"); return stored; }); }
-        }
-        return;
-      }
       if (Date.now() - new Date(sig.created_at).getTime() > 90000) return;
       if (call) { sendSignal(sig.from_id, sig.call_id, "busy", {}); return; }
-      const incoming = { id: sig.call_id, peerId: sig.from_id, peerName: sig.payload?.name || "مكالمة واردة", peerRole: sig.payload?.role, spoken: callSpokenName(sig.payload), wantVideo: !!sig.payload?.video, direction: "in", offerer: false, state: "ringing", stream: null, pc: null, pendingIce: [], pendingOffer: null, connectedAt: 0, hadVideo: false };
+      const incoming = { id: sig.call_id, peerId: sig.from_id, peerName: sig.payload?.name || "مكالمة واردة", peerRole: sig.payload?.role, wantVideo: !!sig.payload?.video, direction: "in", state: "ringing", stream: null, pc: null, pendingIce: [], pendingOffer: null, connectedAt: 0, hadVideo: false };
       callRef.current = incoming;
-      resetCallFlags(); setCamOn(false);
-      setUi({ phase: "ringing", peerName: incoming.peerName, peerId: incoming.peerId, peerRole: incoming.peerRole, direction: "in", wantVideo: incoming.wantVideo });
+      setMuted(false); setSeconds(0); setCamOn(false); setRemoteCam(false); setRemoteRec(false);
+      setUi({ phase: "ringing", peerName: incoming.peerName, peerRole: incoming.peerRole, direction: "in", wantVideo: incoming.wantVideo });
       ringerRef.current = startRinger("incoming");
-      const announce = () => { if (callRef.current === incoming && incoming.state === "ringing") say(callIncomingPhrase(incoming.spoken, incoming.wantVideo), announce); };
-      timersRef.current.say = setTimeout(announce, 2700);
       try { if (window.Notification && Notification.permission === "granted" && document.hidden) { const n = new Notification(incoming.wantVideo ? "مكالمة فيديو واردة" : "مكالمة واردة", { body: incoming.peerName, tag: "dos-call", requireInteraction: true }); n.onclick = () => { window.focus(); n.close(); }; } } catch (e) {}
       timersRef.current.ring = setTimeout(() => { if (callRef.current === incoming && incoming.state === "ringing") finish("مكالمة فائتة"); }, 50000);
       return;
     }
-    if (!call) {
-      if (sig.kind === "hangup") {
-        setResume((current) => (current && current.id === sig.call_id ? null : current));
-        const stored = callStoreLoad(meRef.current.id);
-        if (stored && stored.id === sig.call_id) callStoreClear(meRef.current.id);
-        supabaseClient.from("call_signals").delete().eq("call_id", sig.call_id).eq("to_id", meRef.current.id).then(() => {}, () => {});
-      }
-      return;
-    }
-    if (call.id !== sig.call_id) return;
+    if (!call || call.id !== sig.call_id) return;
     try {
-      if (sig.kind === "accept" && call.direction === "out" && call.state === "calling") {
-        stopRinger(); stopSay(); clearTimeout(timersRef.current.ring);
+      if (sig.kind === "accept" && call.direction === "out") {
+        stopRinger(); clearTimeout(timersRef.current.ring);
         call.state = "connecting";
         setUi((current) => ({ ...current, phase: "connecting" }));
-        createPeer(call);
+        createPeer(call); /* يبدأ التفاوض تلقائيًا (onnegotiationneeded) */
       } else if (sig.kind === "offer") {
         if (call.pc) await onRemoteDescription(call, sig.payload); else call.pendingOffer = sig.payload;
       } else if (sig.kind === "answer" && call.pc && call.pc.signalingState === "have-local-offer") {
         await onRemoteDescription(call, sig.payload);
       } else if (sig.kind === "ice") {
-        if (call.pc && call.pc.remoteDescription) { try { await call.pc.addIceCandidate(sig.payload); } catch (e) {} } else if (call.pc) call.pendingIce.push(sig.payload);
+        if (call.pc && call.pc.remoteDescription) { try { await call.pc.addIceCandidate(sig.payload); } catch (e) { if (!call.ignoreOffer) { /* تجاهل */ } } } else call.pendingIce.push(sig.payload);
       } else if (sig.kind === "reject") finish("تم رفض المكالمة", { log: "rejected" });
       else if (sig.kind === "busy") finish("الطرف الآخر في مكالمة أخرى", { log: "missed" });
-      else if (sig.kind === "cancel" && !call.connectedAt) finish("مكالمة فائتة");
-      else if (sig.kind === "hangup") finish("أنهى الطرف الآخر المكالمة");
-    } catch (error) { /* أخطاء التفاوض لا تُنهي المكالمة */ }
+      else if (sig.kind === "cancel") finish("مكالمة فائتة");
+      else if (sig.kind === "hangup") finish("انتهت المكالمة");
+    } catch (error) {
+      finish("حدث خطأ أثناء المكالمة", { notify: "hangup", log: "missed" });
+    }
   }
-  apiRef.current = { handleSignal, startCall, suspendCall };
+  apiRef.current = { handleSignal, startCall, finish };
 
   useEffect(() => {
     if (!profile?.id) return undefined;
@@ -7983,140 +7494,87 @@ function CallCenter({ profile, role, displayName, speechName }) {
       try { if (window.Notification && Notification.permission === "default") Notification.requestPermission().catch(() => {}); } catch (e) {}
     };
     window.addEventListener("pointerdown", unlock, { once: true });
-    try { if (window.speechSynthesis) { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices(); } } catch (e) {}
     const channel = supabaseClient.channel(`call-signals-${profile.id}`)
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "call_signals", filter: `to_id=eq.${profile.id}` }, (payload) => apiRef.current.handleSignal(payload.new))
       .subscribe();
     const onStart = (event) => apiRef.current.startCall(event.detail);
+    const onLeave = () => { const call = callRef.current; if (call) apiRef.current.finish("", { notify: call.state === "calling" ? "cancel" : "hangup" }); };
     window.addEventListener("dos-call-start", onStart);
-
-    /* مكالمة كانت جارية قبل الخروج من الموقع؟ */
-    (async () => {
-      const stored = callStoreLoad(profile.id);
-      if (!stored) return;
-      const { data } = await supabaseClient.from("call_signals").select("id").eq("call_id", stored.id).eq("to_id", profile.id).eq("kind", "hangup").limit(1);
-      if (data && data.length) {
-        callStoreClear(profile.id);
-        supabaseClient.from("call_signals").delete().eq("call_id", stored.id).eq("to_id", profile.id).then(() => {}, () => {});
-      } else if (!callRef.current) setResume(stored);
-    })();
-
+    window.addEventListener("pagehide", onLeave);
     return () => {
       window.removeEventListener("pointerdown", unlock);
       window.removeEventListener("dos-call-start", onStart);
+      window.removeEventListener("pagehide", onLeave);
       supabaseClient.removeChannel(channel);
-      apiRef.current.suspendCall();
+      onLeave();
     };
   }, [profile?.id]);
 
   const phase = ui.phase;
   const live = phase === "active" || phase === "connecting";
-  const showScreen = remoteScreen && live;
-  const showCam = remoteCam && live;
-  const showVideo = showScreen || showCam;
+  const showRemoteVideo = remoteCam && live;
   const showLocalVideo = camOn && (phase === "calling" || live);
   const isCaller = ui.direction === "out";
   const roleMeta = ui.peerRole ? chatRoleMeta(ui.peerRole) : null;
-  const waiting = reconnecting && live;
-  const arStatus = phase === "ringing" ? (ui.wantVideo ? "مكالمة فيديو واردة…" : "مكالمة صوتية واردة…") : phase === "calling" ? "جاري الاتصال…" : waiting ? "الطرف الآخر غير متصل الآن — المكالمة ما زالت مفتوحة" : phase === "connecting" ? "جاري توصيل المكالمة…" : phase === "active" ? chatClock(seconds) : ui.note || "";
-  const deStatus = phase === "ringing" ? (ui.wantVideo ? "Eingehender Videoanruf" : "Eingehender Anruf") : phase === "calling" ? "Anruf wird aufgebaut…" : waiting ? "Verbindung wird wiederhergestellt…" : phase === "connecting" ? "Verbindung wird hergestellt…" : phase === "ended" ? "Anruf beendet" : "";
+  const statusText = phase === "ringing" ? (ui.wantVideo ? "مكالمة فيديو واردة…" : "مكالمة صوتية واردة…") : phase === "calling" ? "جاري الاتصال…" : phase === "connecting" ? "جاري توصيل المكالمة…" : phase === "active" ? chatClock(seconds) : ui.note || "";
   const phoneIcon = "M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z";
-  const camIcon = "M15 8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-1.6l5 2.9V6.7l-5 2.9z";
   const ctrl = (on) => ({ backgroundColor: on ? "#fff" : "rgba(255,255,255,.18)", color: on ? COLORS.navy : "#fff", backdropFilter: "blur(6px)" });
-  const attach = (getStream) => (el) => { if (!el) return; const stream = getStream(); if (stream && el.srcObject !== stream) { el.srcObject = stream; el.play().catch(() => {}); } };
 
   return (
     <>
       <audio ref={audioRef} autoPlay playsInline style={{ display: "none" }} />
-
-      {resume && !callRef.current && phase === "idle" && (
-        <div className="fixed inset-0 z-[3100] flex items-center justify-center p-4" style={{ backgroundColor: "rgba(5,15,30,.65)" }}>
-          <div className="w-full max-w-sm rounded-2xl p-6 text-center" style={{ backgroundColor: "#fff", fontFamily: F_AR }}>
-            <div className="mx-auto mb-3 w-fit"><Avatar id={resume.peerId} name={resume.peerName} size={72} /></div>
-            <p className="text-xs font-bold" style={{ color: COLORS.red }}>مكالمة جارية</p>
-            <h3 className="mt-1 text-lg font-semibold" style={{ color: COLORS.navy }}>{resume.peerName}</h3>
-            <p className="mt-1 text-sm" style={{ color: COLORS.subtle }}>لديك مكالمة لم تُنهَ بعد. اضغط للعودة إليها.</p>
-            <div className="mt-5 flex gap-3">
-              <button type="button" onClick={endStoredCall} className="flex-1 rounded-lg border px-4 py-2.5 text-sm font-semibold" style={{ borderColor: "#F3C4CA", color: COLORS.red }}>إنهاء المكالمة</button>
-              <button type="button" onClick={resumeCall} className="flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold" style={{ backgroundColor: "#22B35A", color: "#fff" }}>العودة للمكالمة</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {phase !== "idle" && minimized && live && (
-        <div className="fixed z-[3000] flex items-center gap-3 rounded-full px-3 py-2 shadow-2xl" style={{ bottom: 16, left: "50%", transform: "translateX(-50%)", width: "min(94vw, 440px)", background: `linear-gradient(115deg, ${COLORS.navyDeep}, ${COLORS.navyMid})`, color: "#fff", fontFamily: F_AR }}>
-          <Avatar id={ui.peerId} name={ui.peerName} size={38} />
-          <button type="button" onClick={() => setMinimized(false)} className="min-w-0 flex-1 text-right">
-            <span className="block truncate text-sm font-semibold">{ui.peerName}</span>
-            <span dir="ltr" className="block text-xs" style={{ color: waiting ? "#FFD27A" : "#7CE3A1", fontFamily: F_MONO, textAlign: "right" }}>{waiting ? "…" : chatClock(seconds)}{(recOn || remoteRec) ? "  ● REC" : ""}{screenOn ? "  ⧉" : ""}</span>
-          </button>
-          <button type="button" onClick={toggleMute} className="flex h-9 w-9 items-center justify-center rounded-full" style={ctrl(muted)} aria-label="كتم"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0014 0M12 18v3" />{muted && <path d="M4 4l16 16" />}</svg></button>
-          <button type="button" onClick={() => setMinimized(false)} className="flex h-9 w-9 items-center justify-center rounded-full" style={ctrl(false)} aria-label="توسيع"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 14v6h6M20 10V4h-6M4 20l7-7M20 4l-7 7" /></svg></button>
-          <button type="button" onClick={hangUp} className="flex h-10 w-10 items-center justify-center rounded-full" style={{ backgroundColor: "#E5384B" }} aria-label="إنهاء"><svg viewBox="0 0 24 24" width="20" height="20" fill="#fff" style={{ transform: "rotate(135deg)" }}><path d={phoneIcon} /></svg></button>
-        </div>
-      )}
-
-      {phase !== "idle" && !(minimized && live) && (
+      {phase !== "idle" && (
         <div className="fixed inset-0 z-[3000] overflow-hidden" style={{ background: `radial-gradient(circle at 50% 30%, ${COLORS.navyMid}, ${COLORS.navyDeep} 70%)`, color: "#fff", fontFamily: F_AR }} role="dialog" aria-label="مكالمة">
           <style>{`@keyframes dosPulse{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.9);opacity:0}} @keyframes dosShake{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(12deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(6deg)}} @keyframes dosBlink{0%,100%{opacity:1}50%{opacity:.3}}`}</style>
-          {showScreen && <video autoPlay playsInline muted className="absolute inset-0 h-full w-full" style={{ objectFit: "contain", backgroundColor: "#000" }} ref={attach(() => findRemoteScreen(callRef.current))} />}
-          {!showScreen && showCam && <video autoPlay playsInline muted className="absolute inset-0 h-full w-full" style={{ objectFit: "cover", backgroundColor: "#000" }} ref={attach(() => callRef.current?.remoteStream)} />}
-          {showVideo && <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(5,15,30,.6), transparent 28%, transparent 62%, rgba(5,15,30,.78))", pointerEvents: "none" }} />}
-          {showScreen && showCam && <video autoPlay playsInline muted className="absolute z-20 rounded-2xl border-2" style={{ width: 104, height: 138, left: 16, top: 96, objectFit: "cover", borderColor: "rgba(255,255,255,.6)", backgroundColor: "#000", boxShadow: "0 8px 24px rgba(0,0,0,.45)" }} ref={attach(() => callRef.current?.remoteStream)} />}
-          {showLocalVideo && <video autoPlay playsInline muted className="absolute z-20 rounded-2xl border-2" style={{ width: showVideo ? 104 : 150, height: showVideo ? 138 : 200, left: 16, bottom: 150, objectFit: "cover", transform: "scaleX(-1)", borderColor: "rgba(255,255,255,.6)", backgroundColor: "#000", boxShadow: "0 8px 24px rgba(0,0,0,.45)" }} ref={attach(() => callRef.current?.camStream)} />}
-
-          <div className="relative z-10 flex h-full flex-col items-center justify-between px-6 py-8 text-center">
-            <div className="w-full">
-              <div className="flex items-start justify-between">
-                {live ? <button type="button" onClick={() => setMinimized(true)} className="rounded-full px-3 py-1.5 text-xs font-bold" style={{ backgroundColor: "rgba(255,255,255,.18)", backdropFilter: "blur(6px)" }}>⌄ تصغير</button> : <span />}
-                <p className="text-xs uppercase tracking-[0.3em]" style={{ color: COLORS.gold }}>DOS ACADEMY · {ui.wantVideo || camOn || remoteCam ? "VIDEO CALL" : "VOICE CALL"}</p>
-                {phase === "ringing" ? <button type="button" onClick={() => { const next = !voiceOn; setVoiceOn(next); callSetVoiceEnabled(next); if (!next) stopSay(); }} className="rounded-full px-3 py-1.5 text-xs font-bold" style={{ backgroundColor: "rgba(255,255,255,.18)" }}>{voiceOn ? "🔊 نطق الاسم" : "🔇 النطق متوقف"}</button> : <span />}
-              </div>
+          {showRemoteVideo && (
+            <>
+              <video autoPlay playsInline muted className="absolute inset-0 h-full w-full" style={{ objectFit: "cover", backgroundColor: "#000" }} ref={(el) => { const stream = callRef.current?.remoteStream; if (el && stream && el.srcObject !== stream) { el.srcObject = stream; el.play().catch(() => {}); } }} />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(5,15,30,.6), transparent 30%, transparent 62%, rgba(5,15,30,.75))" }} />
+            </>
+          )}
+          {showLocalVideo && (
+            <video autoPlay playsInline muted className="absolute z-20 rounded-2xl border-2" style={{ width: showRemoteVideo ? 112 : 150, height: showRemoteVideo ? 150 : 200, left: 16, bottom: 140, objectFit: "cover", transform: "scaleX(-1)", borderColor: "rgba(255,255,255,.6)", backgroundColor: "#000", boxShadow: "0 8px 24px rgba(0,0,0,.45)" }} ref={(el) => { const stream = callRef.current?.camStream; if (el && stream && el.srcObject !== stream) { el.srcObject = stream; el.play().catch(() => {}); } }} />
+          )}
+          <div className="relative z-10 flex h-full flex-col items-center justify-between px-6 py-10 text-center">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em]" style={{ color: COLORS.gold }}>DOS ACADEMY · {ui.wantVideo || camOn || remoteCam ? "VIDEO CALL" : "VOICE CALL"}</p>
               {roleMeta && <p className="mt-2 text-xs" style={{ color: "#C6D0DE" }}>{roleMeta.label}</p>}
-              <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
-                {(recOn || remoteRec) && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold" style={{ backgroundColor: "rgba(229,56,75,.9)" }}>
-                    <span className="h-2 w-2 rounded-full" style={{ backgroundColor: "#fff", animation: "dosBlink 1s infinite" }} />REC{recOn ? ` ${chatClock(recSeconds)}` : ""}
-                  </span>
-                )}
-                {screenOn && <button type="button" onClick={toggleScreenShare} className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold" style={{ backgroundColor: "rgba(31,138,224,.95)" }}>⧉ أنت تشارك شاشتك — إيقاف</button>}
-                {waiting && showVideo && <span className="rounded-full px-3 py-1 text-[11px] font-bold" style={{ backgroundColor: "rgba(255,193,7,.9)", color: COLORS.navyDeep }}>الطرف الآخر غير متصل الآن</span>}
-              </div>
-              {showVideo && <p className="mt-3 text-lg font-semibold">{ui.peerName} <span dir="ltr" className="mr-2 text-sm" style={{ fontFamily: F_MONO, color: "#7CE3A1" }}>{phase === "active" ? chatClock(seconds) : ""}</span></p>}
+              {(recOn || remoteRec) && (
+                <div className="mt-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold" style={{ backgroundColor: "rgba(229,56,75,.92)" }}>
+                  <span className="h-2 w-2 rounded-full" style={{ backgroundColor: "#fff", animation: "dosBlink 1s infinite" }} />
+                  {recOn ? `جاري تسجيل المكالمة ${chatClock(recSeconds)}` : "هذه المكالمة قيد التسجيل"}
+                </div>
+              )}
+              {showRemoteVideo && <p className="mt-3 text-lg font-semibold">{ui.peerName} <span dir="ltr" className="mr-2 text-sm" style={{ fontFamily: F_MONO, color: "#7CE3A1" }}>{phase === "active" ? chatClock(seconds) : ""}</span></p>}
             </div>
 
-            {!showVideo ? (
+            {!showRemoteVideo && (
               <div className="flex flex-col items-center">
-                <div className="relative flex h-40 w-40 items-center justify-center">
+                <div className="relative flex h-36 w-36 items-center justify-center">
                   {(phase === "ringing" || phase === "calling" || phase === "connecting") && [0, 0.6, 1.2].map((delay) => <span key={delay} className="absolute inset-0 rounded-full" style={{ border: `2px solid ${phase === "ringing" ? COLORS.red : COLORS.gold}`, animation: `dosPulse 1.8s ease-out ${delay}s infinite` }} />)}
-                  <span className="relative" style={{ animation: phase === "ringing" ? "dosShake .9s ease-in-out infinite" : "none", filter: "drop-shadow(0 12px 28px rgba(0,0,0,.45))" }}><Avatar id={ui.peerId} name={ui.peerName} size={124} style={{ border: `3px solid ${COLORS.gold}`, background: undefined }} /></span>
+                  <span className="relative flex h-28 w-28 items-center justify-center rounded-full text-4xl font-bold" style={{ background: `linear-gradient(160deg, ${COLORS.gold}, #D9A93F)`, color: COLORS.navyDeep, boxShadow: "0 12px 40px rgba(0,0,0,.4)", animation: phase === "ringing" ? "dosShake .9s ease-in-out infinite" : "none" }}>{String(ui.peerName || "؟").trim().charAt(0)}</span>
                 </div>
                 <h2 className="mt-6 text-2xl font-semibold">{ui.peerName}</h2>
-                <p className="mt-2 text-lg" dir={phase === "active" && !waiting ? "ltr" : undefined} style={{ color: phase === "active" && !waiting ? "#7CE3A1" : waiting ? "#FFD27A" : "#C6D0DE", fontFamily: phase === "active" && !waiting ? F_MONO : F_AR }}>{arStatus}</p>
-                {deStatus && <p dir="ltr" className="mt-1 text-sm" style={{ color: COLORS.gold, fontFamily: F_BODY }}>{deStatus}</p>}
+                <p className="mt-2 text-lg" dir={phase === "active" ? "ltr" : undefined} style={{ color: phase === "active" ? "#7CE3A1" : "#C6D0DE", fontFamily: phase === "active" ? F_MONO : F_AR }}>{statusText}</p>
               </div>
-            ) : <div />}
+            )}
+            {showRemoteVideo && <div />}
 
-            <div className="w-full">
-              <div className="flex flex-wrap items-center justify-center gap-4">
-                {phase === "ringing" ? (
-                  <>
-                    <button type="button" onClick={rejectCall} className="flex h-16 w-16 items-center justify-center rounded-full" style={{ backgroundColor: "#E5384B", boxShadow: "0 8px 24px rgba(229,56,75,.45)" }} aria-label="رفض"><svg viewBox="0 0 24 24" width="28" height="28" fill="#fff" style={{ transform: "rotate(135deg)" }}><path d={phoneIcon} /></svg></button>
-                    <button type="button" onClick={() => acceptCall(false)} className="flex h-20 w-20 items-center justify-center rounded-full" style={{ backgroundColor: "#22B35A", boxShadow: "0 8px 28px rgba(34,179,90,.5)" }} aria-label="رد صوتي"><svg viewBox="0 0 24 24" width="34" height="34" fill="#fff"><path d={phoneIcon} /></svg></button>
-                    {ui.wantVideo && <button type="button" onClick={() => acceptCall(true)} className="flex h-16 w-16 items-center justify-center rounded-full" style={{ backgroundColor: "#1F8AE0", boxShadow: "0 8px 24px rgba(31,138,224,.5)" }} aria-label="رد بالفيديو"><svg viewBox="0 0 24 24" width="28" height="28" fill="#fff"><path d={camIcon} /></svg></button>}
-                  </>
-                ) : phase === "ended" ? null : (
-                  <>
-                    {live && <button type="button" onClick={toggleMute} className="flex h-14 w-14 items-center justify-center rounded-full" style={ctrl(muted)} aria-label="كتم الميكروفون" title="كتم الميكروفون"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0014 0M12 18v3" />{muted && <path d="M4 4l16 16" />}</svg></button>}
-                    {live && <button type="button" onClick={toggleCamera} className="flex h-14 w-14 items-center justify-center rounded-full" style={ctrl(camOn)} aria-label="الكاميرا" title={camOn ? "إيقاف الكاميرا" : "تشغيل الكاميرا"}><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={camIcon} />{!camOn && <path d="M3 3l18 18" />}</svg></button>}
-                    {live && <button type="button" onClick={toggleScreenShare} className="flex h-14 w-14 items-center justify-center rounded-full" style={ctrl(screenOn)} aria-label="مشاركة الشاشة" title={screenOn ? "إيقاف مشاركة الشاشة" : "مشاركة الشاشة"}><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" />{screenOn && <path d="M9 10l3-3 3 3M12 7v6" />}</svg></button>}
-                    {phase === "active" && isCaller && <button type="button" onClick={() => (recOn ? stopCallRecording(callRef.current) : startCallRecording())} className="flex h-14 w-14 items-center justify-center rounded-full" style={{ backgroundColor: recOn ? "#E5384B" : "rgba(255,255,255,.18)", color: "#fff", backdropFilter: "blur(6px)" }} aria-label="تسجيل المكالمة" title={recOn ? "إيقاف التسجيل" : "تسجيل المكالمة"}>{recOn ? <svg viewBox="0 0 24 24" width="20" height="20" fill="#fff"><rect x="6" y="6" width="12" height="12" rx="2" /></svg> : <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="3.5" fill="#E5384B" stroke="none" /></svg>}</button>}
-                    <button type="button" onClick={hangUp} className="flex h-16 w-16 items-center justify-center rounded-full" style={{ backgroundColor: "#E5384B", boxShadow: "0 8px 24px rgba(229,56,75,.45)" }} aria-label="إنهاء المكالمة" title="إنهاء المكالمة"><svg viewBox="0 0 24 24" width="28" height="28" fill="#fff" style={{ transform: "rotate(135deg)" }}><path d={phoneIcon} /></svg></button>
-                  </>
-                )}
-              </div>
-              {live && <p className="mt-3 text-[11px]" style={{ color: "rgba(255,255,255,.65)" }}>المكالمة لا تُغلق إلا بالزر الأحمر · للجودة والتعليم قد تُسجَّل المكالمات</p>}
+            <div className="flex flex-wrap items-center justify-center gap-5">
+              {phase === "ringing" ? (
+                <>
+                  <button type="button" onClick={rejectCall} className="flex h-16 w-16 items-center justify-center rounded-full" style={{ backgroundColor: "#E5384B", boxShadow: "0 8px 24px rgba(229,56,75,.45)" }} aria-label="رفض"><svg viewBox="0 0 24 24" width="28" height="28" fill="#fff" style={{ transform: "rotate(135deg)" }}><path d={phoneIcon} /></svg></button>
+                  <button type="button" onClick={() => acceptCall(false)} className="flex h-20 w-20 items-center justify-center rounded-full" style={{ backgroundColor: "#22B35A", boxShadow: "0 8px 28px rgba(34,179,90,.5)" }} aria-label="رد صوتي"><svg viewBox="0 0 24 24" width="34" height="34" fill="#fff"><path d={phoneIcon} /></svg></button>
+                  {ui.wantVideo && <button type="button" onClick={() => acceptCall(true)} className="flex h-16 w-16 items-center justify-center rounded-full" style={{ backgroundColor: "#1F8AE0", boxShadow: "0 8px 24px rgba(31,138,224,.5)" }} aria-label="رد بالفيديو"><svg viewBox="0 0 24 24" width="28" height="28" fill="#fff"><path d="M15 8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-1.6l5 2.9V6.7l-5 2.9z" /></svg></button>}
+                </>
+              ) : phase === "ended" ? null : (
+                <>
+                  {live && <button type="button" onClick={toggleMute} className="flex h-14 w-14 items-center justify-center rounded-full" style={ctrl(muted)} aria-label="كتم الميكروفون"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0014 0M12 18v3" />{muted && <path d="M4 4l16 16" />}</svg></button>}
+                  {live && <button type="button" onClick={toggleCamera} className="flex h-14 w-14 items-center justify-center rounded-full" style={ctrl(camOn)} aria-label={camOn ? "إيقاف الكاميرا" : "تشغيل الكاميرا"}><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-1.6l5 2.9V6.7l-5 2.9z" />{!camOn && <path d="M3 3l18 18" />}</svg></button>}
+                  {phase === "active" && isCaller && <button type="button" onClick={() => (recOn ? stopCallRecording(callRef.current) : startCallRecording())} className="flex h-14 w-14 flex-col items-center justify-center rounded-full" style={{ backgroundColor: recOn ? "#E5384B" : "rgba(255,255,255,.18)", color: "#fff", backdropFilter: "blur(6px)" }} aria-label={recOn ? "إيقاف التسجيل" : "تسجيل المكالمة"} title={recOn ? "إيقاف التسجيل" : "تسجيل المكالمة"}>{recOn ? <svg viewBox="0 0 24 24" width="20" height="20" fill="#fff"><rect x="6" y="6" width="12" height="12" rx="2" /></svg> : <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="3.5" fill="#E5384B" stroke="none" /></svg>}</button>}
+                  <button type="button" onClick={hangUp} className="flex h-16 w-16 items-center justify-center rounded-full" style={{ backgroundColor: "#E5384B", boxShadow: "0 8px 24px rgba(229,56,75,.45)" }} aria-label="إنهاء"><svg viewBox="0 0 24 24" width="28" height="28" fill="#fff" style={{ transform: "rotate(135deg)" }}><path d={phoneIcon} /></svg></button>
+                </>
+              )}
             </div>
           </div>
         </div>
